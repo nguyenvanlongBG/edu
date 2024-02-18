@@ -1,0 +1,520 @@
+{
+  "format": 1,
+  "restore": {
+    "G:\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj": {}
+  },
+  "projects": {
+    "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj",
+        "projectName": "Bg.EduSocial.Application",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.8, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.10.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj",
+        "projectName": "Bg.EduSocial.Constract",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj",
+        "projectName": "Bg.EduSocial.Domain.Shared",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj",
+        "projectName": "Bg.EduSocial.Domain",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain.Shared\\Bg.EduSocial.Domain.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.8, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj",
+        "projectName": "Bg.EduSocial.EntityFrameworkCore",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.2, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj",
+        "projectName": "Bg.EduSocial.Helper",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "G:\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj",
+        "projectName": "Bg.EduSocial.Host",
+        "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj",
+        "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
+        "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Host\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+              },
+              "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj": {
+                "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.8, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

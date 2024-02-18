@@ -1,6 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Bg.EduSocial.Constract",
+    "\\Bg.EduSocial.Constract\\Submissions",
+    "\\Bg.EduSocial.Domain",
+    "\\Bg.EduSocial.Domain\\Auths",
+    "\\Bg.EduSocial.Domain\\Cores",
+    "\\Bg.EduSocial.EntityFrameworkCore",
+    "\\Bg.EduSocial.EntityFrameworkCore\\Repositories",
+    "\\Bg.EduSocial.Helper",
+    "\\Bg.EduSocial.Helper\\Commons"
   ],
+  "SelectedNode": "\\Bg.EduSocial.Helper\\Commons\\CommonFunction.cs",
   "PreviewInSolutionExplorer": false
 }

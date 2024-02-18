@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Bg.EduSocial.Host.props" />
+</Project>

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "37CI6e8IXJwRhKIe74Xi9TzoL2nWaz51ApgK8DPDqxU=",
+  "Source": "Bg.EduSocial.Host",
+  "BasePath": "_content/Bg.EduSocial.Host",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

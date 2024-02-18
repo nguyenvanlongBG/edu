@@ -1,0 +1,12 @@
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\bin\Debug\net6.0\Bg.EduSocial.Domain.Shared.deps.json
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\bin\Debug\net6.0\Bg.EduSocial.Domain.Shared.dll
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\bin\Debug\net6.0\Bg.EduSocial.Domain.Shared.pdb
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.csproj.AssemblyReference.cache
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.GeneratedMSBuildEditorConfig.editorconfig
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.AssemblyInfoInputs.cache
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.AssemblyInfo.cs
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.csproj.CoreCompileInputs.cache
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.dll
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\refint\Bg.EduSocial.Domain.Shared.dll
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\Bg.EduSocial.Domain.Shared.pdb
+G:\EduSocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Domain.Shared\obj\Debug\net6.0\ref\Bg.EduSocial.Domain.Shared.dll

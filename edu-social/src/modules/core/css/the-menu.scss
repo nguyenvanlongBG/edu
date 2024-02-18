@@ -1,0 +1,113 @@
+@import '../css/common.variables.scss';
+
+.side-bar {
+  width: 320px;
+  background-color: #f0f2f5;
+  padding: 8px 8px;
+  .logo {
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .edu {
+      font-weight: 750;
+      color: #222222;
+    }
+    .social {
+      font-weight: 750;
+      padding-left: 1px;
+      color: $primary-orange-color;
+    }
+  }
+  .main-menu-block {
+    padding-bottom: 16px;
+    .main-menu {
+      list-style-type: none;
+      padding: 0px;
+      font-family: Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif;
+      margin: 0px;
+    }
+    .item-menu {
+      border-radius: 4px;
+      height: 52px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #1c1e21;
+      border: 1px solid #f0f2f5;
+      box-sizing: border-box;
+      .block-img-menu-item {
+        width: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .title-menu-item {
+        padding-left: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #050505;
+      }
+    }
+    .item-menu:hover {
+      background-color: $primary-backgroundcolor-hover;
+      outline: transparent;
+    }
+  }
+  .line {
+    height: 1px;
+    background-color: #ced0d4;
+  }
+  .group__menu {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    .header {
+      .title-group-study {
+        font-size: 24px;
+        font-weight: 600;
+        color: #56585c;
+      }
+      .find-and-add {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 8px;
+        .icon-add-group {
+          color: rgb(21, 72, 138);
+          cursor: pointer;
+        }
+      }
+    }
+    .hidden-input-radio {
+      display: none;
+    }
+    .group {
+      display: flex;
+      column-gap: 8px;
+      align-items: center;
+      height: 60px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 550;
+      .status-active {
+        display: flex;
+        flex-direction: column;
+        .group-name {
+          font-size: 16px;
+        }
+        .last-active {
+          color: #4c4d4ea1;
+        }
+      }
+    }
+    .group:hover {
+      background-color: $primary-backgroundcolor-hover;
+    }
+    input:checked + .group {
+      background-color: $primary-backgroundcolor-hover;
+    }
+  }
+}

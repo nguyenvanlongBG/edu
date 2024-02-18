@@ -1,0 +1,131 @@
+.group-container {
+  display: flex;
+  .main {
+    flex: 1;
+    padding-left: 150px;
+    padding-right: 150px;
+    .group-post {
+      padding-top: 12px;
+      padding-bottom: 8px;
+      .posts {
+        .post {
+          padding: 8px;
+          background-color: white;
+          border-radius: 8px;
+          cursor: pointer;
+          position: relative;
+          .toolbar {
+            display: flex;
+            justify-content: space-between;
+            .author {
+              display: flex;
+              column-gap: 8px;
+              .created {
+                font-size: 16px;
+                font-weight: 600;
+              }
+            }
+            .more-info {
+              cursor: pointer;
+            }
+          }
+          .picture-default {
+            display: flex;
+            justify-content: center;
+          }
+          .title-post {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+          }
+          .line {
+            margin-top: 4px;
+            .label {
+              font-size: 20px;
+              color: rgba(45, 46, 46, 0.699);
+              font-weight: 600;
+            }
+            .description {
+            }
+            .detail {
+              font-size: 20px;
+              color: rgb(34, 36, 36);
+              font-weight: 600;
+            }
+          }
+          .list-user-do {
+            .label {
+              font-size: 20px;
+              color: rgba(45, 46, 46, 0.699);
+              font-weight: 600;
+            }
+            .users {
+              display: flex;
+              .user {
+                margin-left: -5px;
+              }
+            }
+          }
+          .mask {
+            position: absolute;
+            display: none;
+            .action-post {
+              cursor: pointer;
+            }
+          }
+        }
+
+        .post:hover .mask {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          column-gap: 4px;
+          background-color: #e2dede8c;
+          top: 0px;
+          bottom: 0px;
+          left: 0px;
+          right: 0px;
+          border-radius: 8px;
+          .action-post {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+.group-toolbar {
+  width: 320px;
+  padding-left: 8px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  .group-avatar {
+    display: flex;
+    padding: 16px 0px 12px 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .group-name {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+  .item-toolbar {
+    padding-left: 8px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 550;
+    color: rgb(86, 87, 88);
+  }
+  .item-toolbar:hover {
+    cursor: pointer;
+    background-color: $primary-backgroundcolor-hover;
+  }
+}

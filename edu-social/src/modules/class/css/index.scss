@@ -1,0 +1,105 @@
+.container {
+  padding: 8px;
+}
+
+.list-classroom {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+.container-detail-class {
+  display: flex;
+  height: 100%;
+  background-color: white;
+  .detail {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    flex: 1;
+    row-gap: 16px;
+    .post {
+      display: flex;
+      min-height: 100px;
+      max-height: 200px;
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 8px;
+      .owner-post {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+      }
+      .description {
+        padding: 8px;
+        flex: 1;
+        background-color: rgba(216, 210, 210, 0.24);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .actions {
+          display: flex;
+          column-gap: 8px;
+        }
+      }
+    }
+  }
+  .toolbar-class {
+    width: 320px;
+    background-color: #f0f2f5;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    .item {
+      padding-left: 8px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .expand {
+      display: flex;
+      justify-content: space-between;
+    }
+    .item:hover {
+      background-color: $primary-backgroundcolor-hover;
+      outline: transparent;
+    }
+    .members {
+      display: flex;
+      flex-direction: column;
+      .member {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        padding-left: 8px;
+        height: 36px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .member:hover {
+        background-color: $primary-backgroundcolor-hover;
+      }
+      .add-member {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        column-gap: 4px;
+        padding-left: 8px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .add-member:hover {
+        background-color: $primary-backgroundcolor-hover;
+        color: rgb(59, 88, 133);
+      }
+    }
+  }
+}

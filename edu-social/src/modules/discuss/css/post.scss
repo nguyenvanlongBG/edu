@@ -1,0 +1,62 @@
+.post {
+  background-color: #0b28531f;
+  border-radius: 8px;
+  .own-post {
+    padding: 8px;
+  }
+  .comments {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    row-gap: 8px;
+    .create-comment {
+      display: flex;
+      column-gap: 8px;
+      margin-left: 8px;
+      margin-right: 8px;
+      align-content: center;
+      .input-create-comment {
+        width: 300px;
+        cursor: pointer;
+      }
+    }
+    .see-more {
+      cursor: pointer;
+      color: #6d6f73;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+}
+.comment {
+  display: flex;
+  padding: 8px;
+  background-color: #2a4855d8;
+  color: white;
+  border-radius: 8px;
+  column-gap: 8px;
+  .comment-info {
+    flex: 1;
+    .answer {
+      height: 30px;
+      color: #ea4f4c;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+    .own-answer-name {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .rate-star-and-time {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}

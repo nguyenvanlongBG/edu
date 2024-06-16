@@ -16,11 +16,13 @@ using Bg.EduSocial.EFCore.Repositories;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Bg.EduSocial.EntityFrameworkCore.Repositories;
 using Bg.EduSocial.Helper.Commons;
+using Bg.EduSocial.Host.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Xml.Xsl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 CommonFunction.Initialize(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>(), builder.Services.BuildServiceProvider().GetRequiredService<AuthManager>());
+EditorFunction.Initialize();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -92,5 +95,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.Run();

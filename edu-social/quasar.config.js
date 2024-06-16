@@ -33,7 +33,7 @@ module.exports = configure(function (ctx) {
         // --> boot files are part of "main.js"
         // https://v2.quasar.dev/quasar-cli-webpack/boot-files
         boot: [
-            'i18n', 'axios',
+            'i18n', 'axios', 'global-components'
         ],
 
         // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -100,7 +100,7 @@ module.exports = configure(function (ctx) {
             // (like functional components as one of the examples),
             // you can manually specify Quasar components/directives to be available everywhere:
             //
-            // components: [],
+            components: [],
             // directives: [],
 
             // Quasar plugins

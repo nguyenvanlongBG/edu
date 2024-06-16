@@ -54,12 +54,18 @@ namespace Bg.EduSocial.Host.Controllers
             return Ok("OK");
 
         }
-
-        [Authorize]
+        
         [HttpGet("ok")]
         public async Task<IActionResult> Done()
         {
             return Ok("Done Authen");
+
+        }
+        [HttpPost("uploadFile")]
+        public IActionResult CreateQuestionsFromFile([FromForm] IFormFile? file)
+        {
+            var data = EditorFunction.GetLatexFromFile(file);
+            return Ok(data);
 
         }
     }

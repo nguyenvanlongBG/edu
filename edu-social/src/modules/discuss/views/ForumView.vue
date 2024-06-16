@@ -1,6 +1,7 @@
 <template>
   <div class="forum-container">
     <div class="main-content">
+      <EditorComponent />
       <div class="posts" v-if="showPostsView">
         <div class="create-post">
           <AvatarComponent />

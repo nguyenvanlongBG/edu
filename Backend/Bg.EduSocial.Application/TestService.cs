@@ -7,6 +7,8 @@ using Bg.EduSocial.Domain.Questions;
 using Bg.EduSocial.Domain.Tests;
 using Bg.EduSocial.EFCore.Repositories;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
+using Bg.EduSocial.Helper.Commons;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +60,12 @@ namespace Bg.EduSocial.Application
             }
             finally { _unitOfWork.Dispose(); }
             return 0;
+        }
+
+        public Task<List<QuestionDto>> ReadQuestionFromFile(IFormFile file, string regexStr)
+        {
+            EditorFunction.GetLatexFromFile(file);
+            return default;
         }
     }
 }

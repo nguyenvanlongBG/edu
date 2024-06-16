@@ -1,6 +1,7 @@
 ﻿using Bg.EduSocial.Constract.Cores;
 using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain.Tests;
+using Bg.EduSocial.Helper.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bg.EduSocial.Host.Controllers
@@ -13,6 +14,15 @@ namespace Bg.EduSocial.Host.Controllers
         public TestController(ITestService testService) : base(testService)
         {
             _testService = testService;
+        }
+
+        [HttpPost("upload")]
+        public IActionResult CreateQuestionsFromFile(FormFile? file)
+        {
+            return Ok("OK");
+            var data = EditorFunction.GetLatexFromFile(file);
+            return Ok(data);
+
         }
     }
 }

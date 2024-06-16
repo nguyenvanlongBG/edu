@@ -4,6 +4,7 @@ import PostComponent from '../components/PostComponent.vue';
 import PopupCreatePost from '../../discuss/components/PopupCreatePost.vue';
 import AvatarComponent from '../../core/components/avatar/AvatarComponent.vue';
 import ChatComponent from '../../core/components/chat/ChatComponent.vue';
+import EditorComponent from 'src/modules/core/components/rich-editor/EditorComponent.vue';
 import { useQuasar } from 'quasar';
 import { Post } from '../models/post';
 import { usePostStore } from '../stores/post';
@@ -15,6 +16,7 @@ export default defineComponent({
     PostComponent,
     AvatarComponent,
     ChatComponent,
+    EditorComponent,
   },
 
   setup() {
@@ -39,6 +41,7 @@ export default defineComponent({
     function changeMode() {
       showPostsView.value = !showPostsView.value;
     }
+
     return {
       ...mapActions(usePostStore, ['savePost']),
       postsStore,

@@ -627,17 +627,17 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b5d07668-05b2-4ca1-b71e-516cf74785dd",
+                            Id = "746c41a7-6157-4601-a0dc-1faa248a3649",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "13fdebe2-680e-4c04-80ad-4910469a344e",
+                            ConcurrencyStamp = "f3df083a-0f09-49a5-9fdc-7b34879e69c1",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMVbfaq4eHIF0WwFz36XAtLxr/ixuDSLNchV37TIrQ/WNMCPVQjmzyk6sv7GJ6820A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENkAFykNqlOrlsaMQpo6gPM6oEGZ/tPhdVKXPN08HxIFhLTy/MOg6yocX9Q/uZolOw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0d5e727b-be01-4539-b4f7-b265483d9535",
+                            SecurityStamp = "8becdc1f-76f8-4529-8b47-7c5c58d9c602",
                             TwoFactorEnabled = false,
                             UserName = "",
                             CreatedBy = "",

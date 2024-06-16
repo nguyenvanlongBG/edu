@@ -19,7 +19,7 @@
       />
     </div>
     <div class="question-content">
-      <EditorComponent :content="question.content" :isReadonly="!isEdit" />
+      <EditorComponent />
     </div>
     <q-list class="answers" v-if="question.type == 2">
       <q-item
@@ -41,7 +41,7 @@
         </q-item-section>
         <q-item-section>
           <div class="content-answer">
-            <EditorComponent :content="answer.content" :isReadonly="!isEdit" />
+            <EditorComponent />
           </div>
         </q-item-section>
       </q-item>
@@ -70,7 +70,7 @@
         </q-item-section>
         <q-item-section>
           <div class="content-answer">
-            <EditorComponent :isReadonly="!isEdit" />
+            <EditorComponent />
           </div>
         </q-item-section>
       </q-item>

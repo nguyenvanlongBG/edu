@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Bg.EduSocial.Constract
-build_property.ProjectDir = G:\edusocial\Backend\Bg.EduSocial.Host\Bg.EduSocial.Constract\
+build_property.ProjectDir = G:\edu\Backend\Bg.EduSocial.Constract\

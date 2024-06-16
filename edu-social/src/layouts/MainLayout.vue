@@ -8,9 +8,18 @@
   </q-layout>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import TheMenu from '../modules/core/components/menu/TheMenu.vue';
 import TheHeader from '../modules/core/components/header/TheHeader.vue';
+import { defineComponent, ref } from 'vue';
+
+export default defineComponent({
+  name: 'MainLayout',
+  components: {
+    TheMenu,
+    TheHeader,
+  },
+});
 </script>
 <style>
 .main-layout {

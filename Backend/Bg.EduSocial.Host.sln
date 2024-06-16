@@ -20,7 +20,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bg.EduSocial.HttpApi", "Bg.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bg.EduSocial.EntityFrameworkCore", "Bg.EduSocial.EntityFrameworkCore\Bg.EduSocial.EntityFrameworkCore.csproj", "{6D49BBA6-EA7E-40FC-848D-0ADCBCD95BD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bg.EduSocial.Helper", "Bg.EduSocial.Helper\Bg.EduSocial.Helper.csproj", "{F05D1412-2E1A-4468-BA35-2276BA3F7EBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bg.EduSocial.Helper", "Bg.EduSocial.Helper\Bg.EduSocial.Helper.csproj", "{F05D1412-2E1A-4468-BA35-2276BA3F7EBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F07B9A95-E2E3-4FB2-96E5-C99739246215}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -19,7 +19,6 @@ namespace Bg.EduSocial.Host.Controllers
         [HttpPost("upload")]
         public IActionResult CreateQuestionsFromFile(FormFile? file)
         {
-            return Ok("OK");
             var data = EditorFunction.GetLatexFromFile(file);
             return Ok(data);
 

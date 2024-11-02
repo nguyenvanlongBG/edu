@@ -11,7 +11,7 @@ export default defineComponent({
   name: 'PopupChat',
   components: { ChatComponent },
   emits: [...useDialogPluginComponent.emits],
-  setup(props, ctx) {
+  setup(_props, _ctx) {
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
     async function closeChat() {

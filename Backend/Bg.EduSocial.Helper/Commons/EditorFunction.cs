@@ -56,12 +56,43 @@ namespace Bg.EduSocial.Helper.Commons
                         if (body == null) return default;
                         foreach (var element in body.Elements())
                         {
-                            var items = GetDataFromGraph(element, mainPart);
-                            data.AddRange(items);
+                            if (element is DocumentFormat.OpenXml.Wordprocessing.Paragraph)
+                            {
+                                var items = GetDataFromParagraph(element, mainPart);
+                                data.AddRange(items);
+                            }
+                            else if (element is DocumentFormat.OpenXml.Wordprocessing.Table)
+                            {
+                                var items = GetDataFromTable(element, mainPart);
+                                data.AddRange(items);
+                            }
+                            else if (element is DocumentFormat.OpenXml.Math.Paragraph)
+                            {
+                                var latexes = GetDataFromParagraph(element, mainPart);
+                                if (latexes != null)
+                                {
+                                    data.AddRange(latexes);
+                                }
+                            }
                         }
                     }
                 }
             }
+            return data;
+        }
+        public static List<object> GetDataFromMathParagraph(DocumentFormat.OpenXml.OpenXmlElement element, MainDocumentPart mainPart)
+        {
+            var data = new List<object>();
+            var listChild = element.ChildElements.ToList();
+            listChild.ForEach(childElement =>
+            {
+                if (childElement is DocumentFormat.OpenXml.Math.OfficeMath)
+                {
+                    var latexMath = ConvertXML2Latex(childElement.OuterXml);
+                    var itemMath = BuildItem(EditorActionType.INSERT, EditorItemType.FOMUALA, latexMath);
+                    data.Add(itemMath);
+                }
+            });
             return data;
         }
         /// <summary>
@@ -71,58 +102,59 @@ namespace Bg.EduSocial.Helper.Commons
         /// <param name="mainPart"></param>
         /// <returns></returns>
         /// Created By: NVLong 4/5/2024
-        public static List<object> GetDataFromGraph(DocumentFormat.OpenXml.OpenXmlElement element, MainDocumentPart mainPart)
+        public static List<object> GetDataFromParagraph(DocumentFormat.OpenXml.OpenXmlElement element, MainDocumentPart mainPart)
         {
             var data = new List<object>();
             var listChild = element.ChildElements.ToList();
             listChild.ForEach(childElement =>
             {
-                if (childElement is DocumentFormat.OpenXml.Math.OfficeMath)
+                if (childElement is DocumentFormat.OpenXml.Wordprocessing.Run)
                 {
-                   var latexMath = ConvertXML2Latex(childElement.OuterXml);
-                   var itemMath = BuildItem(EditorActionType.INSERT, EditorItemType.FOMUALA, latexMath);
-                   data.Add(itemMath);
+                    var itemsInRun = GetDataFromRun(childElement, mainPart);
+                    data.AddRange(itemsInRun);
                 }
-                else if (childElement is DocumentFormat.OpenXml.Math.Paragraph)
-                {   var latexes = GetDataFromGraph(childElement, mainPart);
-                    if (latexes != null)
-                    {
-                        data.AddRange(latexes);
-                    }
-                }
-                else
+                else if (childElement is DocumentFormat.OpenXml.Math.OfficeMath)
                 {
-                    if (childElement is DocumentFormat.OpenXml.Wordprocessing.Run)
-                    {
-                        var listItem = childElement.ChildElements.ToList();
-                        listItem.ForEach(item =>
-                        {
-                            if (item is DocumentFormat.OpenXml.Wordprocessing.Drawing)
-                            {
-                                var url = HandlePicture(mainPart, (DocumentFormat.OpenXml.Wordprocessing.Drawing)item);
-                                var picture = BuildItem(EditorActionType.INSERT, EditorItemType.IMAGE, url);
-                                data.Add(picture);
-                            }
-                            else if (childElement is DocumentFormat.OpenXml.Wordprocessing.Paragraph)
-                            {
-                                var items = GetDataFromGraph(childElement, mainPart);
-                                data.AddRange(items);
-                            }
-                            else
-                            {
-                                var dataText = BuildItem(EditorActionType.NONE, EditorItemType.TEXT, item.InnerText);
-                                data.Add(dataText);
-                            }
-                        });
-                    }
-                    else if (childElement is DocumentFormat.OpenXml.Wordprocessing.Paragraph)
-                    {
-                        var items = GetDataFromGraph(childElement, mainPart);
-                        data.AddRange(items);
-                    }
+                    var latexMath = ConvertXML2Latex(childElement.OuterXml);
+                    var itemMath = BuildItem(EditorActionType.INSERT, EditorItemType.FOMUALA, latexMath);
+                    data.Add(itemMath);
                 }
             });
             return data;
+        }
+
+        public static List<object> GetDataFromRun(DocumentFormat.OpenXml.OpenXmlElement element, MainDocumentPart mainPart)
+        {
+            var data = new List<object>();
+            if (element is not DocumentFormat.OpenXml.Wordprocessing.Run) return default;
+            var listItem = element.ChildElements.ToList();
+            listItem.ForEach(item =>
+            {
+                if (item is DocumentFormat.OpenXml.Wordprocessing.Text)
+                {
+                    var dataText = BuildItem(EditorActionType.INSERT, EditorItemType.TEXT, item.InnerText);
+                    data.Add(dataText);
+                }
+                else
+                if (item is DocumentFormat.OpenXml.Math.OfficeMath)
+                {
+                    var latexMath = ConvertXML2Latex(item.OuterXml);
+                    var itemMath = BuildItem(EditorActionType.INSERT, EditorItemType.FOMUALA, latexMath);
+                    data.Add(itemMath);
+                }
+                else if (item is DocumentFormat.OpenXml.Wordprocessing.Drawing)
+                {
+                    var url = HandlePicture(mainPart, (DocumentFormat.OpenXml.Wordprocessing.Drawing)item);
+                    var picture = BuildItem(EditorActionType.INSERT, EditorItemType.IMAGE, url);
+                    data.Add(picture);
+                }
+            });
+            return data;
+        }
+
+        public static List<object> GetDataFromTable(DocumentFormat.OpenXml.OpenXmlElement element, MainDocumentPart mainPart)
+        {
+            return default;
         }
         /// <summary>
         /// Convert dữ liệu từ XML sang Latex
@@ -202,6 +234,10 @@ namespace Bg.EduSocial.Helper.Commons
                         using (StreamReader sr = new StreamReader(ms, Encoding.UTF8))
                         {
                             officeLatex = sr.ReadToEnd();
+                            if (officeLatex.StartsWith("$") && officeLatex.EndsWith("$"))
+                            {
+                                officeLatex = officeLatex.Trim('$');
+                            }
                         }
                     }
                 }
@@ -327,7 +363,7 @@ namespace Bg.EduSocial.Helper.Commons
                     {
                         insert = new
                         {
-                            formuala = data
+                            formula = data
                         }
                     };
                 }

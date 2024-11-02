@@ -110,6 +110,8 @@ G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\Bg.EduSocial.Host.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\Bg.EduSocial.Host.pdb
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\AutoMapper.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\DocumentFormat.OpenXml.Framework.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\Google.Protobuf.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\K4os.Compression.LZ4.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\K4os.Compression.LZ4.Streams.dll
@@ -154,6 +156,7 @@ G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.Drawing.Common.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.IO.Packaging.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.IO.Pipelines.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.Security.Permissions.dll
@@ -204,6 +207,3 @@ G:\edu\Backend\Bg.EduSocial.Host\obj\Debug\net6.0\refint\Bg.EduSocial.Host.dll
 G:\edu\Backend\Bg.EduSocial.Host\obj\Debug\net6.0\Bg.EduSocial.Host.pdb
 G:\edu\Backend\Bg.EduSocial.Host\obj\Debug\net6.0\Bg.EduSocial.Host.genruntimeconfig.cache
 G:\edu\Backend\Bg.EduSocial.Host\obj\Debug\net6.0\ref\Bg.EduSocial.Host.dll
-G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
-G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\DocumentFormat.OpenXml.Framework.dll
-G:\edu\Backend\Bg.EduSocial.Host\bin\Debug\net6.0\System.IO.Packaging.dll

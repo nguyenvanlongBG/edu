@@ -25,7 +25,6 @@
 import { computed, defineComponent, ref, watch } from 'vue';
 import { Mathfield } from 'mathlive';
 import { useDialogPluginComponent } from 'quasar';
-
 export default defineComponent({
   name: 'PopupMathEditor',
   emits: [

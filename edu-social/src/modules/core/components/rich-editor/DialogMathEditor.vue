@@ -70,9 +70,11 @@ export default defineComponent({
     );
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
-    function handleInput(e) {
-      formula.value = e.target.value;
-      console.log(formula);
+    function handleInput(e: any) {
+      if (e && e.target) {
+        formula.value = e.target.value;
+        console.log(formula);
+      }
     }
     function emitMath() {
       onDialogOK(formula.value);

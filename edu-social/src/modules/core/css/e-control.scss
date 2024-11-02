@@ -1,0 +1,62 @@
+.e-input {
+  min-height: 36px;
+  border: $primary-color solid 1px;
+  border-radius: 4px;
+  font-size: 18px;
+  .default-input {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    border: none;
+    border-radius: inherit;
+    padding: 0px;
+    font-size: inherit;
+  }
+  .default-input:focus-visible {
+    outline: #ffffff00;
+    padding: 0px;
+  }
+  .focus-e-input {
+    border: $primary-color-bold solid 2px !important;
+  }
+}
+.e-combobox {
+  min-height: 36px;
+  border: $primary-color solid 1px;
+  border-radius: 4px;
+  font-size: 18px;
+  height: 100%;
+  position: relative;
+  .default-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: inherit;
+    padding: 0px;
+  }
+  .default-input:focus-visible {
+    outline: #ffffff00;
+    padding: 0px;
+  }
+  .focus-e-input {
+    border: $primary-color-bold solid 2px !important;
+  }
+  .options {
+    background-color: #c7c1c100;
+    position: absolute;
+    padding-top: 5px;
+    width: 100%;
+  }
+  .option {
+    padding: 4px;
+    cursor: pointer;
+    border: $primary-color-bold solid 1px;
+    border-radius: 4px;
+  }
+  .option :hover {
+    border: $primary-color solid 1px;
+  }
+  .selected {
+    background-color: aqua;
+  }
+}

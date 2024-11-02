@@ -1,13 +1,13 @@
 import { defineComponent, ref } from 'vue';
-import ToolBar from '../components/ToolBar.vue';
-import PostComponent from '../components/PostComponent.vue';
-import PopupCreatePost from '../../discuss/components/PopupCreatePost.vue';
-import AvatarComponent from '../../core/components/avatar/AvatarComponent.vue';
-import ChatComponent from '../../core/components/chat/ChatComponent.vue';
-import EditorComponent from 'src/modules/core/components/rich-editor/EditorComponent.vue';
+import ToolBar from '@discuss/components/ToolBar.vue';
+import PostComponent from '@discuss/components/PostComponent.vue';
+import PopupCreatePost from '@discuss/components/PopupCreatePost.vue';
+import AvatarComponent from '@core/components/avatar/AvatarComponent.vue';
+import ChatComponent from '@core/components/chat/ChatComponent.vue';
+import EditorComponent from '@core/components/rich-editor/EditorComponent.vue';
 import { useQuasar } from 'quasar';
-import { Post } from '../models/post';
-import { usePostStore } from '../stores/post';
+import { Post } from '@discuss/models/post';
+import { usePostStore } from '@discuss/stores/post';
 import { mapActions, storeToRefs } from 'pinia';
 export default defineComponent({
   name: 'ForumView',

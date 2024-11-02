@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
           import('../modules/authen/components/LoginComponent.vue'),
       },
       {
+        path: '/test',
+        name: 'test',
+        component: () => import('../modules/authen/views/TestView.vue'),
+      },
+      {
         path: '/register',
         name: 'register',
         component: () =>
@@ -19,7 +24,7 @@ const routes: RouteRecordRaw[] = [
       {
         name: 'forum',
         path: '',
-        component: () => import('../modules/discuss/views/ForumView.vue'),
+        component: () => import('../modules/discuss/views/forum/ForumView.vue'),
       },
       {
         name: 'groups',

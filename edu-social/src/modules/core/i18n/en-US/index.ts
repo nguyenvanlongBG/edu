@@ -3,4 +3,7 @@ export default {
     save: 'Save',
     cancel: 'Cancel',
   },
+  common: {
+    NotValid: 'Không hợp lệ',
+  },
 };

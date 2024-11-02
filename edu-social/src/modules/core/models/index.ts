@@ -14,3 +14,7 @@ export interface Question {
   result: string;
   answers: Answer[];
 }
+export interface ResultValidateBase {
+  isValid: boolean;
+  message: string;
+}

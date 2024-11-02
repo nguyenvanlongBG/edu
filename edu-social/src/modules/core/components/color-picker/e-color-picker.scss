@@ -1,0 +1,149 @@
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #eaeaea;
+  /* Thay đổi màu nền */
+}
+
+.color-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 8px;
+  /* Tăng padding để tạo không gian */
+  border-radius: 12px;
+  /* Tăng độ bo góc */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  /* Tăng độ mờ của bóng */
+  width: 300px;
+  border: 1px solid #db8585;
+  /* Tăng chiều rộng */
+}
+
+.color-gradient {
+  width: 100%;
+  /* Đặt chiều rộng 100% để phù hợp với container */
+  height: 120px;
+  /* Tăng chiều cao để đẹp hơn */
+  border-radius: 10px;
+  position: relative;
+  cursor: crosshair;
+  margin-bottom: 15px;
+  /* Tăng khoảng cách giữa các phần tử */
+  overflow: hidden;
+  /* Ẩn các phần tử bên ngoài */
+}
+
+.color-gradient .color-circle {
+  width: 14px;
+  /* Tăng kích thước hình tròn */
+  height: 14px;
+  /* Tăng kích thước hình tròn */
+  border: 2px solid #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  /* Căn giữa theo chiều dọc */
+  left: 50%;
+  /* Căn giữa theo chiều ngang */
+  transform: translate(-50%, -50%);
+  /* Căn chính xác giữa */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  /* Tăng độ bóng */
+  pointer-events: none;
+}
+
+.color-hue {
+  width: 100%;
+  /* Đặt chiều rộng 100% để phù hợp với container */
+  height: 12px;
+  /* Tăng chiều cao */
+  margin: 12px 0;
+  /* Tăng khoảng cách giữa các phần tử */
+  background: linear-gradient(
+    to right,
+    red,
+    yellow,
+    lime,
+    cyan,
+    blue,
+    magenta,
+    red
+  );
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hue-slider {
+  width: 12px;
+  /* Tăng kích thước thanh trượt */
+  height: 12px;
+  /* Tăng chiều cao thanh trượt */
+  border: 2px solid #fff;
+  border-radius: 3px;
+  position: absolute;
+  /* Căn giữa thanh trượt */
+  left: 0;
+  background: white;
+  transform: translate(-50%, 0);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.color-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+  column-gap: 6px;
+}
+
+.color-input input[type='text'] {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 14px;
+  height: 32px;
+  border-radius: 12px;
+  border: 1px solid #db8585;
+  background-color: white;
+  /* Thay đổi kích thước font cho input */
+}
+
+.color-input button {
+  background: none;
+  border: 1px solid #db8585;
+  border-radius: 12px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.color-preview {
+  width: 20px;
+  /* Tăng kích thước hình tròn màu */
+  height: 20px;
+  /* Tăng kích thước hình tròn màu */
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #db8585;
+  /* Mặc định màu */
+}
+
+.color-input img {
+  width: 24px;
+  /* Tăng kích thước icon */
+  height: 24px;
+  /* Tăng kích thước icon */
+}
+.circle-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: aqua;
+}

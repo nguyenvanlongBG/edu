@@ -62,7 +62,7 @@ namespace Bg.EduSocial.Host.Controllers
 
         }
         [HttpPost("uploadFile")]
-        public IActionResult CreateQuestionsFromFile([FromForm] IFormFile? file)
+        public IActionResult CreateQuestionsFromFile(IFormFile file, [FromForm] string testId)
         {
             var data = EditorFunction.GetLatexFromFile(file);
             return Ok(data);

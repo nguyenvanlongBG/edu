@@ -11,7 +11,7 @@
 <script lang="ts">
 import TheMenu from '../modules/core/components/menu/TheMenu.vue';
 import TheHeader from '../modules/core/components/header/TheHeader.vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -25,6 +25,7 @@ export default defineComponent({
 .main-layout {
   display: flex;
 }
+
 .main-container {
   flex: 1;
   background-color: #f0f2f5;

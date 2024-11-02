@@ -13,7 +13,7 @@
 
 
 const {configure} = require('quasar/wrappers');
-
+const path = require('node:path')
 module.exports = configure(function (ctx) {
     return {
         // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
@@ -25,6 +25,11 @@ module.exports = configure(function (ctx) {
                 }
             }
         },
+
+        rules: {
+          '@typescript-eslint/no-inferrable-types': 'off'
+        },
+
 
         // https://v2.quasar.dev/quasar-cli-webpack/prefetch-feature
         // preFetch: true,
@@ -56,6 +61,18 @@ module.exports = configure(function (ctx) {
         // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
         build: {
             vueRouterMode: 'hash',
+            extendWebpack (cfg, { isServer, isClient }) {
+              cfg.resolve.alias = {
+                ...cfg.resolve.alias,
+                '@core': path.resolve(__dirname, './src/modules/core'), // Ví dụ thêm alias `components`
+                '@discuss': path.resolve(__dirname, './src/modules/discuss'),
+                '@authen': path.resolve(__dirname, './src/modules/authen'),
+                '@class': path.resolve(__dirname, './src/modules/class'),
+                '@exam': path.resolve(__dirname, './src/modules/exam')
+              }
+            }
+
+
             // available values: 'hash', 'history'
 
             // transpile: false,

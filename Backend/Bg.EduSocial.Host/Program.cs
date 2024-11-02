@@ -1,4 +1,4 @@
-using Bg.EduSocial.Application;
+﻿using Bg.EduSocial.Application;
 using Bg.EduSocial.Constract.Auth;
 using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Constract.Cores;
@@ -17,6 +17,7 @@ using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Bg.EduSocial.EntityFrameworkCore.Repositories;
 using Bg.EduSocial.Helper.Commons;
 using Bg.EduSocial.Host.Middleware;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
     .Build();
+
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<EduSocialDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
@@ -54,6 +56,14 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true
     };
 });
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+{
+    policy.WithOrigins("http://localhost:8080", "http://localhost:5000")
+          .AllowAnyMethod()
+          .AllowAnyHeader() // Cho phép tất cả các header
+          .AllowCredentials(); // Nếu sử dụng cookie hoặc thông tin xác thực;
+}));
 
 builder.Services.AddSingleton<IConfiguration>(configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -91,7 +101,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -1,6 +1,7 @@
 import { defineComponent, ref } from 'vue';
 import EditorComponent from '../../components/rich-editor/EditorComponent.vue';
 import { Answer, Question } from '../../models';
+import { EditorControl } from '../../models/editor/editor-control';
 export default defineComponent({
   name: 'QuestionComponent',
   components: {
@@ -31,6 +32,7 @@ export default defineComponent({
     const isEdit = ref(false);
     const results = ref([] as string[]);
     const questionLocal = ref({} as Question);
+    const edittorControl = ref(new EditorControl());
     function createAnswer() {
       const answer = {
         id: '',
@@ -44,6 +46,7 @@ export default defineComponent({
     }
     return {
       questionLocal,
+      edittorControl,
       createAnswer,
       editMode,
       isEdit,

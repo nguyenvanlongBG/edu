@@ -3,20 +3,23 @@ import { getAccessToken, removeAccessToken } from './cookies';
 import router from '../../../router';
 
 const HEADER_ACCEPT = 'application/json';
-const HEADER_CONTENT_TYPE = 'application/json';
 const WITH_CREDENTIALS = false;
 const REQUEST_HEADER = {
   Accept: HEADER_ACCEPT,
-  'Content-Type': HEADER_CONTENT_TYPE,
 };
 const service = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'http://localhost:5000/api',
   withCredentials: WITH_CREDENTIALS,
   headers: REQUEST_HEADER,
 });
 service.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data';
+    } else if (typeof config.data === 'object') {
+      config.headers['Content-Type'] = 'application/json';
+    }
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }

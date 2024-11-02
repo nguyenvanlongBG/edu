@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
 import { socket } from '../src/modules/core/services/socket';
 export default {
   setup() {

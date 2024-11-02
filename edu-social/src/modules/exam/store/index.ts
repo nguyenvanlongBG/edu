@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { Answer, Question } from 'src/modules/core/models';
-import request from '../../core/utils/request';
+import originRequest from '@core/utils/origin-request';
 export const useExamStore = defineStore('exam', {
   state: () => ({
     questions: [
@@ -59,7 +59,7 @@ export const useExamStore = defineStore('exam', {
   },
   actions: {
     async getQuestionsExamAsymc() {
-      const dataQuestions = (await request({
+      const dataQuestions = (await originRequest({
         url: 'test',
         method: 'get',
         params: { testId: 1 },
@@ -67,7 +67,7 @@ export const useExamStore = defineStore('exam', {
       this.questions = dataQuestions;
     },
     async updateExam(id: string) {
-      await request({ url: 'test/' + id, method: 'put', data: {} });
+      await originRequest({ url: 'test/' + id, method: 'put', data: {} });
     },
   },
 });

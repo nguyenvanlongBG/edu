@@ -1,0 +1,25 @@
+<div>
+  <div @click="onOpenSelectColor">
+    <slot name="boxColor">
+      <div class="circle-color"></div>
+    </slot>
+  </div>
+  <div class="color-picker-container" v-if="isShowSelectColor">
+    <div class="color-gradient" @click="updateColorPicker" ref="colorGradient">
+      <div class="color-circle" ref="colorCircle"></div>
+    </div>
+    <div class="color-hue" @click="updateHue" ref="colorHue">
+      <div class="hue-slider" ref="hueSlider"></div>
+    </div>
+    <div class="color-input">
+      <div class="color-preview" :style="{ backgroundColor: colorValue }"></div>
+      <input type="text" v-model="colorValue" @input="updateInputColor" />
+      <button @click="pickColor">
+        <img
+          src="https://img.icons8.com/ios-glyphs/20/000000/color-dropper.png"
+          alt="color picker"
+        />
+      </button>
+    </div>
+  </div>
+</div>

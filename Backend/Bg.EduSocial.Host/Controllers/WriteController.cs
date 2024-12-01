@@ -1,22 +1,20 @@
-﻿using Bg.EduSocial.Constract.Cores;
+﻿using Bg.EduSocial.Constract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bg.EduSocial.Host.Controllers
 {
     [ApiController]
-    public class WriteController<TEntity, TEntityDto, TEntityInsertDto, TEntityUpdateDto> : ReadController<TEntity, TEntityDto>
+    public class WriteController<TService, TEntity, TEntityDto, TEntityEditDto> : ReadController<TService,TEntity, TEntityDto> where TService : IWriteService<TEntity, TEntityDto, TEntityEditDto>
     {
-        private readonly IWriteService<TEntity, TEntityDto, TEntityInsertDto, TEntityUpdateDto> _writeService;
-        public WriteController(IWriteService<TEntity, TEntityDto, TEntityInsertDto, TEntityUpdateDto> writeService) : base(writeService)
+        public WriteController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            _writeService = writeService;
         }
         [HttpPost()]
-        public virtual async Task<IActionResult> InsertAsync(TEntityInsertDto entityInsertDto)
+        public virtual async Task<IActionResult> InsertAsync(TEntityEditDto entityInsertDto)
         {
             try
             {
-                var status = _writeService.InsertAsync(entityInsertDto);
+                var status = _service.InsertAsync(entityInsertDto);
                 return StatusCode(201, status);
             } catch (Exception ex)
             {

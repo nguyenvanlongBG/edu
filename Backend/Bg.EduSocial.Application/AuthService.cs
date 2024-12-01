@@ -1,29 +1,23 @@
 ﻿using Bg.EduSocial.Constract.Auth;
 using Bg.EduSocial.Constract.Authen;
-using Bg.EduSocial.Domain.Users;
-using Bg.EduSocial.Helper.Commons;
+using Bg.EduSocial.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Bg.EduSocial.Application
 {
     public class AuthService : IAuthService
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<User> _signInManager;
-        private UserManager<User> _userManager;
+        private readonly SignInManager<AccountEntity> _signInManager;
+        private UserManager<UserEntity> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AuthService(IConfiguration configuration, SignInManager<User> signInManager, IHttpContextAccessor httpContextAccessor)
+        public AuthService(IConfiguration configuration, SignInManager<AccountEntity> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _signInManager = signInManager;

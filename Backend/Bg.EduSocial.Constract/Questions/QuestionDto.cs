@@ -1,22 +1,13 @@
-﻿using Bg.EduSocial.Domain.Questions;
-using Bg.EduSocial.Domain.Shared.Modes;
-using Bg.EduSocial.Domain.Shared.Questions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bg.EduSocial.Constract.Cores;
+using Bg.EduSocial.Domain;
+using Bg.EduSocial.Domain.Shared.ModelState;
 
-namespace Bg.EduSocial.Constract.Questions
+namespace Bg.EduSocial.Constract
 {
-    public class QuestionDto
+    public class QuestionDto: QuestionEntity, IRecordState
     {
-        public Guid ID { get; set; }
-        public string Description { get; set; }
-        public QuestionType QuestionType { get; set; }
-        public string ResultsIDs { get; set; }
-        public ICollection<AnswerDto> Answers { get; set; } = new List<AnswerDto>();
-        public EditMode EditMode { get; set; } = EditMode.NONE;
+        public ICollection<OptionDto> options { get; set; } = new List<OptionDto>();
+        public List<object> object_content { get; set; }
+        public ModelState State { get; set; } = ModelState.View;
     }
 }

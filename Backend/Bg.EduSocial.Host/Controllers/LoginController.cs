@@ -1,7 +1,9 @@
-﻿using Bg.EduSocial.Constract.Authen;
-using Bg.EduSocial.Domain.Users;
+﻿using Bg.EduSocial.Application;
+using Bg.EduSocial.Constract.Authen;
+using Bg.EduSocial.Constract.Questions;
+using Bg.EduSocial.Constract.Tests;
+using Bg.EduSocial.Domain;
 using Bg.EduSocial.Helper.Commons;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +19,13 @@ namespace Bg.EduSocial.Host.Controllers
     public class LoginController: ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<User> _signInManager;
-        public LoginController(IConfiguration configuration, SignInManager<User> signInManager)
+        private readonly SignInManager<AccountEntity> _signInManager;
+        private readonly IQuestionService _questionService;
+        public LoginController(IConfiguration configuration, SignInManager<AccountEntity> signInManager, IQuestionService questionService)
         {
             _configuration = configuration;
             _signInManager = signInManager;
+            _questionService = questionService;
         }
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
@@ -50,7 +54,7 @@ namespace Bg.EduSocial.Host.Controllers
         [HttpGet]
         public async Task<IActionResult> Authen()
         {
-            var user = await CommonFunction.GetUserFromToken();
+            //var user = await CommonFunction.GetUserFromToken();
             return Ok("OK");
 
         }
@@ -59,13 +63,6 @@ namespace Bg.EduSocial.Host.Controllers
         public async Task<IActionResult> Done()
         {
             return Ok("Done Authen");
-
-        }
-        [HttpPost("uploadFile")]
-        public IActionResult CreateQuestionsFromFile(IFormFile file, [FromForm] string testId)
-        {
-            var data = EditorFunction.GetLatexFromFile(file);
-            return Ok(data);
 
         }
     }

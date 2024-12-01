@@ -4643,11 +4643,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj",
+      "projectUniqueName": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj",
       "projectName": "Bg.EduSocial.Host",
-      "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj",
+      "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Host\\Bg.EduSocial.Host.csproj",
       "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
-      "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Host\\obj\\",
+      "outputPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Host\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4664,17 +4664,17 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj": {
-              "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj"
+            "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj": {
+              "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Application\\Bg.EduSocial.Application.csproj"
             },
-            "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj": {
-              "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj"
+            "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj": {
+              "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Constract\\Bg.EduSocial.Constract.csproj"
             },
-            "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
-              "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+            "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+              "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
             },
-            "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj": {
-              "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj"
+            "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj": {
+              "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.EntityFrameworkCore\\Bg.EduSocial.EntityFrameworkCore.csproj"
             }
           }
         }

@@ -2201,11 +2201,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj",
+      "projectUniqueName": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj",
       "projectName": "Bg.EduSocial.Helper",
-      "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj",
+      "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Helper\\Bg.EduSocial.Helper.csproj",
       "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
-      "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.Helper\\obj\\",
+      "outputPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Helper\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -2222,8 +2222,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
-              "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
+            "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj": {
+              "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.Domain\\Bg.EduSocial.Domain.csproj"
             }
           }
         }

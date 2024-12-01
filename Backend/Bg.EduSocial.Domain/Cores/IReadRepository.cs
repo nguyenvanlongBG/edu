@@ -8,7 +8,8 @@ namespace Bg.EduSocial.Domain.Cores
 {
     public interface IReadRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> FilterAsync();
+        Task<List<TEntity>> FilterAsync(List<FilterCondition> filters);
         Task<TEntity> GetById(Guid id);
+        Task<List<TEntity>> GetPagingAsync(int skip, int take, List<FilterCondition> filters);
     }
 }

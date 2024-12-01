@@ -1,18 +1,16 @@
-﻿using Bg.EduSocial.Constract.Cores;
+﻿using Bg.EduSocial.Constract;
 using Bg.EduSocial.Constract.Questions;
-using Bg.EduSocial.Domain.Questions;
+using Bg.EduSocial.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bg.EduSocial.Host.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class QuestionController : WriteController<Question, QuestionDto, QuestionEditDto, QuestionEditDto>
+    public class QuestionController : WriteController<IQuestionService,QuestionEntity, QuestionDto, QuestionEditDto>
     {
-        private readonly IQuestionService _questionService;
-        public QuestionController(IQuestionService questionService) : base(questionService)
+        public QuestionController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            _questionService = questionService;
         }
     }
 }

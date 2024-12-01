@@ -4,6 +4,7 @@ using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,35 @@ namespace Bg.EduSocial.EFCore.Repositories
         {
         }
 
+        public async Task<int> DeleteManyAsync(List<TEntity> entities)
+        {
+            var keyProperty = typeof(TEntity).GetProperties()
+        .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)));
+
+            if (keyProperty == null)
+            {
+                throw new InvalidOperationException($"Class {typeof(TEntity).Name} không có thuộc tính được đánh dấu [Key].");
+            }
+
+            // Lấy giá trị từ thuộc tính [Key]
+            var targetIDs = new List<object>();
+            foreach (var entity in entities)
+            {
+                var keyValue = keyProperty.GetValue(entity);
+                if (keyValue != null)
+                {
+                    targetIDs.Add(keyValue);
+                }
+            }
+
+            // Lọc các bản ghi trong `Records` dựa trên giá trị của thuộc tính [Key]
+            var entitiesToDelete = Records
+                .Where(entity => targetIDs.Contains(keyProperty.GetValue(entity)))
+                .ToList();
+            Records.RemoveRange(entitiesToDelete);
+            return await Context.SaveChangesAsync();
+        }
+
         public virtual async Task<int> InsertAsync(TEntity entity)
         {
             var result = await Records.AddAsync(entity);
@@ -23,7 +53,7 @@ namespace Bg.EduSocial.EFCore.Repositories
             return 0;
         }
 
-        public virtual async Task<int> InsertManyAsync(TEntity[] entities)
+        public virtual async Task<int> InsertManyAsync(List<TEntity> entities)
         {
             await Records.AddRangeAsync(entities);
             return Context.SaveChanges();
@@ -40,23 +70,45 @@ namespace Bg.EduSocial.EFCore.Repositories
             return 0;
         }
 
-        public virtual async Task<int> UpdateManyAsync(TEntity[] entities)
+        public virtual async Task<int> UpdateManyAsync(List<TEntity> entities)
         {
-            var targetIDs = new List<Guid>();
+            var keyProperty = typeof(TEntity).GetProperties()
+        .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)));
+
+            if (keyProperty == null)
+            {
+                throw new InvalidOperationException($"Class {typeof(TEntity).Name} không có thuộc tính được đánh dấu [Key].");
+            }
+
+            // Lấy giá trị từ thuộc tính [Key]
+            var targetIDs = new List<object>();
             foreach (var entity in entities)
             {
-                targetIDs.Add(entity.ID);
+                var keyValue = keyProperty.GetValue(entity);
+                if (keyValue != null)
+                {
+                    targetIDs.Add(keyValue);
+                }
             }
-            var entitiesToUpdate = Records.Where(entity => targetIDs.Contains(entity.ID)).ToList();
+
+            // Lọc các bản ghi trong `Records` dựa trên giá trị của thuộc tính [Key]
+            var entitiesToUpdate = Records
+                .Where(entity => targetIDs.Contains(keyProperty.GetValue(entity)))
+                .ToList();
+
+            // Cập nhật giá trị
             foreach (var entityUpdate in entitiesToUpdate)
             {
-                var entity = entities.First(entity => entity.ID == entityUpdate.ID);
+                var entity = entities.First(e =>
+                    keyProperty.GetValue(e).Equals(keyProperty.GetValue(entityUpdate))
+                );
                 if (entity != null)
                 {
                     Context.Entry(entityUpdate).CurrentValues.SetValues(entity);
                 }
             }
-            return Context.SaveChanges();
+
+            return await Context.SaveChangesAsync();
         }
     }
 }

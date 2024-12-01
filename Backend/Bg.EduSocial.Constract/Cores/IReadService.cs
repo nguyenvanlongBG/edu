@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bg.EduSocial.Constract.Base;
+using Bg.EduSocial.Domain.Cores;
 
-namespace Bg.EduSocial.Constract.Cores
+namespace Bg.EduSocial.Constract
 {
-    public interface IReadService <TEntity, TEntityDto>
+    public interface IReadService<TEntity, TEntityDto>
     {
         Task<TEntityDto> GetById(Guid id);
-        Task<IEnumerable<TEntityDto>> FilterAsync();
+        Task<List<TEntityDto>> FilterAsync(List<FilterCondition> filters);
+        Task<List<TEntityDto>> GetPagingAsync(PagingParam pagingParam);
     }
 }

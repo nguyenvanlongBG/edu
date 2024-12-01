@@ -1,14 +1,10 @@
 ﻿using Bg.EduSocial.Constract.Cores;
-using Bg.EduSocial.Domain.Questions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bg.EduSocial.Domain;
 
 namespace Bg.EduSocial.Constract.Questions
 {
-    public interface IQuestionService: IWriteService<Question, QuestionDto, QuestionEditDto, QuestionEditDto>
+    public interface IQuestionService: IWriteService<QuestionEntity, QuestionDto, QuestionEditDto>
     {
+        Task HandleAddQuestion(List<QuestionDto> questions);
     }
 }

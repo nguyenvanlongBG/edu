@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Bg.EduSocial.Domain.Questions
 {
-    public interface IQuestionRepository : IWriteRepository<Question>
+    public interface IQuestionRepository : IWriteRepository<QuestionEntity>
     {
-        Task<IEnumerable<Question>> GetByTestID(Guid testID);
+        Task<IEnumerable<QuestionEntity>> GetByTestID(Guid testID);
     }
 }

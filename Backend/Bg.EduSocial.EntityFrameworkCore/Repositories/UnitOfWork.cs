@@ -45,11 +45,11 @@ namespace Bg.EduSocial.EFCore.Repositories
             _transaction?.Dispose();
         }
 
-        public IDbContextTransaction GetTransaction()
+        public async Task<IDbContextTransaction> GetTransaction()
         {
             if (_transaction is null)
             {
-                _transaction = _context.Database.BeginTransaction();
+                _transaction = await _context.Database.BeginTransactionAsync();
             }
             return _transaction;
         }

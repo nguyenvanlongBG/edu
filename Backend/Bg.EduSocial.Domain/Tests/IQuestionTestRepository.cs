@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bg.EduSocial.Domain.Tests
 {
-    public interface IQuestionTestRepository: IWriteRepository<QuestionTest>
+    public interface IQuestionTestRepository: IWriteRepository<QuestionTestEntity>
     {
     }
 }

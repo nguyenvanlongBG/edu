@@ -1,11 +1,4 @@
-﻿using Bg.EduSocial.Domain.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Bg.EduSocial.EntityFrameworkCore.Extensions
 {
@@ -14,21 +7,21 @@ namespace Bg.EduSocial.EntityFrameworkCore.Extensions
         
         public static void SeedUser(ModelBuilder modelBuilder)
         {
-            IPasswordHasher<User> passwordHasher = new PasswordHasher<User>();
-            var user = new User()
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "",
-                PasswordHash = "",
-                PhoneNumber = "1234567890",
-                NormalizedUserName = "ADMIN",
-                NormalizedEmail = "ADMIN@GMAIL.COM",
-                SecurityStamp = Guid.NewGuid().ToString(),
-            };
-            user.PasswordHash = passwordHasher.HashPassword(user, "Admin@123");
-            modelBuilder.Entity<User>().HasData(
-                user
-                ) ;
+            //IPasswordHasher<UserEntity> passwordHasher = new PasswordHasher<UserEntity>();
+            //var user = new UserEntity()
+            //{
+            //    Id = Guid.NewGuid().ToString(),
+            //    UserName = "",
+            //    PasswordHash = "",
+            //    PhoneNumber = "1234567890",
+            //    NormalizedUserName = "ADMIN",
+            //    NormalizedEmail = "ADMIN@GMAIL.COM",
+            //    SecurityStamp = Guid.NewGuid().ToString(),
+            //};
+            //user.PasswordHash = passwordHasher.HashPassword(user, "Admin@123");
+            //modelBuilder.Entity<UserEntity>().HasData(
+            //    user
+            //    ) ;
         }
     }
 }

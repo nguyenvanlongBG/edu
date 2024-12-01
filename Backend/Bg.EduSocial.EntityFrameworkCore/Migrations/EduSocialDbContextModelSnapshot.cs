@@ -19,360 +19,425 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.Classroom", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.AnswerEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("answer_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
+                    b.Property<Guid>("exam_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("modified_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("note")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("ID");
+                    b.Property<decimal>("point")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Classrooms");
+                    b.Property<Guid>("question_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("answer_id");
+
+                    b.ToTable("answer");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.EnrollmentClass", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.ChapterEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("chapter_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ClassID")
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("subject_id")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.HasKey("chapter_id");
+
+                    b.ToTable("chapter");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.ClassroomEntity", b =>
+                {
+                    b.Property<Guid>("classroom_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ModifiedBy")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("classroom_id");
+
+                    b.ToTable("classroom");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.ExamEntity", b =>
+                {
+                    b.Property<Guid>("exam_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("point")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("test_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("exam_id");
+
+                    b.ToTable("exam");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.OptionEntity", b =>
+                {
+                    b.Property<Guid>("option_question_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("question_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("option_question_id");
+
+                    b.ToTable("option");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.QuestionChapterEntity", b =>
+                {
+                    b.Property<Guid>("questio_chapter_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("chapter_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("question_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("subject_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("questio_chapter_id");
+
+                    b.ToTable("question_chapter");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.QuestionEntity", b =>
+                {
+                    b.Property<Guid>("question_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("level")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("EnrollmentClass");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.TestClass", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ClassroomID")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("modified_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<decimal>("point")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("TestID")
+                    b.Property<Guid>("subject_id")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClassroomID");
-
-                    b.HasIndex("TestID");
-
-                    b.ToTable("TestClasses");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.UserClassroom", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ClassroomID")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Type")
+                    b.Property<int>("type")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.HasKey("question_id");
 
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClassroomID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserClassrooms");
+                    b.ToTable("question");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Questions.Answer", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.QuestionTestEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("question_test_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("modified_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("QuestionID")
+                    b.Property<Guid>("question_id")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("ID");
+                    b.Property<Guid>("test_id")
+                        .HasColumnType("char(36)");
 
-                    b.HasIndex("QuestionID");
+                    b.HasKey("question_test_id");
 
-                    b.ToTable("Answers");
+                    b.ToTable("question_test");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Questions.Question", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.ResultQuestionEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("result_question_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<Guid>("question_id")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.HasKey("result_question_id");
 
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("QuestionType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ResultsIDs")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Questions");
+                    b.ToTable("result_question");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Submissions.Submission", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.SubjectEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("subject_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ModifiedBy")
+                    b.Property<string>("modified_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<float>("Point")
-                        .HasColumnType("float");
+                    b.Property<string>("subject_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<Guid>("TestID")
-                        .HasColumnType("char(36)");
+                    b.HasKey("subject_id");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TestID");
-
-                    b.ToTable("Submissions");
+                    b.ToTable("subject");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Submissions.SubmissionAnswer", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.TestClassroomEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("test_classroom_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("QuestionID")
+                    b.Property<Guid>("classroom_id")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("SubmissionID")
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("test_id")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("ID");
+                    b.HasKey("test_classroom_id");
 
-                    b.HasIndex("QuestionID");
-
-                    b.HasIndex("SubmissionID");
-
-                    b.ToTable("SubmissionAnswers");
+                    b.ToTable("test_classroom");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Tests.QuestionTest", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.TestEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("test_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ModifiedBy")
+                    b.Property<DateTime?>("finish_time")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("QuestionID")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<Guid>("TestID")
-                        .HasColumnType("char(36)");
+                    b.Property<DateTime>("start_time")
+                        .HasColumnType("datetime(6)");
 
-                    b.HasKey("ID");
+                    b.HasKey("test_id");
 
-                    b.HasIndex("QuestionID");
-
-                    b.HasIndex("TestID");
-
-                    b.ToTable("QuestionTests");
+                    b.ToTable("test");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Tests.Test", b =>
+            modelBuilder.Entity("Bg.EduSocial.Domain.UserEntity", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("user_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("FinishTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ModifiedBy")
+                    b.Property<string>("modified_by")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime(6)");
+                    b.HasKey("user_id");
 
-                    b.HasKey("ID");
-
-                    b.ToTable("Tests");
+                    b.ToTable("UserEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -444,10 +509,6 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -498,10 +559,6 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -604,145 +661,6 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasDiscriminator().HasValue("Role");
                 });
 
-            modelBuilder.Entity("Bg.EduSocial.Domain.Users.User", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasDiscriminator().HasValue("User");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "746c41a7-6157-4601-a0dc-1faa248a3649",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "f3df083a-0f09-49a5-9fdc-7b34879e69c1",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAENkAFykNqlOrlsaMQpo6gPM6oEGZ/tPhdVKXPN08HxIFhLTy/MOg6yocX9Q/uZolOw==",
-                            PhoneNumber = "1234567890",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "8becdc1f-76f8-4529-8b47-7c5c58d9c602",
-                            TwoFactorEnabled = false,
-                            UserName = "",
-                            CreatedBy = "",
-                            ModifiedBy = ""
-                        });
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.TestClass", b =>
-                {
-                    b.HasOne("Bg.EduSocial.Domain.Classes.Classroom", "Classroom")
-                        .WithMany("TestClasses")
-                        .HasForeignKey("ClassroomID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bg.EduSocial.Domain.Tests.Test", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Classroom");
-
-                    b.Navigation("Test");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.UserClassroom", b =>
-                {
-                    b.HasOne("Bg.EduSocial.Domain.Classes.Classroom", "Classroom")
-                        .WithMany("UserClasses")
-                        .HasForeignKey("ClassroomID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bg.EduSocial.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Classroom");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Questions.Answer", b =>
-                {
-                    b.HasOne("Bg.EduSocial.Domain.Questions.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Submissions.Submission", b =>
-                {
-                    b.HasOne("Bg.EduSocial.Domain.Tests.Test", "Test")
-                        .WithMany("Submissions")
-                        .HasForeignKey("TestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Test");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Submissions.SubmissionAnswer", b =>
-                {
-                    b.HasOne("Bg.EduSocial.Domain.Questions.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bg.EduSocial.Domain.Submissions.Submission", "Submission")
-                        .WithMany("SubmissionAnswers")
-                        .HasForeignKey("SubmissionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Submission");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Tests.QuestionTest", b =>
-                {
-                    b.HasOne("Bg.EduSocial.Domain.Questions.Question", "Question")
-                        .WithMany("QuestionTests")
-                        .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bg.EduSocial.Domain.Tests.Test", "Test")
-                        .WithMany("QuestionTests")
-                        .HasForeignKey("TestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Test");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -792,32 +710,6 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Classes.Classroom", b =>
-                {
-                    b.Navigation("TestClasses");
-
-                    b.Navigation("UserClasses");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Questions.Question", b =>
-                {
-                    b.Navigation("Answers");
-
-                    b.Navigation("QuestionTests");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Submissions.Submission", b =>
-                {
-                    b.Navigation("SubmissionAnswers");
-                });
-
-            modelBuilder.Entity("Bg.EduSocial.Domain.Tests.Test", b =>
-                {
-                    b.Navigation("QuestionTests");
-
-                    b.Navigation("Submissions");
                 });
 #pragma warning restore 612, 618
         }

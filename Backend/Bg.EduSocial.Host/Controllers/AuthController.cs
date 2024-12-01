@@ -1,12 +1,8 @@
 ﻿using Bg.EduSocial.Constract.Auth;
 using Bg.EduSocial.Constract.Authen;
-using Bg.EduSocial.Domain.Users;
+using Bg.EduSocial.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Bg.EduSocial.Host.Controllers
 {
@@ -15,7 +11,7 @@ namespace Bg.EduSocial.Host.Controllers
     public class AuthController: ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<UserEntity> _signInManager;
         private readonly IAuthService _authService;
         public AuthController(IAuthService authService)
         {

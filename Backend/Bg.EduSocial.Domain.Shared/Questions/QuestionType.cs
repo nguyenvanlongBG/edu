@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bg.EduSocial.Domain.Shared.Questions
+﻿namespace Bg.EduSocial.Domain.Shared.Questions
 {
     public enum QuestionType
     {
-        CHOOSE_1_RESULT,
-        ESSAY,
-        CHOOSE_MULTI_RESULT,
-        FILL_ANSWER
+        SingleChoice = 1,
+        MultiChoice = 2,
+        FillResult = 3
+    }
+    public enum QuestionLevel
+    {
+        Recognition = 1,         // Nhận biết
+        Understanding = 2,       // Thông hiểu
+        Application = 3,         // Vận dụng
+        AdvancedApplication = 4  // Vận dụng cao
     }
 }

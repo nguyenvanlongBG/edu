@@ -1,16 +1,9 @@
 ﻿using Bg.EduSocial.Constract.Cores;
-using Bg.EduSocial.Constract.Questions;
-using Bg.EduSocial.Domain.Questions;
-using Bg.EduSocial.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bg.EduSocial.Domain;
 
-namespace Bg.EduSocial.Constract.Users
+namespace Bg.EduSocial.Constract
 {
-    public interface IUserService : IWriteService<User, UserDto, UserEditDto, UserEditDto>
+    public interface IUserService : IWriteService<UserEntity, UserDto, UserEditDto>
     {
     }
 }

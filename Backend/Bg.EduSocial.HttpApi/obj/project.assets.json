@@ -1904,11 +1904,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\edu\\Backend\\Bg.EduSocial.HttpApi\\Bg.EduSocial.HttpApi.csproj",
+      "projectUniqueName": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.HttpApi\\Bg.EduSocial.HttpApi.csproj",
       "projectName": "Bg.EduSocial.HttpApi",
-      "projectPath": "G:\\edu\\Backend\\Bg.EduSocial.HttpApi\\Bg.EduSocial.HttpApi.csproj",
+      "projectPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.HttpApi\\Bg.EduSocial.HttpApi.csproj",
       "packagesPath": "C:\\Users\\Lap City\\.nuget\\packages\\",
-      "outputPath": "G:\\edu\\Backend\\Bg.EduSocial.HttpApi\\obj\\",
+      "outputPath": "G:\\Edu-Social\\edu\\Backend\\Bg.EduSocial.HttpApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Lap City\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,29 +1,27 @@
 ﻿using Bg.EduSocial.Application;
+using Bg.EduSocial.Constract;
 using Bg.EduSocial.Constract.Auth;
 using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Constract.Cores;
+using Bg.EduSocial.Constract.FileQuestion;
 using Bg.EduSocial.Constract.Questions;
-using Bg.EduSocial.Constract.Submissions;
 using Bg.EduSocial.Constract.Tests;
+using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Auths;
 using Bg.EduSocial.Domain.Classes;
 using Bg.EduSocial.Domain.Questions;
 using Bg.EduSocial.Domain.Roles;
-using Bg.EduSocial.Domain.Submissions;
 using Bg.EduSocial.Domain.Tests;
-using Bg.EduSocial.Domain.Users;
 using Bg.EduSocial.EFCore.Repositories;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Bg.EduSocial.EntityFrameworkCore.Repositories;
 using Bg.EduSocial.Helper.Commons;
 using Bg.EduSocial.Host.Middleware;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.Xml.Xsl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +34,7 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<EduSocialDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<AccountEntity, Role>().AddEntityFrameworkStores<EduSocialDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,7 +57,7 @@ builder.Services.AddAuthentication(options =>
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
 {
-    policy.WithOrigins("http://localhost:8080", "http://localhost:5000")
+    policy.WithOrigins("http://localhost:5173", "http://localhost:5000")
           .AllowAnyMethod()
           .AllowAnyHeader() // Cho phép tất cả các header
           .AllowCredentials(); // Nếu sử dụng cookie hoặc thông tin xác thực;
@@ -67,19 +65,18 @@ builder.Services.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigi
 
 builder.Services.AddSingleton<IConfiguration>(configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IFileQuestionService, FileQuestionService>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<IQuestionTestRepository, QuestionTestRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
-builder.Services.AddScoped<ISubmissionService, SubmissionService>();
-builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
-builder.Services.AddScoped<ISubmissionAnswerRepository, SubmissionAnswerRepository>();
+builder.Services.AddScoped<IOptionService, OptionService>();
+builder.Services.AddScoped<IOptionRepo, OptionRepo>();
 builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddTransient<QuestionManager>();
-builder.Services.AddTransient<AuthManager>();
+builder.Services.AddScoped<IConvertService, ConvertService>();
 builder.Services.AddDbContext<EduSocialDbContext>(
     options => options.UseMySQL("server=localhost;database=edusocial;user=root;password=")
 );
@@ -90,8 +87,8 @@ builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
-CommonFunction.Initialize(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>(), builder.Services.BuildServiceProvider().GetRequiredService<AuthManager>());
-EditorFunction.Initialize();
+//CommonFunction.Initialize(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>(), builder.Services.BuildServiceProvider().GetRequiredService<AuthManager>());
+//EditorFunction.Initialize();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

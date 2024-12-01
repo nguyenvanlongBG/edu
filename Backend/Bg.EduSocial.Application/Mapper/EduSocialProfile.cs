@@ -1,41 +1,58 @@
 ﻿using AutoMapper;
-using Bg.EduSocial.Constract.Classrooms;
-using Bg.EduSocial.Constract.Questions;
-using Bg.EduSocial.Constract.Submissions;
-using Bg.EduSocial.Constract.Tests;
-using Bg.EduSocial.Domain.Classes;
-using Bg.EduSocial.Domain.Questions;
-using Bg.EduSocial.Domain.Submissions;
-using Bg.EduSocial.Domain.Tests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bg.EduSocial.Constract;
+using Bg.EduSocial.Domain;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Bg.EduSocial.Application.Mapper
 {
     public class EduSocialProfile : Profile
     {
         public EduSocialProfile() {
-            CreateMap<Question, QuestionDto>();
-            CreateMap<QuestionDto, Question>();
-            CreateMap<QuestionEditDto, Question>();
-            CreateMap<Test, TestDto>();
-            CreateMap<TestDto, Test>();
-            CreateMap<TestInsertDto, Test>();
-            CreateMap<TestUpdateDto, Test>();
-            CreateMap<Answer, AnswerDto>();
-            CreateMap<AnswerDto, Answer>();
-            CreateMap<AnswerEditDto, Answer>();
-            CreateMap<Submission, SubmissionDto>();
-            CreateMap<SubmissionEditDto, Submission>();
-            CreateMap<Submission, SubmissionEditDto>();
-            CreateMap<SubmissionAnswerDto, SubmissionAnswer>();
-            CreateMap<SubmissionAnswer, SubmissionAnswerDto>();
-            CreateMap<Classroom, ClassroomDto>();
-            CreateMap<ClassroomDto, Classroom>();
-            CreateMap<ClassroomEditDto, Classroom>();
+            CreateMap<QuestionEntity, QuestionDto>()
+            .ForMember(dest => dest.object_content, opt => opt.MapFrom(src =>
+                string.IsNullOrEmpty(src.content)
+                    ? new List<object>()
+                    : JsonSerializer.Deserialize<List<object>>(src.content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    }) ?? new List<object>()));
+
+            // Map từ QuestionDto sang QuestionEntity
+            CreateMap<QuestionDto, QuestionEntity>()
+                .ForMember(dest => dest.content, opt => opt.MapFrom(src =>
+                    JsonSerializer.Serialize(src.object_content, new JsonSerializerOptions
+                    {
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    })));
+
+            CreateMap<OptionEditDto, OptionEntity>()
+               .ForMember(dest => dest.content, opt => opt.MapFrom(src =>
+                   JsonSerializer.Serialize(src.object_content, new JsonSerializerOptions
+                   {
+                       DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                   })));
+
+            CreateMap<OptionEntity, OptionDto>()
+               .ForMember(dest => dest.object_content, opt => opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.content)
+                    ? new List<object>()
+                    : JsonSerializer.Deserialize<List<object>>(src.content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    }) ?? new List<object>()));
+            CreateMap<OptionEntity, OptionEditDto>()
+               .ForMember(dest => dest.object_content, opt => opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.content)
+                    ? new List<object>()
+                    : JsonSerializer.Deserialize<List<object>>(src.content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    }) ?? new List<object>()));
+            CreateMap<OptionDto, OptionEditDto>();
+            CreateMap<QuestionDto, QuestionEditDto>();
+            CreateMap<QuestionEditDto, QuestionDto>();
+
         }
     }
 }

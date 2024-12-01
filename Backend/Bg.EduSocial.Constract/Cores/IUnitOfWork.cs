@@ -15,7 +15,7 @@ namespace Bg.EduSocial.Constract.Cores
         void Dispose();
         void Commit();
         void Rollback();
-        IDbContextTransaction GetTransaction();
+        Task<IDbContextTransaction> GetTransaction();
         TContext GetContext();
         void SaveChange();
     }

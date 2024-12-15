@@ -7,6 +7,7 @@ using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -87,7 +88,11 @@ namespace Bg.EduSocial.EFCore.Repositories
         {
             var parameter = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(parameter, condition.Field);
-            var constant = Expression.Constant(condition.Value);
+
+            // Chuyển đổi giá trị constant sang kiểu dữ liệu của property
+            var constant = Expression.Constant(
+                Convert.ChangeType(condition.Value, property.Type)
+            );
 
             Expression? comparison = condition.Operator switch
             {
@@ -97,14 +102,26 @@ namespace Bg.EduSocial.EFCore.Repositories
                 FilterOperator.LessThan => Expression.LessThan(property, constant),
                 FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, constant),
                 FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(property, constant),
-                FilterOperator.Contains => Expression.Call(property, "Contains", null, constant),
-                FilterOperator.StartsWith => Expression.Call(property, "StartsWith", null, constant),
-                FilterOperator.EndsWith => Expression.Call(property, "EndsWith", null, constant),
+                FilterOperator.Contains => Expression.Call(
+                    EnsureString(property),
+                    typeof(string).GetMethod("Contains", new[] { typeof(string) }),
+                    constant
+                ),
+                FilterOperator.StartsWith => Expression.Call(
+                    EnsureString(property),
+                    typeof(string).GetMethod("StartsWith", new[] { typeof(string) }),
+                    constant
+                ),
+                FilterOperator.EndsWith => Expression.Call(
+                    EnsureString(property),
+                    typeof(string).GetMethod("EndsWith", new[] { typeof(string) }),
+                    constant
+                ),
                 FilterOperator.In => Expression.Call(
                     typeof(Enumerable),
                     "Contains",
                     new Type[] { property.Type },
-                    constant,
+                    Expression.Constant(((IEnumerable)condition.Value).Cast<object>().ToList()),
                     property
                 ),
                 _ => throw new NotSupportedException($"Operator '{condition.Operator}' is not supported.")
@@ -113,6 +130,16 @@ namespace Bg.EduSocial.EFCore.Repositories
             var lambda = Expression.Lambda<Func<T, bool>>(comparison!, parameter);
 
             return query.Where(lambda);
+        }
+
+        // Hàm đảm bảo rằng property là kiểu string
+        private static Expression EnsureString(Expression property)
+        {
+            if (property.Type != typeof(string))
+            {
+                throw new InvalidOperationException($"Property '{property}' must be a string for this operator.");
+            }
+            return property;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bg.EduSocial.Constract.Cores;
+using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Shared.ModelState;
 using Bg.EduSocial.Domain.Shared.Modes;
 using System;
@@ -9,11 +10,8 @@ using System.Threading.Tasks;
 
 namespace Bg.EduSocial.Constract.Classrooms
 {
-    public class ClassroomEditDto: IRecordState
+    public class ClassroomEditDto: ClassroomEntity, IRecordState
     {
-        public Guid ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
         public ModelState State { get; set; } = ModelState.View;
     }
 }

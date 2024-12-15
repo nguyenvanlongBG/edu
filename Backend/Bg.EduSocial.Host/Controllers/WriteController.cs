@@ -1,10 +1,11 @@
 ﻿using Bg.EduSocial.Constract;
+using Bg.EduSocial.Domain.Cores;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bg.EduSocial.Host.Controllers
 {
     [ApiController]
-    public class WriteController<TService, TEntity, TEntityDto, TEntityEditDto> : ReadController<TService,TEntity, TEntityDto> where TService : IWriteService<TEntity, TEntityDto, TEntityEditDto>
+    public class WriteController<TService, TEntity, TEntityDto, TEntityEditDto> : ReadController<TService,TEntity, TEntityDto> where TService : IWriteService<TEntity, TEntityDto, TEntityEditDto> where TEntity : BaseEntity
     {
         public WriteController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
@@ -14,8 +15,8 @@ namespace Bg.EduSocial.Host.Controllers
         {
             try
             {
-                var status = _service.InsertAsync(entityInsertDto);
-                return StatusCode(201, status);
+                var result = await _service.InsertAsync(entityInsertDto);
+                return StatusCode(201, result);
             } catch (Exception ex)
             {
                 throw ex;

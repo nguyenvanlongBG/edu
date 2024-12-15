@@ -33,20 +33,6 @@ namespace Bg.EduSocial.Application
             return _mapper.Map<List<QuestionDto>>(questions);
         }
 
-        public override async Task<int> InsertAsync(TestEditDto testDto)
-        {
-            try
-            {
-                
-            }
-            catch (Exception ex)
-            {
-                _unitOfWork.Rollback();
-            }
-            finally { _unitOfWork.Dispose(); }
-            return 0;
-        }
-
         public Task<List<QuestionDto>> ReadQuestionFromFile(IFormFile file, string regexStr)
         {
             //EditorFunction.GetLatexFromFile(file, regexStr);

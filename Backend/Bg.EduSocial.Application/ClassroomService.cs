@@ -9,5 +9,50 @@ namespace Bg.EduSocial.Application
         public ClassroomService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
+
+
+        /// <summary>
+        /// Validate trước khi thêm 1 bản ghi
+        /// </summary>
+        /// <param name="entityCreateDto">Đối tượng cần validate</param>
+        /// <returns></returns>
+        public override async Task<bool> ValidateBeforeInsert(ClassroomEditDto classroom)
+        {
+            if (classroom == null || string.IsNullOrEmpty(classroom.name)) return false;
+            return true;
+        }
+
+        public override async Task HandleBeforeSaveAsync(ClassroomEditDto classroom)
+        {
+            base.HandleBeforeSaveAsync(classroom);
+            classroom.classroom_code = GenerateClassroomCode(classroom.name);
+        }
+
+        private async Task<string> GenerateUniqueClassroomCodeAsync(string name)
+        {
+            string code = string.Empty;
+            bool isExistClassroomCode = true;
+            while (isExistClassroomCode)
+            {
+                // Sinh mã tạm thời
+                code = GenerateClassroomCode(name);
+                var classroomExist = await _repo.GetByClassroomCode(code);
+                isExistClassroomCode = classroomExist != null ? true : false;
+            }
+            return code;
+        }
+        private string GenerateClassroomCode(string name)
+        {
+            // Lấy chữ cái đầu từ tên
+            string initials = string.Join("", name
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) // Tách các từ
+                .Select(word => char.ToUpper(word[0])));
+
+            // Tạo GUID và lấy 8 ký tự cuối
+            string guidSuffix = Guid.NewGuid().ToString().Replace("-", "").Substring(24); // Lấy 8 ký tự cuối
+
+            // Ghép chữ cái đầu và GUID
+            return $"{initials}-{guidSuffix}".ToUpper(); // Mã in hoa
+        }
     }
 }

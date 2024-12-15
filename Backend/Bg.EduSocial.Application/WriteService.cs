@@ -7,10 +7,10 @@ using System.Data;
 
 namespace Bg.EduSocial.Application
 {
-    public class WriteService<TRepository,TEntity, TEntityDto, TEntityEditDto> : ReadService<TRepository, TEntity, TEntityDto>, IWriteService<TEntity, TEntityDto, TEntityEditDto>
+    public class WriteService<TRepository,TEntity, TEntityDto, TEntityEditDto> : ReadService<TRepository, TEntity, TEntityDto>, IWriteService<TEntity, TEntityDto, TEntityEditDto> 
         where TRepository: IWriteRepository<TEntity>
-        where TEntity: class
-        where TEntityEditDto: IRecordState
+        where TEntity: BaseEntity
+        where TEntityEditDto: TEntity,IRecordState
     {
         public WriteService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
@@ -26,44 +26,51 @@ namespace Bg.EduSocial.Application
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Xử lý trước khi lưu
+        /// Xử lý trước khi thêm mới
         /// </summary>
         /// <param name="entityCreateDto"></param>
         /// <returns></returns>
-        public virtual async Task HandleBeforeSaveAsync(TEntityEditDto entityCreateDto)
+        public virtual async Task HandleBeforeSaveAsync(TEntityEditDto entityHandle)
         {
-
+           if (entityHandle != null && entityHandle.State == ModelState.Insert)
+            {
+                entityHandle.created_date = DateTime.Now;
+                entityHandle.modified_date = DateTime.Now;
+            } else if (entityHandle != null && entityHandle.State == ModelState.Update)
+            {
+                entityHandle.modified_date = DateTime.Now;
+            }
         }
+
         /// <summary>
         /// Thêm 1 bản ghi
         /// </summary>
         /// <param name="entity">Đối tượng cần thêm</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public virtual async Task<int> InsertAsync(TEntityEditDto entityCreateDto)
+        public virtual async Task<TEntityEditDto> InsertAsync(TEntityEditDto entityCreateDto)
         {
             if (entityCreateDto == null) throw new ArgumentNullException();
-            await HandleBeforeSaveAsync(entityCreateDto);
             var resultValidate = await this.ValidateBeforeInsert(entityCreateDto);
             int status = 0;
-            if (resultValidate)
+            if (!resultValidate) throw new ArgumentNullException();
+
+            await HandleBeforeSaveAsync(entityCreateDto);
+            var entity = _mapper.Map<TEntity>(entityCreateDto);
+            _unitOfWork.BeginTransaction();
+            try
             {
-                var entity = _mapper.Map<TEntity>(entityCreateDto);
-                _unitOfWork.BeginTransaction();
-                try
-                {
-                    status = await _repo.InsertAsync(entity);
-                    _unitOfWork.SaveChange();
-                    _unitOfWork.Commit();
-                } catch (Exception ex)
-                {
-                    _unitOfWork.Rollback();
-                } finally
-                {
-                    _unitOfWork.Dispose();
-                }
+                status = await _repo.InsertAsync(entity);
+                _unitOfWork.SaveChange();
+                _unitOfWork.Commit();
+            } catch (Exception ex)
+            {
+                _unitOfWork.Rollback();
+            } finally
+            {
+                _unitOfWork.Dispose();
             }
-            return status;
+            return entityCreateDto;
         }
 
         public async Task<int> InsertManyAsync(List<TEntityEditDto> lstDto)
@@ -118,31 +125,34 @@ namespace Bg.EduSocial.Application
         /// <param name="entity">Đối tượng cần cập nhật</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public virtual async Task<int> UpdateAsync(Guid id, TEntityEditDto entityUpdateDto)
+        public virtual async Task<TEntityEditDto> UpdateAsync(Guid id, TEntityEditDto entityUpdateDto)
         {
             if (entityUpdateDto == null) throw new ArgumentNullException();
             var isValid = await ValidateBeforeUpdate(id, entityUpdateDto);
             int status = 0;
-            if (isValid)
+            if (!isValid) throw new ArgumentNullException();
+            await HandleBeforeSaveAsync(entityUpdateDto);
+            _unitOfWork.BeginTransaction();
+            try
             {
-                _unitOfWork.BeginTransaction();
-                try
+                var entity = _mapper.Map<TEntity>(entityUpdateDto);
+                status = await _repo.UpdateAsync(id, entity);
+                if (status > 0)
                 {
-                    var entity = _mapper.Map<TEntity>(entityUpdateDto);
-                    status = await _repo.UpdateAsync(id, entity);
-                    if (status > 0) {
-                        _unitOfWork.SaveChange();
-                        _unitOfWork.Commit();
-                    }
-                } catch (Exception ex)
-                {
-                    _unitOfWork.Rollback();
-                } finally
-                {
-                    _unitOfWork.Dispose();
+                    _unitOfWork.SaveChange();
+                    _unitOfWork.Commit();
                 }
             }
-            return status;
+            catch (Exception ex)
+            {
+                _unitOfWork.Rollback();
+                throw ex;
+            }
+            finally
+            {
+                _unitOfWork.Dispose();
+            }
+            return entityUpdateDto;
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bg.EduSocial.Constract;
+using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Domain;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -52,6 +53,11 @@ namespace Bg.EduSocial.Application.Mapper
             CreateMap<OptionDto, OptionEditDto>();
             CreateMap<QuestionDto, QuestionEditDto>();
             CreateMap<QuestionEditDto, QuestionDto>();
+
+
+            CreateMap<ClassroomEntity, ClassroomEditDto>();
+            CreateMap<ClassroomEntity, ClassroomDto>();
+            CreateMap<ClassroomEditDto, ClassroomEntity>();
 
         }
     }

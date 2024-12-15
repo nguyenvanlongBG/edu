@@ -1,9 +1,10 @@
 ﻿using Bg.EduSocial.Constract.Cores;
+using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Shared.ModelState;
 
 namespace Bg.EduSocial.Constract
 {
-    public class TestEditDto : IRecordState
+    public class TestEditDto : TestEntity, IRecordState
     {
         public string Name { get; set; }
         public DateTime StartTime { get; set; }

@@ -1,14 +1,17 @@
-﻿using System.Data;
+﻿using Bg.EduSocial.Domain.Cores;
+using System.Data;
 
 namespace Bg.EduSocial.Constract
 {
-    public interface IWriteService<TEntity, TEntityDto, TEntityEditDto> : IReadService<TEntity, TEntityDto>
+    public interface IWriteService<TEntity, TEntityDto, TEntityEditDto> : IReadService<TEntity, TEntityDto> where TEntity : BaseEntity
     {
-        Task<int> InsertAsync(TEntityEditDto entityInsertDto);
+        Task<TEntityEditDto> InsertAsync(TEntityEditDto entityInsertDto);
         Task<int> InsertManyAsync(List<TEntityEditDto> lstDto);
 
         Task<int> UpdateManyAsync(List<TEntityEditDto> lstDto);
         Task<int> DeleteManyAsync(List<TEntityEditDto> lstDto);
+
+        Task HandleBeforeSaveAsync(TEntityEditDto entityHandle);
 
         Task<int> SubmitManyAsync(List<TEntityEditDto> lstDto);
 
@@ -20,7 +23,7 @@ namespace Bg.EduSocial.Constract
         Task<int> SubmitManyAsync(IDbTransaction transaction, List<TEntityEditDto> lstDto);
 
 
-        Task<int> UpdateAsync(Guid id, TEntityEditDto entityUpdateDto);
+        Task<TEntityEditDto> UpdateAsync(Guid id, TEntityEditDto entityUpdateDto);
         Task<TEntity> DeleteAsync(TEntity entity);
         Task<bool> ValidateBeforeInsert(TEntityEditDto entityInsertDto);
         Task<bool> ValidateBeforeUpdate(Guid id, TEntityEditDto entityUpdateDto);

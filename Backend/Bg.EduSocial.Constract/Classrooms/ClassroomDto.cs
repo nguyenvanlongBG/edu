@@ -9,9 +9,11 @@ namespace Bg.EduSocial.Constract.Classrooms
 {
     public class ClassroomDto
     {
-        public Guid ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public EditMode EditMode { get; set; } = EditMode.NONE;
+        public Guid classroom_id { get; set; }
+        public string name { get; set; }
+        public string classroom_code { get; set; }
+
+        public string description { get; set; }
+        public string avatar { get; set; }
     }
 }

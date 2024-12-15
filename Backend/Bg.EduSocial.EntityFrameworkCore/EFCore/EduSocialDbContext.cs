@@ -50,6 +50,7 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
                 entity =>
                 {
                     entity.HasKey(u => u.classroom_id);
+                    entity.HasIndex(u => u.classroom_code).IsUnique();
                 }
             );
             modelBuilder.Entity<SubjectEntity>(

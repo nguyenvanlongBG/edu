@@ -99,6 +99,14 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("avatar")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("classroom_code")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -122,6 +130,9 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("classroom_id");
+
+                    b.HasIndex("classroom_code")
+                        .IsUnique();
 
                     b.ToTable("classroom");
                 });

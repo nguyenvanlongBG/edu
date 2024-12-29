@@ -10,6 +10,7 @@ namespace Bg.EduSocial.Domain
         [Key]
         public Guid test_id { get; set; }
         public string name { get; set; }
+        public double duration { get; set; }
         public DateTime start_time { get; set; }
         public DateTime? finish_time { get; set; }
     }

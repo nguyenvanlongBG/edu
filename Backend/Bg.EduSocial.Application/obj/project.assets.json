@@ -1566,6 +1566,7 @@
         "dependencies": {
           "Bg.EduSocial.Constract": "1.0.0",
           "Bg.EduSocial.Domain": "1.0.0",
+          "Bg.EduSocial.Helper": "1.0.0",
           "Microsoft.AspNetCore.Identity": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.8",
           "Microsoft.Extensions.Configuration": "7.0.0",

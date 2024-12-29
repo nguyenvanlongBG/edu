@@ -1,4 +1,5 @@
-﻿using Bg.EduSocial.Domain.Shared.Modes;
+﻿using Bg.EduSocial.Domain.Shared.ModelState;
+using Bg.EduSocial.Domain.Shared.Modes;
 
 namespace Bg.EduSocial.Constract
 {
@@ -9,6 +10,6 @@ namespace Bg.EduSocial.Constract
         public List<object> object_content { get; set; }
 
         public Guid question_id { get; set; }
-        public EditMode State { get; set; } = EditMode.NONE;
+        public ModelState State { get; set; } = ModelState.View;
     }
 }

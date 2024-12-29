@@ -21,6 +21,7 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
         public DbSet<TestEntity> Tests { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<QuestionTestEntity> QuestionTests { get; set; }
+        public DbSet<ResultQuestionEntity> ResultQuestions { get; set; }
         public DbSet<AnswerEntity> Answers { get; set; }
         public DbSet<ClassroomEntity> Classrooms { get; set; }
         public DbSet<TestClassroomEntity> TestClasses { get; set; }
@@ -102,6 +103,11 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
                 {
                     entity.HasKey(u => u.question_test_id);
                 }
+            );
+            modelBuilder.Entity<AnswerEntity>(entity =>
+            {
+                entity.HasKey(u => u.answer_id);
+            }
             );
             modelBuilder.Entity<QuestionChapterEntity>().HasKey(a => a.questio_chapter_id);
             //modelBuilder.Entity<Answer>().HasOne(a => a.Question).WithMany(q => q.Answers).HasForeignKey(a => a.QuestionID).OnDelete(DeleteBehavior.Cascade);

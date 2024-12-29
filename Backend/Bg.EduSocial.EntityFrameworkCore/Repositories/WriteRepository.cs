@@ -1,11 +1,14 @@
 ﻿using Bg.EduSocial.Constract.Cores;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Vml.Office;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +22,7 @@ namespace Bg.EduSocial.EFCore.Repositories
 
         public async Task<int> DeleteManyAsync(List<TEntity> entities)
         {
+            if (entities == null || entities.Count == 0) return 0;
             var keyProperty = typeof(TEntity).GetProperties()
         .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)));
 
@@ -26,22 +30,18 @@ namespace Bg.EduSocial.EFCore.Repositories
             {
                 throw new InvalidOperationException($"Class {typeof(TEntity).Name} không có thuộc tính được đánh dấu [Key].");
             }
-
-            // Lấy giá trị từ thuộc tính [Key]
-            var targetIDs = new List<object>();
-            foreach (var entity in entities)
+            var keyPropertyName = keyProperty.Name; // Lấy tên của thuộc tính khóa
+            var entitiesToDelete = new List<TEntity>();
+            foreach (var entityUpdate in entities)
             {
-                var keyValue = keyProperty.GetValue(entity);
-                if (keyValue != null)
+                var keyValue = entityUpdate.GetType().GetProperty(keyPropertyName).GetValue(entityUpdate);
+                var entity = await Records.FindAsync(keyValue);
+                if (entity != null)
                 {
-                    targetIDs.Add(keyValue);
+                    entitiesToDelete.Add(entity);
                 }
+                
             }
-
-            // Lọc các bản ghi trong `Records` dựa trên giá trị của thuộc tính [Key]
-            var entitiesToDelete = Records
-                .Where(entity => targetIDs.Contains(keyProperty.GetValue(entity)))
-                .ToList();
             Records.RemoveRange(entitiesToDelete);
             return await Context.SaveChangesAsync();
         }
@@ -72,39 +72,23 @@ namespace Bg.EduSocial.EFCore.Repositories
 
         public virtual async Task<int> UpdateManyAsync(List<TEntity> entities)
         {
+            if (entities == null || !entities.Any()) return 0;
+
             var keyProperty = typeof(TEntity).GetProperties()
-        .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)));
+                .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)));
 
             if (keyProperty == null)
-            {
                 throw new InvalidOperationException($"Class {typeof(TEntity).Name} không có thuộc tính được đánh dấu [Key].");
-            }
 
-            // Lấy giá trị từ thuộc tính [Key]
-            var targetIDs = new List<object>();
-            foreach (var entity in entities)
+            var keyPropertyName = keyProperty.Name; // Lấy tên của thuộc tính khóa
+
+            foreach (var entityUpdate in entities)
             {
-                var keyValue = keyProperty.GetValue(entity);
-                if (keyValue != null)
-                {
-                    targetIDs.Add(keyValue);
-                }
-            }
-
-            // Lọc các bản ghi trong `Records` dựa trên giá trị của thuộc tính [Key]
-            var entitiesToUpdate = Records
-                .Where(entity => targetIDs.Contains(keyProperty.GetValue(entity)))
-                .ToList();
-
-            // Cập nhật giá trị
-            foreach (var entityUpdate in entitiesToUpdate)
-            {
-                var entity = entities.First(e =>
-                    keyProperty.GetValue(e).Equals(keyProperty.GetValue(entityUpdate))
-                );
+                var keyValue = entityUpdate.GetType().GetProperty(keyPropertyName).GetValue(entityUpdate);
+                var entity = Records.FindAsync(keyValue);
                 if (entity != null)
                 {
-                    Context.Entry(entityUpdate).CurrentValues.SetValues(entity);
+                    Context.Entry(entity).CurrentValues.SetValues(entityUpdate);
                 }
             }
 

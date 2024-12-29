@@ -34,6 +34,14 @@ namespace Bg.EduSocial.Host.Middleware
                     .ToString() ?? ""
                     );
                 // Kiểm tra lỗi có phải lỗi Validate
+            } else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                NotFoundException notFoundException = (NotFoundException)exception;
+                await context.Response.WriteAsync(
+                    text: new BaseException(notFoundException.ErrorCode, notFoundException.UserMessages, notFoundException.DevMessages, context.TraceIdentifier, exception.HelpLink)
+                    .ToString() ?? ""
+                    );
             }
         }
     }

@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bg.EduSocial.Constract\Bg.EduSocial.Constract.csproj" />
     <ProjectReference Include="..\Bg.EduSocial.Domain\Bg.EduSocial.Domain.csproj" />
+    <ProjectReference Include="..\Bg.EduSocial.Helper\Bg.EduSocial.Helper.csproj" />
   </ItemGroup>
 
 </Project>

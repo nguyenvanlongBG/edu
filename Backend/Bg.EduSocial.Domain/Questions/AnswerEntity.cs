@@ -13,7 +13,6 @@ namespace Bg.EduSocial.Domain
         public Guid question_id { get; set; }
         public Guid exam_id { get; set; }
         public decimal point { get; set; }
-        public string note { get; set; }
 
     }
 }

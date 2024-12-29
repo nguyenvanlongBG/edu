@@ -4,6 +4,7 @@ using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Questions;
 using Bg.EduSocial.EntityFrameworkCore;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
+using Bg.EduSocial.Helper.Commons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
@@ -60,14 +61,14 @@ namespace Bg.EduSocial.EFCore.Repositories
         public virtual async Task<List<TEntity>> FilterAsync(List<FilterCondition> filterConditions)
         {
             var query = Records.AsQueryable();
-            if (filterConditions != null && filterConditions.Count > 0)
-            {
-                filterConditions.ForEach(filter =>
-                {
-                    query = this.ApplyCondition(query, filter);
-                });
-            }
-            var data = await query.ToListAsync();
+            //if (filterConditions != null && filterConditions.Count > 0)
+            //{
+            //    filterConditions.ForEach(filter =>
+            //    {
+            //        query = this.ApplyCondition(query, filter);
+            //    });
+            //}
+            var data = await Records.ToListAsync();
             return data;
         }
         public virtual async Task<List<TEntity>> GetPagingAsync(int skip, int take, List<FilterCondition> filters)
@@ -90,8 +91,9 @@ namespace Bg.EduSocial.EFCore.Repositories
             var property = Expression.Property(parameter, condition.Field);
 
             // Chuyển đổi giá trị constant sang kiểu dữ liệu của property
+            var valueCondition = CommonFunction.ConvertToType(condition.Value, property.Type);
             var constant = Expression.Constant(
-                Convert.ChangeType(condition.Value, property.Type)
+                valueCondition
             );
 
             Expression? comparison = condition.Operator switch

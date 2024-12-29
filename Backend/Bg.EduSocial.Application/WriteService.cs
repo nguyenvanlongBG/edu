@@ -2,6 +2,7 @@
 using Bg.EduSocial.Constract.Cores;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Shared.ModelState;
+using Bg.EduSocial.Helper.Commons;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -60,9 +61,12 @@ namespace Bg.EduSocial.Application
             _unitOfWork.BeginTransaction();
             try
             {
+
                 status = await _repo.InsertAsync(entity);
                 _unitOfWork.SaveChange();
+                await BeforeCommitAsync(entityCreateDto);
                 _unitOfWork.Commit();
+                await AfterCommitAsync(entityCreateDto);
             } catch (Exception ex)
             {
                 _unitOfWork.Rollback();
@@ -71,6 +75,13 @@ namespace Bg.EduSocial.Application
                 _unitOfWork.Dispose();
             }
             return entityCreateDto;
+        }
+
+        public virtual async Task BeforeCommitAsync(TEntityEditDto entityCreateDto)
+        {
+        }
+        public virtual async Task AfterCommitAsync(TEntityEditDto entityCreateDto)
+        {
         }
 
         public async Task<int> InsertManyAsync(List<TEntityEditDto> lstDto)
@@ -106,13 +117,12 @@ namespace Bg.EduSocial.Application
         {
             var dtoInsert = lstDto.Where(item => item.State == ModelState.Insert).ToList();
             var dtoUpdate = lstDto.Where(item => item.State == ModelState.Update).ToList();
-            var dtoDelete = lstDto.Where(item => item.State == ModelState.Update).ToList();
+            var dtoDelete = lstDto.Where(item => item.State == ModelState.Delete).ToList();
 
             var entitiedInsert = _mapper.Map<List<TEntityEditDto>, List<TEntity>>(dtoInsert);
             var entitiedUpdate = _mapper.Map<List<TEntityEditDto>, List<TEntity>>(dtoUpdate);
             var entitiedDelete = _mapper.Map<List<TEntityEditDto>, List<TEntity>>(dtoDelete);
 
-            using var transaction = await _unitOfWork.GetTransaction();
             var resultInsert = await _repo.InsertManyAsync(entitiedInsert);
             var resultUpdate = await _repo.UpdateManyAsync(entitiedUpdate);
             var resultDelete = await _repo.DeleteManyAsync(entitiedDelete);
@@ -125,22 +135,25 @@ namespace Bg.EduSocial.Application
         /// <param name="entity">Đối tượng cần cập nhật</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public virtual async Task<TEntityEditDto> UpdateAsync(Guid id, TEntityEditDto entityUpdateDto)
+        public virtual async Task<TEntityEditDto> UpdateAsync(TEntityEditDto entityUpdateDto)
         {
             if (entityUpdateDto == null) throw new ArgumentNullException();
-            var isValid = await ValidateBeforeUpdate(id, entityUpdateDto);
+            var isValid = await ValidateBeforeUpdate(entityUpdateDto);
             int status = 0;
             if (!isValid) throw new ArgumentNullException();
             await HandleBeforeSaveAsync(entityUpdateDto);
             _unitOfWork.BeginTransaction();
             try
             {
+                var id = (Guid)TypeService.GetKeyValue<TEntityEditDto>(entityUpdateDto);
                 var entity = _mapper.Map<TEntity>(entityUpdateDto);
                 status = await _repo.UpdateAsync(id, entity);
                 if (status > 0)
                 {
                     _unitOfWork.SaveChange();
+                    await BeforeCommitAsync(entityUpdateDto);
                     _unitOfWork.Commit();
+                    await AfterCommitAsync(entityUpdateDto);
                 }
             }
             catch (Exception ex)
@@ -171,7 +184,7 @@ namespace Bg.EduSocial.Application
         /// </summary>
         /// <param name="entityUpdateDto">Đối tượng dữ liệu cần validate</param>
         /// <returns></returns>
-        public virtual async Task<bool> ValidateBeforeUpdate(Guid id, TEntityEditDto entityUpdateDto)
+        public virtual async Task<bool> ValidateBeforeUpdate(TEntityEditDto entityUpdateDto)
         {
             return true;
         }

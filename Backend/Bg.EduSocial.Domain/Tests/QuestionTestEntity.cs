@@ -11,5 +11,6 @@ namespace Bg.EduSocial.Domain
         public Guid question_test_id { get; set; }
         public Guid question_id { get; set; }
         public Guid test_id { get; set; }
+        public decimal point { get; set; }
     }
 }

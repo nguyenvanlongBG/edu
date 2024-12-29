@@ -22,5 +22,18 @@ namespace Bg.EduSocial.Host.Controllers
                 throw ex;
             }
         }
+        [HttpPut()]
+        public virtual async Task<IActionResult> UpdateAsync(TEntityEditDto entityUpdateDto)
+        {
+            try
+            {
+                var result = await _service.UpdateAsync(entityUpdateDto);
+                return StatusCode(201, result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

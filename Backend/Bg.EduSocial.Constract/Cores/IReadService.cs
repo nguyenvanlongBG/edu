@@ -5,8 +5,10 @@ namespace Bg.EduSocial.Constract
 {
     public interface IReadService<TEntity, TEntityDto>
     {
-        Task<TEntityDto> GetById(Guid id);
+        Task<T> GetById<T>(Guid id);
         Task<List<TEntityDto>> FilterAsync(List<FilterCondition> filters);
+        Task<List<T>> FilterAsync<T>(List<FilterCondition> filters);
+
         Task<List<TEntityDto>> GetPagingAsync(PagingParam pagingParam);
     }
 }

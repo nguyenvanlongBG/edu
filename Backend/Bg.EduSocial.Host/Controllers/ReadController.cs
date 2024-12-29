@@ -20,7 +20,7 @@ namespace Bg.EduSocial.Host.Controllers
         public virtual async Task<IActionResult?> GetById(Guid id) {
             try
             {
-                var response = await _service.GetById(id);
+                var response = await _service.GetById<TEntityDto>(id);
                 return Ok(response);
             } catch (Exception ex)
             {

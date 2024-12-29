@@ -23,5 +23,28 @@ namespace Bg.EduSocial.Helper.Commons
             //}
             return default;
         }
+        public static object ConvertToType(object value, Type targetType)
+        {
+            if (value == null)
+                return null;
+
+            if (targetType == typeof(string))
+                return value.ToString();
+
+            if (targetType == typeof(int) && int.TryParse(value.ToString(), out var intValue))
+                return intValue;
+
+            if (targetType == typeof(double) && double.TryParse(value.ToString(), out var doubleValue))
+                return doubleValue;
+
+            if (targetType == typeof(DateTime) && DateTime.TryParse(value.ToString(), out var dateTimeValue))
+                return dateTimeValue;
+
+            if (targetType == typeof(bool) && bool.TryParse(value.ToString(), out var boolValue))
+                return boolValue;
+
+            throw new InvalidOperationException($"Cannot convert value '{value}' to type {targetType.Name}");
+        }
+
     }
 }

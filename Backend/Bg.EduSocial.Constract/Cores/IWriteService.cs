@@ -23,9 +23,9 @@ namespace Bg.EduSocial.Constract
         Task<int> SubmitManyAsync(IDbTransaction transaction, List<TEntityEditDto> lstDto);
 
 
-        Task<TEntityEditDto> UpdateAsync(Guid id, TEntityEditDto entityUpdateDto);
+        Task<TEntityEditDto> UpdateAsync(TEntityEditDto entityUpdateDto);
         Task<TEntity> DeleteAsync(TEntity entity);
         Task<bool> ValidateBeforeInsert(TEntityEditDto entityInsertDto);
-        Task<bool> ValidateBeforeUpdate(Guid id, TEntityEditDto entityUpdateDto);
+        Task<bool> ValidateBeforeUpdate(TEntityEditDto entityUpdateDto);
     }
 }

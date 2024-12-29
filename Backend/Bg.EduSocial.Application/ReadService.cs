@@ -16,19 +16,29 @@ namespace Bg.EduSocial.Application
         protected readonly TRepository _repo;
         protected readonly IMapper _mapper;
         protected readonly IServiceProvider _serviceProvider;
+        protected readonly IContextService _contextService;
+        protected ContextData contextData
+        {
+            get
+            {
+                var contextData = _contextService.GetContextData();
+                return contextData ?? new ContextData();
+            }
+        }
         public ReadService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork<EduSocialDbContext>>();
             _repo = _serviceProvider.GetRequiredService<TRepository>();
             _mapper = _serviceProvider.GetRequiredService<IMapper>();
+            _contextService = _serviceProvider.GetRequiredService<IContextService>();
         }
-        public virtual async Task<TEntityDto?> GetById(Guid id)
+        public virtual async Task<T> GetById<T>(Guid id)
         {
             var entity = await _repo.GetById(id);
             if (entity != null)
             {
-                var entityDto = _mapper.Map<TEntityDto>(entity);
+                var entityDto = _mapper.Map<T>(entity);
                 return entityDto;
             }
             return default;
@@ -40,6 +50,16 @@ namespace Bg.EduSocial.Application
             if (data != null)
             {
                 var dataDto = _mapper.Map<List<TEntity>, List<TEntityDto>>(data);
+                return dataDto;
+            }
+            return default;
+        }
+        public async Task<List<T>> FilterAsync<T>(List<FilterCondition> filters)
+        {
+            var data = await _repo.FilterAsync(filters);
+            if (data != null)
+            {
+                var dataDto = _mapper.Map<List<TEntity>, List<T>>(data);
                 return dataDto;
             }
             return default;

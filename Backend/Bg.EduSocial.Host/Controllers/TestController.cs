@@ -40,9 +40,22 @@ namespace Bg.EduSocial.Host.Controllers
 
         }
         [HttpGet("{testId}/do")]
-        public async Task<IActionResult> GetTest(Guid testId)
+        public async Task<IActionResult> GetTestDo(Guid testId)
         {
-            var questions = await _service.GetQuestionOfTest(testId);
+            var questions = await _service.GetTestDetail(testId);
+            return Ok(questions);
+
+        }
+        [HttpGet("{testId}/mark")]
+        public async Task<IActionResult> MarkTest(Guid testId)
+        {
+            var exams = await _service.MarkTest(testId);
+            return Ok(exams);
+        }
+        [HttpGet("{testId}/edit")]
+        public async Task<IActionResult> GetQuestionTestEdit(Guid testId)
+        {
+            var questions = await _service.GetQuestionOfTestEditAsync(testId);
             return Ok(questions);
 
         }

@@ -70,7 +70,7 @@ builder.Services.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigi
 builder.Services.AddSingleton<IConfiguration>(configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IContextService, ContextService>();
-builder.Services.AddSingleton<IReportService, ReportService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFileQuestionService, FileQuestionService>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();

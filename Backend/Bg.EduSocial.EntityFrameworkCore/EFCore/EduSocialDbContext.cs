@@ -109,6 +109,11 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
                 entity.HasKey(u => u.answer_id);
             }
             );
+            modelBuilder.Entity<ChapterEntity>(entity =>
+            {
+                entity.HasKey(u => u.chapter_id);
+            }
+            );
             modelBuilder.Entity<QuestionChapterEntity>().HasKey(a => a.questio_chapter_id);
             //modelBuilder.Entity<Answer>().HasOne(a => a.Question).WithMany(q => q.Answers).HasForeignKey(a => a.QuestionID).OnDelete(DeleteBehavior.Cascade);
             ModelBuilderExtension.SeedUser(modelBuilder);

@@ -1,6 +1,7 @@
 ﻿using Bg.EduSocial.Constract;
 using Bg.EduSocial.Constract.Cores;
 using Bg.EduSocial.Domain;
+using Bg.EduSocial.Domain.Shared.Roles;
 using System.Security.Claims;
 
 namespace Bg.EduSocial.Host.Middleware
@@ -25,6 +26,7 @@ namespace Bg.EduSocial.Host.Middleware
                     user = new UserDto
                     {
                         user_id = Guid.NewGuid(),
+                        role = Role.Admin
                     }
                 };
                 contextService.SetContextData(contextData);

@@ -263,5 +263,25 @@ namespace Bg.EduSocial.Application
                 }
             }
         }
+
+        public async Task<List<ExamDto>> GetExamUserHistory(Guid testId)
+        {
+            var examService = _serviceProvider.GetRequiredService<IExamService>();
+            var filters = new List<FilterCondition> { 
+                new FilterCondition
+                {
+                    Field = "test_id",
+                    Operator = FilterOperator.Equal,
+                    Value = testId
+                },
+                new FilterCondition
+                {
+                    Field = "user_id",
+                    Operator = FilterOperator.Equal,
+                    Value = contextData.user.user_id
+                }
+            };
+            return await examService.FilterAsync<ExamDto>(filters);
+        }
     }
 }

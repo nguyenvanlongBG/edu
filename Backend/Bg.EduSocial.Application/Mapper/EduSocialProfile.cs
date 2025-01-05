@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bg.EduSocial.Constract;
 using Bg.EduSocial.Constract.Answers;
+using Bg.EduSocial.Constract.Chapter;
 using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Constract.Exams;
 using Bg.EduSocial.Constract.Questions;
@@ -58,7 +59,8 @@ namespace Bg.EduSocial.Application.Mapper
             CreateMap<QuestionDto, QuestionEditDto>();
             CreateMap<QuestionEditDto, QuestionDto>();
 
-
+            CreateMap<ChapterEntity, ChapterDto>();
+            CreateMap<ChapterEntity, ChapterEditDto>();
             CreateMap<ClassroomEntity, ClassroomEditDto>();
             CreateMap<ClassroomEntity, ClassroomDto>();
             CreateMap<ClassroomEditDto, ClassroomEntity>();

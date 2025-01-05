@@ -59,5 +59,12 @@ namespace Bg.EduSocial.Host.Controllers
             return Ok(questions);
 
         }
+        [HttpGet("{testId}/history")]
+        public async Task<IActionResult> GetExamsHistory(Guid testId)
+        {
+            var exams = await _service.GetExamUserHistory(testId);
+            return Ok(exams);
+
+        }
     }
 }

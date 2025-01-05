@@ -27,7 +27,7 @@ namespace Bg.EduSocial.Host.Controllers
                 return Ok(default);
             }
         }
-        [HttpGet("filter")]
+        [HttpPost("filter")]
         public virtual async Task<IActionResult?> FilterAsync(List<FilterCondition> filters)
         {
             try

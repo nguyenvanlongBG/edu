@@ -11,6 +11,7 @@ using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Shared;
+using Bg.EduSocial.Domain.Shared.Questions;
 using Bg.EduSocial.Domain.Shared.Roles;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -110,17 +111,29 @@ namespace Bg.EduSocial.Application
             };
             var answersHandle = await answerService.FilterAsync<AnswerDto>(filterAnswerExam);
             if (answersHandle == null || answersHandle.Count == 0) return new List<Dictionary<string, object>>();
+
+            var filterQuestionTest = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "test_id",
+                    Operator = FilterOperator.In,
+                    Value = tests?.Select(e => e.test_id).ToList(),
+                }
+            };
+            var questionsTest = await questionTestService.FilterAsync(filterQuestionTest);
+            if (!(questionsTest?.Count > 0)) return default;
             var filterQuestion = new List<FilterCondition>
             {
                 new FilterCondition
                 {
                     Field = "question_id",
                     Operator = FilterOperator.In,
-                    Value = answersHandle?.Select(e => e.question_id).ToList(),
+                    Value = questionsTest?.Select(e => e.question_id).ToList(),
                 }
             };
-            var questionChapters = await questionService.FilterAsync(filterQuestion);
-            var questionsTest = await questionTestService.FilterAsync(filterQuestion);
+            var questionsHandle = await questionService.FilterAsync(filterQuestion);
+
             var result = chapters.Select(chapter =>
             {
                 decimal totalPointChapter = 0;
@@ -134,7 +147,7 @@ namespace Bg.EduSocial.Application
                     var examOfThisTest = exams.Where(e => e.test_id == test.test_id).ToList();
                     var questionTestOfThisTest = questionsTest.Where(q => q.test_id == test.test_id).ToList();
                     var questionIdsInTest = questionTestOfThisTest.Select(q => q.question_id).ToList();
-                    var questionChapterOfThisTest = questionChapters.Where(q => questionIdsInTest.Contains(q.question_id) && q.chapter_ids != null && q.chapter_ids.Contains(chapter.chapter_id.ToString())).ToList();
+                    var questionChapterOfThisTest = questionsHandle.Where(q => questionIdsInTest.Contains(q.question_id) && q.chapter_ids != null && q.chapter_ids.Contains(chapter.chapter_id.ToString())).ToList();
                     if (questionChapterOfThisTest?.Count > 0)
                     {
                         var questionIdsChapter = questionChapterOfThisTest?.Select(q => q.question_id).ToList();
@@ -168,9 +181,166 @@ namespace Bg.EduSocial.Application
             return result;
         }
 
-        public Task<List<Dictionary<string, object>>> ReportLevel(ReportParam param)
+
+        public async Task<List<Dictionary<string, object>>> ReportLevel(ReportParam param)
         {
-            throw new NotImplementedException();
+            var testService = _serviceProvider.GetRequiredService<ITestService>();
+            var examService = _serviceProvider.GetRequiredService<IExamService>();
+            var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
+            var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
+            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
+
+
+            var user = contextData.user;
+            var filtersTest = new List<FilterCondition>();
+
+            if (param != null && param.TestIds?.Count > 0)
+            {
+                filtersTest.Add(new FilterCondition
+                {
+                    Field = "test_id",
+                    Operator = FilterOperator.In,
+                    Value = param.TestIds
+                });
+            }
+            else
+            {
+                var testOfUser = await testService.GetTestOfUserAsync();
+                if (testOfUser?.Count > 0)
+                {
+                    filtersTest.Add(new FilterCondition
+                    {
+                        Field = "test_id",
+                        Operator = FilterOperator.In,
+                        Value = testOfUser?.Select(test => test.test_id).ToList()
+                    });
+                }
+                else
+                {
+                    return default;
+                }
+            }
+            var tests = await testService.FilterAsync(filtersTest);
+            if (!(tests?.Count > 0)) return default;
+            if (param != null && param.ClassIds?.Count > 0 && (user.role_id == Role.Admin || user.role_id == Role.Teacher))
+            {
+                var enrollmentClassService = _serviceProvider.GetRequiredService<IEnrollmentClassService>();
+                var filterClassroom = new List<FilterCondition> { new FilterCondition { Field = "classroom_id", Operator = FilterOperator.In, Value = param.ClassIds } };
+                var userInClassrooms = await enrollmentClassService.FilterAsync<EnrollmentClassDto>(filterClassroom);
+                if (filtersTest?.Count > 0)
+                {
+                    filtersTest.Add(new FilterCondition
+                    {
+                        Field = "user_id",
+                        Operator = FilterOperator.In,
+                        Value = userInClassrooms?.Select(u => u.user_id).ToList(),
+                    });
+                }
+            };
+            filtersTest?.Add(new FilterCondition
+            {
+                Field = "status",
+                Operator = FilterOperator.Equal,
+                Value = ExamStatus.Marked
+            });
+
+            var exams = await examService.FilterAsync<ExamDto>(filtersTest);
+            if (exams == null || exams.Count == 0)
+                return new List<Dictionary<string, object>>();
+            var filterAnswerExam = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "exam_id",
+                    Operator = FilterOperator.In,
+                    Value = exams.Select(e => e.exam_id).ToList(),
+                }
+            };
+            var answersHandle = await answerService.FilterAsync<AnswerDto>(filterAnswerExam);
+            if (answersHandle == null || answersHandle.Count == 0) return new List<Dictionary<string, object>>();
+            var filterQuestionTest = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "test_id",
+                    Operator = FilterOperator.In,
+                    Value = tests?.Select(e => e.test_id).ToList(),
+                }
+            };
+            var questionsTest = await questionTestService.FilterAsync(filterQuestionTest);
+            if (!(questionsTest?.Count > 0)) return default;
+            var filterQuestion = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "question_id",
+                    Operator = FilterOperator.In,
+                    Value = questionsTest?.Select(e => e.question_id).ToList(),
+                }
+            };
+            var questionsHandle = await questionService.FilterAsync(filterQuestion);
+            var result = Enum.GetValues(typeof(QuestionLevel))
+            .Cast<QuestionLevel>()
+            .Select(level =>
+            {
+                decimal totalPointChapter = 0;
+                decimal totalPointCorrectChapter = 0;
+                decimal totalPointInCorrectChapter = 0;
+                decimal totalPointUnAttemptChapter = 0;
+
+
+                tests.ForEach(test =>
+                {
+                    var examOfThisTest = exams.Where(e => e.test_id == test.test_id).ToList();
+                    var questionTestOfThisTest = questionsTest.Where(q => q.test_id == test.test_id).ToList();
+                    var questionIdsInTest = questionTestOfThisTest.Select(q => q.question_id).ToList();
+                    var questionLevelOfThisTest = questionsHandle.Where(q => questionIdsInTest.Contains(q.question_id) && q.level == level).ToList();
+                    if (questionLevelOfThisTest?.Count > 0)
+                    {
+                        var questionIdsLevel = questionLevelOfThisTest?.Select(q => q.question_id).ToList();
+                        if (questionIdsLevel?.Count > 0)
+                        {
+                            decimal totalPointLevelThisTest = questionTestOfThisTest.Where(question => questionIdsLevel.Contains(question.question_id))?.Sum(q => q.point) ?? 0;
+                            totalPointChapter += (examOfThisTest?.Count ?? 0) * totalPointLevelThisTest;
+                            examOfThisTest?.ForEach(e =>
+                            {
+                                var answerOfChapter = answersHandle?.Where(a => questionIdsLevel?.Count > 0 && questionIdsLevel.Contains(a.question_id)).ToList();
+                                var totalAnswerCorrect = answerOfChapter?.Sum(a => a.point) ?? 0;
+                                totalPointCorrectChapter += totalAnswerCorrect;
+                                totalPointInCorrectChapter += (totalPointLevelThisTest - totalAnswerCorrect);
+                            });
+                        }
+
+                    }
+                });
+                totalPointUnAttemptChapter = (totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter) > 0 ? (totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter) : 0;
+                // Lấy tất cả questionChapter thuộc chapter này
+                return new Dictionary<string, object>
+                {
+                    { "level", level },
+                    { "level_name",  this.GetNameLeve(level)},
+                    { "correct", totalPointCorrectChapter },
+                    { "incorrect", totalPointInCorrectChapter },
+                    { "unattempted",  totalPointUnAttemptChapter}
+
+                };
+            }).ToList();
+            return result;
+        }
+        private string GetNameLeve(QuestionLevel level)
+        {
+            switch (level)
+            {
+                case QuestionLevel.Recognition:
+                    return "Nhận biết";
+                case QuestionLevel.Comprehension:
+                    return "Thông hiểu";
+                case QuestionLevel.Application:
+                    return "Vận dụng";
+                case QuestionLevel.AdvancedApplication:
+                    return "Vận dụng cáo";
+            }
+            return string.Empty;
         }
 
         public async Task<List<Dictionary<string, object>>> ReportTest(ReportParam param)

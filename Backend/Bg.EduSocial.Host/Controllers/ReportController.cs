@@ -30,10 +30,11 @@ namespace Bg.EduSocial.Host.Controllers
             return Ok(response);
         }
         [HttpPost("level")]
+        [Authorize]
         public virtual async Task<IActionResult> ReportLevel([FromBody] ReportParam param)
         {
             var reportService = _serviceProvider.GetRequiredService<IReportService>();
-            var response = await reportService.ReportTest(param);
+            var response = await reportService.ReportLevel(param);
             return Ok(response);
         }
     }

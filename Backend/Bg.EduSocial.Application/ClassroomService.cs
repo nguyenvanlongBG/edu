@@ -1,6 +1,11 @@
 ﻿using Bg.EduSocial.Constract.Classrooms;
+using Bg.EduSocial.Constract.Exams;
+using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Classes;
+using Bg.EduSocial.Domain.Cores;
+using Bg.EduSocial.Domain.Shared.Roles;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bg.EduSocial.Application
 {
@@ -53,6 +58,24 @@ namespace Bg.EduSocial.Application
 
             // Ghép chữ cái đầu và GUID
             return $"{initials}-{guidSuffix}".ToUpper(); // Mã in hoa
+        }
+
+        public async Task<List<ClassroomDto>> GetClassroomsOfUser()
+        {
+            var user = contextData.user;
+            var filterClass = new List<FilterCondition>();
+
+            if (user.role_id == Role.Teacher || user.role_id == Role.Admin)
+            {
+                filterClass.Add(new FilterCondition
+                {
+                    Field = "user_id",
+                    Operator = FilterOperator.Equal,
+                    Value = user.user_id
+                });
+                return await this.FilterAsync<ClassroomDto>(filterClass);
+            }
+            return default;
         }
     }
 }

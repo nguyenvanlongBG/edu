@@ -1,6 +1,7 @@
 ﻿using Bg.EduSocial.Constract.Auth;
 using Bg.EduSocial.Constract.Authen;
 using Bg.EduSocial.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,25 +11,24 @@ namespace Bg.EduSocial.Host.Controllers
     [Route("api/[controller]")]
     public class AuthController: ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly SignInManager<UserEntity> _signInManager;
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        protected readonly IServiceProvider _serviceProvider;
+        public AuthController(IServiceProvider serviceProvider)
         {
-            _authService = authService;
+            _serviceProvider = serviceProvider;
         }
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginRequest login)
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest param)
         {
-            var loginResonse = await _authService.Login(login);
-            return Ok(loginResonse);
+            var authService = _serviceProvider.GetRequiredService<IAuthService>();
+            var token = await authService.LoginAsync(param.user_name, param.password);
+            return Ok(token);
         }
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDto param)
         {
-            await _signInManager.SignOutAsync();
-            return Ok("Logout");
-
+            var authService = _serviceProvider.GetRequiredService<IAuthService>();
+            var success = await authService.RegisterAsync(param);
+            return Ok(success);
         }
     }
 }

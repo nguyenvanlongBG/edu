@@ -85,7 +85,7 @@ namespace Bg.EduSocial.EFCore.Repositories
             foreach (var entityUpdate in entities)
             {
                 var keyValue = entityUpdate.GetType().GetProperty(keyPropertyName).GetValue(entityUpdate);
-                var entity = Records.FindAsync(keyValue);
+                var entity = await Records.FindAsync(keyValue);
                 if (entity != null)
                 {
                     Context.Entry(entity).CurrentValues.SetValues(entityUpdate);

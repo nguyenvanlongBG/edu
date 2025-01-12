@@ -1,5 +1,4 @@
 ﻿using Bg.EduSocial.Domain.Cores;
-using Bg.EduSocial.Domain.Shared.Modes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

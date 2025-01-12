@@ -3,6 +3,7 @@ using Bg.EduSocial.Constract;
 using Bg.EduSocial.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Bg.EduSocial.Constract.Exams;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bg.EduSocial.Host.Controllers
 {
@@ -14,6 +15,7 @@ namespace Bg.EduSocial.Host.Controllers
         {
         }
         [HttpPost("new-exam")]
+        [Authorize]
         public async Task<IActionResult> NewExam([FromBody] Guid testId)
         {
             var exam =  await _service.NewExam(testId);

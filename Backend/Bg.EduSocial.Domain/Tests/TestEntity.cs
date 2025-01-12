@@ -13,5 +13,6 @@ namespace Bg.EduSocial.Domain
         public double duration { get; set; }
         public DateTime start_time { get; set; }
         public DateTime? finish_time { get; set; }
+        public Guid user_id { get; set; }
     }
 }

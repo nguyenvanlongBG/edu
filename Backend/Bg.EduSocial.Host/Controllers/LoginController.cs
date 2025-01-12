@@ -30,13 +30,13 @@ namespace Bg.EduSocial.Host.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
-            var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(login.user_name, login.password, false, false);
             if (!result.Succeeded)
             {
                 return NotFound();
             }
             var claims = new[] {
-                new Claim(ClaimTypes.Name, login.Username), 
+                new Claim(ClaimTypes.Name, login.user_name), 
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

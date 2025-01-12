@@ -6,7 +6,6 @@ namespace Bg.EduSocial.Constract
 {
     public class OptionEditDto : OptionEntity, IRecordState
     {
-        public List<object> object_content { get; set; }
         public ModelState State { get; set; } = ModelState.View;
     }
 }

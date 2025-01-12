@@ -52,4 +52,9 @@
         /// </summary>
         In
     }
+    public enum LogicalOperator
+    {
+        AND,
+        OR
+    }
 }

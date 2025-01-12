@@ -18,40 +18,20 @@ namespace Bg.EduSocial.Host.Controllers
         }
         [HttpGet("{id}")]
         public virtual async Task<IActionResult?> GetById(Guid id) {
-            try
-            {
-                var response = await _service.GetById<TEntityDto>(id);
-                return Ok(response);
-            } catch (Exception ex)
-            {
-                return Ok(default);
-            }
+            var response = await _service.GetById<TEntityDto>(id);
+            return Ok(response);
         }
         [HttpPost("filter")]
         public virtual async Task<IActionResult?> FilterAsync(List<FilterCondition> filters)
         {
-            try
-            {
-                var response = await _service.FilterAsync(filters);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return Ok(default);
-            }
+            var response = await _service.FilterAsync(filters);
+            return Ok(response);
         }
         [HttpPost("paging")]
         public virtual async Task<IActionResult?> GetPagingData(PagingParam pagingParam)
         {
-            try
-            {
-                var response = await _service.GetPagingAsync(pagingParam);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return Ok(default);
-            }
+            var response = await _service.GetPagingAsync(pagingParam);
+            return Ok(response);
         }
     }
 }

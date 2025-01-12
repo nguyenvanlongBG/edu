@@ -4,6 +4,7 @@ using Bg.EduSocial.Constract.FileQuestion;
 using Bg.EduSocial.Constract.Questions;
 using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bg.EduSocial.Host.Controllers
@@ -35,14 +36,21 @@ namespace Bg.EduSocial.Host.Controllers
             };
 
             var data = fileQuestionService.GetQuestionFromFile(file, configQuestion);
-            await questionService.HandleAddQuestion(data);
             return Ok(data);
 
         }
         [HttpGet("{testId}/do")]
         public async Task<IActionResult> GetTestDo(Guid testId)
         {
-            var questions = await _service.GetTestDetail(testId);
+            var questions = await _service.HandleGetDoTest(testId);
+            return Ok(questions);
+
+        }
+        [HttpGet("test-of-user")]
+        [Authorize]
+        public async Task<IActionResult> GetTestOfUser()
+        {
+            var questions = await _service.GetTestOfUserAsync();
             return Ok(questions);
 
         }
@@ -52,10 +60,23 @@ namespace Bg.EduSocial.Host.Controllers
             var exams = await _service.MarkTest(testId);
             return Ok(exams);
         }
+        [HttpGet("{testId}/exam-mark")]
+        public async Task<IActionResult> GetExamMax(Guid testId)
+        {
+            var exams = await _service.GetExamMarkAsync(testId);
+            return Ok(exams);
+        }
         [HttpGet("{testId}/edit")]
         public async Task<IActionResult> GetQuestionTestEdit(Guid testId)
         {
             var questions = await _service.GetQuestionOfTestEditAsync(testId);
+            return Ok(questions);
+
+        }
+        [HttpPost("auto-gen")]
+        public async Task<IActionResult> GetAutoGenQuestion([FromBody] ParamAutoGenTest param)
+        {
+            var questions = await _service.GenAutoTest(param);
             return Ok(questions);
 
         }

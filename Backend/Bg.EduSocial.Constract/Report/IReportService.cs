@@ -2,6 +2,8 @@
 {
     public interface IReportService
     {
-        Task<Dictionary<decimal, int>> ReportTest();
+        Task<List<Dictionary<string, object>>> ReportTest(ReportParam param);
+        Task<List<Dictionary<string, object>>> ReportChapter(ReportParam param);
+        Task<List<Dictionary<string, object>>> ReportLevel(ReportParam param);
     }
 }

@@ -14,7 +14,7 @@ namespace Bg.EduSocial.EntityFrameworkCore.Repositories
         }
         public async Task<ExamEntity> ExamDoing(Guid testId)
         {
-            return Records.Where(exam => exam.status == ExamStatus.Doing).FirstOrDefault();
+            return Records.Where(exam => exam.status == ExamStatus.Doing && exam.test_id == testId).FirstOrDefault();
         }
     }
 }

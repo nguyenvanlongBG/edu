@@ -15,52 +15,27 @@ namespace Bg.EduSocial.Application.Mapper
     public class EduSocialProfile : Profile
     {
         public EduSocialProfile() {
-            CreateMap<QuestionEntity, QuestionDto>()
-            .ForMember(dest => dest.object_content, opt => opt.MapFrom(src =>
-                string.IsNullOrEmpty(src.content)
-                    ? new List<object>()
-                    : JsonSerializer.Deserialize<List<object>>(src.content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    }) ?? new List<object>()));
+            CreateMap<QuestionEntity, QuestionDto>();
+            CreateMap<QuestionEntity, QuestionEditDto>();
+            CreateMap<QuestionEditDto, QuestionDto>();
+            CreateMap<QuestionEditDto, QuestionEntity>();
+            CreateMap<QuestionDto, QuestionEditDto>();
 
             // Map từ QuestionDto sang QuestionEntity
-            CreateMap<QuestionDto, QuestionEntity>()
-                .ForMember(dest => dest.content, opt => opt.MapFrom(src =>
-                    JsonSerializer.Serialize(src.object_content, new JsonSerializerOptions
-                    {
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                    })));
-
-            CreateMap<OptionEditDto, OptionEntity>()
-               .ForMember(dest => dest.content, opt => opt.MapFrom(src =>
-                   JsonSerializer.Serialize(src.object_content, new JsonSerializerOptions
-                   {
-                       DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                   })));
-
-            CreateMap<OptionEntity, OptionDto>()
-               .ForMember(dest => dest.object_content, opt => opt.MapFrom(src =>
-                    string.IsNullOrEmpty(src.content)
-                    ? new List<object>()
-                    : JsonSerializer.Deserialize<List<object>>(src.content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    }) ?? new List<object>()));
-            CreateMap<OptionEntity, OptionEditDto>()
-               .ForMember(dest => dest.object_content, opt => opt.MapFrom(src =>
-                    string.IsNullOrEmpty(src.content)
-                    ? new List<object>()
-                    : JsonSerializer.Deserialize<List<object>>(src.content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    }) ?? new List<object>()));
+            CreateMap<QuestionDto, QuestionEntity>();
+            CreateMap<OptionEditDto, OptionEntity>();
+            CreateMap<OptionEntity, OptionEditDto>();
             CreateMap<OptionDto, OptionEditDto>();
-            CreateMap<QuestionDto, QuestionEditDto>();
-            CreateMap<QuestionEditDto, QuestionDto>();
+            CreateMap<OptionEditDto, OptionEntity>();
+            CreateMap<OptionEntity, OptionDto>();
+
+
+            CreateMap<ResultQuestionEditDto, ResultQuestionEntity>();
 
             CreateMap<ChapterEntity, ChapterDto>();
             CreateMap<ChapterEntity, ChapterEditDto>();
+            CreateMap<UserEntity, UserEditDto>();
+            CreateMap<UserEntity, UserDto>();
             CreateMap<ClassroomEntity, ClassroomEditDto>();
             CreateMap<ClassroomEntity, ClassroomDto>();
             CreateMap<ClassroomEditDto, ClassroomEntity>();

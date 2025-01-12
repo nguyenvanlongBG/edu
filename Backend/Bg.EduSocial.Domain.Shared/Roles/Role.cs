@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bg.EduSocial.Domain.Shared.Roles
+﻿namespace Bg.EduSocial.Domain.Shared.Roles
 {
     public enum Role
     {
+        None,
         Admin,
         Teacher,
         Student

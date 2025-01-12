@@ -8,8 +8,6 @@ namespace Bg.EduSocial.Constract
         public Guid option_question_id { get; set; }
         public string content { get; set; } = string.Empty;
         public List<object> object_content { get; set; }
-
         public Guid question_id { get; set; }
-        public ModelState State { get; set; } = ModelState.View;
     }
 }

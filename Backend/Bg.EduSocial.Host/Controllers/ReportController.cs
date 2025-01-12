@@ -1,4 +1,5 @@
 ﻿using Bg.EduSocial.Constract.Report;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bg.EduSocial.Host.Controllers
@@ -12,11 +13,27 @@ namespace Bg.EduSocial.Host.Controllers
         {
             _serviceProvider = serviceProvider;
         }
-        [HttpGet("test")]
-        public virtual async Task<IActionResult> ReportTest()
+        [HttpPost("test")]
+        [Authorize]
+        public virtual async Task<IActionResult> ReportTest([FromBody] ReportParam param)
         {
             var reportService = _serviceProvider.GetRequiredService<IReportService>();
-            var response = await reportService.ReportTest();
+            var response = await reportService.ReportTest(param);
+            return Ok(response);
+        }
+        [HttpPost("chapter")]
+        [Authorize]
+        public virtual async Task<IActionResult> ReportChapter([FromBody] ReportParam param)
+        {
+            var reportService = _serviceProvider.GetRequiredService<IReportService>();
+            var response = await reportService.ReportChapter(param);
+            return Ok(response);
+        }
+        [HttpPost("level")]
+        public virtual async Task<IActionResult> ReportLevel([FromBody] ReportParam param)
+        {
+            var reportService = _serviceProvider.GetRequiredService<IReportService>();
+            var response = await reportService.ReportTest(param);
             return Ok(response);
         }
     }

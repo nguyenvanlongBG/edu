@@ -22,5 +22,14 @@ namespace Bg.EduSocial.Domain.Cores
         /// Giá trị cần so sánh.
         /// </summary>
         public object? Value { get; set; }
+        /// <summary>
+        /// Danh sách điều kiện con (dùng cho AND/OR).
+        /// </summary>
+        public List<FilterCondition> SubConditions { get; set; } = new();
+
+        /// <summary>
+        /// Toán tử logic (AND, OR) giữa các SubConditions.
+        /// </summary>
+        public LogicalOperator LogicalOperator { get; set; } = LogicalOperator.AND;
     }
 }

@@ -11,20 +11,16 @@ using Bg.EduSocial.Constract.Questions;
 using Bg.EduSocial.Constract.Report;
 using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
-using Bg.EduSocial.Domain.Auths;
 using Bg.EduSocial.Domain.Chapters;
 using Bg.EduSocial.Domain.Classes;
 using Bg.EduSocial.Domain.Exams;
 using Bg.EduSocial.Domain.Questions;
-using Bg.EduSocial.Domain.Roles;
 using Bg.EduSocial.Domain.Tests;
 using Bg.EduSocial.EFCore.Repositories;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Bg.EduSocial.EntityFrameworkCore.Repositories;
-using Bg.EduSocial.Helper.Commons;
 using Bg.EduSocial.Host.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -40,26 +36,21 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-builder.Services.AddIdentity<AccountEntity, Role>().AddEntityFrameworkStores<EduSocialDbContext>().AddDefaultTokenProviders();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
-{
-    o.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = false,
-        ValidateIssuerSigningKey = true
-    };
-});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
 {

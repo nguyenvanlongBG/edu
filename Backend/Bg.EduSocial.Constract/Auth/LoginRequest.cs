@@ -10,9 +10,9 @@ namespace Bg.EduSocial.Constract.Authen
     public class LoginRequest
     {
         [Required]   
-        public string Username { get; set; }
+        public string user_name { get; set; }
         [Required]
-        public string Password { get; set; }
+        public string password { get; set; }
 
     }
 }

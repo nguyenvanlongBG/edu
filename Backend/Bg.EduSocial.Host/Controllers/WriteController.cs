@@ -13,27 +13,14 @@ namespace Bg.EduSocial.Host.Controllers
         [HttpPost()]
         public virtual async Task<IActionResult> InsertAsync(TEntityEditDto entityInsertDto)
         {
-            try
-            {
-                var result = await _service.InsertAsync(entityInsertDto);
-                return StatusCode(201, result);
-            } catch (Exception ex)
-            {
-                throw ex;
-            }
+            var result = await _service.InsertAsync(entityInsertDto);
+            return StatusCode(201, result);
         }
         [HttpPut()]
         public virtual async Task<IActionResult> UpdateAsync(TEntityEditDto entityUpdateDto)
         {
-            try
-            {
-                var result = await _service.UpdateAsync(entityUpdateDto);
-                return StatusCode(201, result);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var result = await _service.UpdateAsync(entityUpdateDto);
+            return StatusCode(201, result);
         }
     }
 }

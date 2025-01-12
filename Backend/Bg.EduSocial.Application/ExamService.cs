@@ -32,8 +32,8 @@ namespace Bg.EduSocial.Application
             var questions = test.questions;
             foreach (var question in questions)
             {
-                var answer = answers.FirstOrDefault(a => a.question_id ==  question.question_id);
-                var resultsQuestion = question.results?.Where(r => r.question_id == question.question_id).ToList();
+                var answer = answers?.FirstOrDefault(a => a.question_id ==  question.question_id);
+                var resultsQuestion = question?.results?.Where(r => r.question_id == question.question_id).ToList();
                 if (answer != null && resultsQuestion?.Count > 0)
                 {
                     switch (question.type)
@@ -124,6 +124,8 @@ namespace Bg.EduSocial.Application
             if (questions == null || questions?.Count == 0) return default;
             var testService = _serviceProvider.GetRequiredService<ITestService>();
             var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
+            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
+
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
             var filterAnswer = new FilterCondition
             {
@@ -145,7 +147,7 @@ namespace Bg.EduSocial.Application
             var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterQuestions });
 
             // Tiếp tục xử lý logic dựa trên kết quả trên
-            testService.MapResultsToQuestion(questions, results);
+            questionService.MapResultsToQuestion(questions, results);
 
 
             foreach (var question in questions)
@@ -158,6 +160,58 @@ namespace Bg.EduSocial.Application
                 }
             }
             return test;
+        }
+
+        public async Task<TestDto> HistoryDoingExam(Guid examId)
+        {
+            var test = await this.TestOfExam(examId);
+            var questions = test.questions;
+            if (questions == null || questions?.Count == 0) return default;
+            var testService = _serviceProvider.GetRequiredService<ITestService>();
+            var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
+            var filterAnswer = new FilterCondition
+            {
+                Field = "exam_id",
+                Operator = FilterOperator.Equal,
+                Value = examId
+            };
+            var answers = await answerService.FilterAsync<AnswerDto>(new List<FilterCondition> { filterAnswer });
+
+
+            foreach (var question in questions)
+            {
+                var answerOfQuestion = answers.FirstOrDefault(a => a.question_id == question.question_id);
+                if (answerOfQuestion != null)
+                {
+                    question.answer = answerOfQuestion;
+                }
+            }
+            return test;
+        }
+
+        public async Task<TestDoingDto> LastExam(Guid testId)
+        {
+            var examDoing = await _repo.ExamDoing(testId);
+            TestDto test = null;
+            if (examDoing == null)
+            {
+                var newExam = await NewExam(testId);
+                test = await this.TestOfExam(testId);
+                return new TestDoingDto
+                {
+                    test = test,
+                    exam_id = newExam.exam_id
+                };
+            }
+            else
+            {
+                test= await HistoryDoingExam(examDoing.exam_id);
+                return new TestDoingDto
+                {
+                    test = test,
+                    exam_id = examDoing.exam_id
+                };
+            }
         }
     }
 }

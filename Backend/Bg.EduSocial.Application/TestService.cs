@@ -6,7 +6,9 @@ using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Shared.ModelState;
+using Bg.EduSocial.Domain.Shared.Roles;
 using Bg.EduSocial.Domain.Tests;
+using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,26 +22,51 @@ namespace Bg.EduSocial.Application
 
         public async Task<List<QuestionDto>> GetQuestionOfTest(Guid testId)
         {
-            var questions = await _repo.GetQuestionOfTest(testId);
-            if (!(questions?.Count > 0)) return default;
-            var optionService = _serviceProvider.GetRequiredService<IOptionService>();
-            var questionIds = questions.Select(question => question.question_id).ToList();
-            var filterOptionOfTest = new FilterCondition
+            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
+            var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
+
+            var filterQuestionOfTest = new FilterCondition
             {
-                Field = "question_id",
+                Field = "test_id",
                 Operator = FilterOperator.Equal,
-                Value = questionIds
+                Value = testId
             };
-            var options = await optionService.FilterAsync(new List<FilterCondition> { filterOptionOfTest });
-            var questionsReturn = _mapper.Map<List<QuestionDto>>(questions);
-            MapOptionsToQuestion(questionsReturn, options);
-            return questionsReturn;
+            var questionsTest = await questionTestService.FilterAsync(new List<FilterCondition> { filterQuestionOfTest });
+            if (questionsTest?.Count > 0)
+            {
+                var filterQuestion = new List<FilterCondition>
+                {
+                    new FilterCondition
+                    {
+                        Field = "question_id",
+                        Operator = FilterOperator.In,
+                        Value = questionsTest.Select(q => q.question_id).ToList()
+                    }
+                };
+                var questions = await questionService.FilterAsync(filterQuestion);
+                if (!(questions?.Count > 0)) return default;
+                var optionService = _serviceProvider.GetRequiredService<IOptionService>();
+
+                var questionIds = questions.Select(question => question.question_id).ToList();
+                var filterOptionOfTest = new FilterCondition
+                {
+                    Field = "question_id",
+                    Operator = FilterOperator.In,
+                    Value = questionIds
+                };
+                var options = await optionService.FilterAsync(new List<FilterCondition> { filterOptionOfTest });
+                var questionsReturn = _mapper.Map<List<QuestionDto>>(questions);
+                questionService.MapOptionsToQuestion(questionsReturn, options);
+                return questionsReturn;
+            }
+            return default;
         }
 
         public async Task<List<QuestionDto>> GetQuestionOfTestEditAsync(Guid testId)
         {
             var questions = await _repo.GetQuestionOfTest(testId);
             if (!(questions?.Count > 0)) return default;
+            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
             var optionService = _serviceProvider.GetRequiredService<IOptionService>();
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
 
@@ -59,46 +86,9 @@ namespace Bg.EduSocial.Application
             };
             var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterResultOfTest });
             var questionsReturn = _mapper.Map<List<QuestionDto>>(questions);
-            MapOptionsToQuestion(questionsReturn, options);
-            MapResultsToQuestion(questionsReturn, results);
+            questionService.MapOptionsToQuestion(questionsReturn, options);
+            questionService.MapResultsToQuestion(questionsReturn, results);
             return questionsReturn;
-        }
-
-        private void MapOptionsToQuestion(List<QuestionDto> questions, List<OptionDto> options)
-        {
-            if (questions?.Count > 0 && options?.Count > 0) { 
-                // Tạo một dictionary để nhóm các options theo QuestionId
-                var optionsByQuestionId = options.GroupBy(o => o.question_id)
-                                                 .ToDictionary(g => g.Key, g => g.ToList());
-
-                foreach (var question in questions)
-                {
-                    // Lấy ra danh sách options từ dictionary bằng QuestionId của câu hỏi
-                    if (optionsByQuestionId.TryGetValue(question.question_id, out var relevantOptions))
-                    {
-                        question.options = relevantOptions;
-                    }
-                }
-            }
-        }
-
-
-        public void MapResultsToQuestion(List<QuestionDto> questions, List<ResultQuestionDto> results)
-        {
-            if (questions.Count > 0 && results?.Count > 0) {
-                // Tạo một dictionary để nhóm các options theo QuestionId
-                var resultsByQuestionId = results.GroupBy(o => o.question_id)
-                                                 .ToDictionary(g => g.Key, g => g.ToList());
-
-                foreach (var question in questions)
-                {
-                    // Lấy ra danh sách options từ dictionary bằng QuestionId của câu hỏi
-                    if (resultsByQuestionId.TryGetValue(question.question_id, out var relevantResults))
-                    {
-                        question.results = relevantResults;
-                    }
-                }
-            }
         }
 
         public override async Task BeforeCommitAsync(TestEditDto test)
@@ -106,6 +96,8 @@ namespace Bg.EduSocial.Application
             if (test == null || test.questions?.Count == 0) return;
 
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
+            var questionResultService = _serviceProvider.GetRequiredService<IResultQuestionService>();
+
             var optionService = _serviceProvider.GetRequiredService<IOptionService>();
             var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
             var questionsHandle = test.questions?
@@ -120,33 +112,39 @@ namespace Bg.EduSocial.Application
                                 option.State == ModelState.Update ||
                                 option.State == ModelState.Delete)
                 .ToList();
+            var resultsHandle = test.questions?
+                .SelectMany(question => question.results)
+                .Where(r => r.State == ModelState.Insert ||
+                                r.State == ModelState.Update ||
+                                r.State == ModelState.Delete)
+                .ToList();
 
             var tasks = new List<Task>();
 
             if (questionsHandle?.Count > 0)
             {
-                tasks.Add(questionService.SubmitManyAsync(questionsHandle));
+                await questionService.SubmitManyAsync(questionsHandle);
+            }
+            if (optionsHandle?.Count > 0)
+            {
+                await optionService.SubmitManyAsync(optionsHandle);
+            }
+            if (resultsHandle?.Count > 0)
+            {
+                await questionResultService.SubmitManyAsync(resultsHandle);
             }
             if (questionsHandle?.Count > 0)
             {
-                tasks.Add(questionTestService.SubmitManyAsync(
+               await questionTestService.SubmitManyAsync(
                     questionsHandle.Select(question => new QuestionTestEditDto
                     {
                         question_test_id = Guid.NewGuid(),
                         test_id = test.test_id,
-                        question_id = question.question_id
+                        question_id = question.question_id,
+                        State = question.State
                     }).ToList()
-                    ));
-            }
-            if (optionsHandle?.Count > 0)
-            {
-                tasks.Add(optionService.SubmitManyAsync(optionsHandle));
-            }
-
-            if (tasks.Count > 0)
-            {
-                await Task.WhenAll(tasks);
-            }
+                    );
+            };
         }
 
         public Task<List<QuestionDto>> ReadQuestionFromFile(IFormFile file, string regexStr)
@@ -171,7 +169,7 @@ namespace Bg.EduSocial.Application
             return test;
         }
 
-        public async Task<bool> MarkTest(Guid testId)
+        public async Task<List<ExamDto>> MarkTest(Guid testId)
         {
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
             var examService = _serviceProvider.GetRequiredService<IExamService>();
@@ -180,7 +178,7 @@ namespace Bg.EduSocial.Application
             var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
 
             // Lấy thông tin Test dựa trên testId
-            var testTask = this.GetById<TestDto>(testId);
+            var testTask = await this.GetById<TestDto>(testId);
 
             // Thiết lập các điều kiện lọc
             var filterCondition = new FilterCondition
@@ -191,20 +189,20 @@ namespace Bg.EduSocial.Application
             };
 
             // Gọi các API một cách song song
-            var questionsTestTask = questionTestService.FilterAsync(new List<FilterCondition> { filterCondition });
-            var examsTask = this.FilterAsync<ExamEditDto>(new List<FilterCondition> { filterCondition });
+            var questionsTestTask = await questionTestService.FilterAsync(new List<FilterCondition> { filterCondition });
+            var examsTask = await examService.FilterAsync<ExamEditDto>(new List<FilterCondition> { filterCondition });
 
             // Đợi tất cả các Task hoàn thành
-            await Task.WhenAll(testTask, questionsTestTask, examsTask);
+            //await Task.WhenAll(testTask, questionsTestTask, examsTask);
 
             // Lấy kết quả từ các Task
-            var test = await testTask;
-            var questionsTest = await questionsTestTask;
-            var exams = await examsTask;
+            var test = testTask;
+            var questionsTest = questionsTestTask;
+            var exams = examsTask;
 
             // Kiểm tra điều kiện trả về false sớm
             if (test == null || questionsTest == null || questionsTest.Count == 0 || exams == null || exams.Count == 0)
-                return false;
+                return default;
 
             // Xử lý tiếp theo
             var questionIds = questionsTest.Select(q => q.question_id).ToList();
@@ -216,16 +214,15 @@ namespace Bg.EduSocial.Application
             };
 
             // Gọi song song các truy vấn lấy thông tin chi tiết các câu hỏi và kết quả
-            var questionsTask = questionService.FilterAsync(new List<FilterCondition> { filterQuestions });
-            var resultsTask = resultQuestionService.FilterAsync(new List<FilterCondition> { filterQuestions });
-            await Task.WhenAll(questionsTask, resultsTask);
+            var questionsTask = await questionService.FilterAsync(new List<FilterCondition> { filterQuestions });
+            var resultsTask = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterQuestions });
 
             // Lấy kết quả từ các Task
-            var questions = await questionsTask;
-            var results = await resultsTask;
+            var questions =  questionsTask;
+            var results =  resultsTask;
 
             // Tiếp tục xử lý logic dựa trên kết quả trên
-            MapResultsToQuestion(questions, results);
+            questionService.MapResultsToQuestion(questions, results);
             test.questions = questions;
             var examIds = exams.Select(e => e.exam_id).ToList();
             var filterAnswer = new FilterCondition
@@ -235,14 +232,34 @@ namespace Bg.EduSocial.Application
                 Value = examIds
             };
             var answers = await answerService.FilterAsync<AnswerEditDto>(new List<FilterCondition> { filterAnswer });
-            if (answers?.Count == 0) return true;
+            if (answers?.Count == 0) return default;
             MapAnswersToExam(answers, exams);
             for (var index =0; index < exams.Count; index++)
             {
                 examService.MarkExam(exams[index], test);
             }
-
-            return true;
+            var examsDto = _mapper.Map<List<ExamDto>>(exams);
+            var userService = _serviceProvider.GetRequiredService<IUserService>();
+            var userIds = exams?.Select(e => e.user_id).ToList();
+            var filterUserExam = new FilterCondition
+            {
+                Field = "user_id",
+                Operator = FilterOperator.In,
+                Value = userIds
+            };
+            var usersDoExam = await userService.FilterAsync<UserDto>(new List<FilterCondition> { filterUserExam });
+            if (usersDoExam?.Count > 0)
+            {
+                examsDto.ForEach(exam =>
+                {
+                    var userDoExam = usersDoExam.FirstOrDefault(e => e.user_id == exam.user_id);
+                    if (userDoExam != null)
+                    {
+                        exam.name = userDoExam.name;
+                    }
+                });
+            }
+            return examsDto;
         }
 
         private void MapAnswersToExam(List<AnswerEditDto> answers, List<ExamEditDto> exams)
@@ -282,6 +299,127 @@ namespace Bg.EduSocial.Application
                 }
             };
             return await examService.FilterAsync<ExamDto>(filters);
+        }
+
+        public async Task<TestDoingDto> HandleGetDoTest(Guid testId)
+        {
+            var examService = _serviceProvider.GetRequiredService<IExamService>();
+            var test = await examService.LastExam(testId);
+            return test;
+        }
+
+        public async Task<List<QuestionDto>> GenAutoTest(ParamAutoGenTest param)
+        {
+            var questionsEntity = new List<QuestionEntity>();
+            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
+
+            for (var index = 0; index < param?.chapters.Count; index++)
+            {
+                var questionsTmp = await questionService.GetRandomQuestion(param.chapters[index]);
+                if (questionsTmp?.Count > 0)
+                {
+                    questionsEntity.AddRange(questionsTmp);
+                }
+            }
+            if (questionsEntity.Count > 0)
+            {
+                var optionService = _serviceProvider.GetRequiredService<IOptionService>();
+                var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
+
+                var questionIds = questionsEntity.Select(question => question.question_id).ToList();
+                var filterOptionOfTest = new FilterCondition
+                {
+                    Field = "question_id",
+                    Operator = FilterOperator.Equal,
+                    Value = questionIds
+                };
+                var options = await optionService.FilterAsync(new List<FilterCondition> { filterOptionOfTest });
+                var filterResultOfTest = new FilterCondition
+                {
+                    Field = "question_id",
+                    Operator = FilterOperator.Equal,
+                    Value = questionIds
+                };
+                var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterResultOfTest });
+                var questionsReturn = _mapper.Map<List<QuestionDto>>(questionsEntity);
+                questionService.MapOptionsToQuestion(questionsReturn, options);
+                questionService.MapResultsToQuestion(questionsReturn, results);
+                return questionsReturn;
+            }
+            return default;
+
+        }
+        
+        public async Task<List<ExamDto>> GetExamMarkAsync(Guid testId)
+        {
+            var examService = _serviceProvider.GetRequiredService<IExamService>();
+            var userService = _serviceProvider.GetRequiredService<IUserService>();
+
+            var filterExam = new FilterCondition
+            {
+                Field = "test_id",
+                Operator = FilterOperator.Equal,
+                Value = testId
+            };
+
+            // Gọi các API một cách song song
+            var exams = await examService.FilterAsync<ExamDto>(new List<FilterCondition> { filterExam });
+            var userIds = exams?.Select(e => e.user_id).ToList();
+            var filterUserExam = new FilterCondition
+            {
+                Field = "user_id",
+                Operator = FilterOperator.In,
+                Value = userIds
+            };
+            var usersDoExam = await userService.FilterAsync<UserDto>(new List<FilterCondition> { filterUserExam });
+            if (usersDoExam?.Count > 0)
+            {
+                exams.ForEach(exam =>
+                {
+                    var userDoExam = usersDoExam.FirstOrDefault(e => e.user_id == exam.user_id);
+                    if (userDoExam != null)
+                    {
+                        exam.name = userDoExam.name;
+                    }
+                });
+            }
+            return exams;
+        }
+
+        public async Task<List<TestDto>> GetTestOfUserAsync()
+        {
+            var user = contextData.user;
+            var filterTest = new List<FilterCondition>();
+
+            if (user.role_id == Role.Teacher || user.role_id == Role.Admin)
+            {
+                filterTest.Add(new FilterCondition
+                {
+                    Field = "user_id",
+                    Operator = FilterOperator.Equal,
+                    Value = user.user_id
+                });
+                return await this.FilterAsync<TestDto>(filterTest);
+            }
+            else if (user.role_id == Role.Student)
+            {
+                var examService = _serviceProvider.GetRequiredService<IExamService>();
+                var exams = await examService.FilterAsync(new List<FilterCondition>
+                {
+                    new FilterCondition { Field = "user_id", Operator = FilterOperator.Equal, Value = user.user_id }
+                });
+                if (exams?.Count > 0)
+                {
+                    filterTest.Add(new FilterCondition
+                    {
+                        Field = "test_id",
+                        Operator = FilterOperator.Equal,
+                        Value = exams.Select(e => e.test_id).ToList()
+                    });
+                    return await this.FilterAsync<TestDto>(filterTest);
+                }
+            }
+            return default;
         }
     }
 }

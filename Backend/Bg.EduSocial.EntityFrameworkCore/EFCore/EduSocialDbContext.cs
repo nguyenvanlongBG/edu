@@ -1,26 +1,25 @@
 ﻿using Bg.EduSocial.Domain;
-using Bg.EduSocial.Domain.Roles;
 using Bg.EduSocial.EntityFrameworkCore.Extensions;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Bg.EduSocial.EntityFrameworkCore.EFCore
 {
-    public class EduSocialDbContext : IdentityDbContext
+    public class EduSocialDbContext: DbContext
     {
+        private readonly DbContextOptions _options;
         public EduSocialDbContext() { }
         public EduSocialDbContext(DbContextOptions<EduSocialDbContext> options)
-        : base(options)
         {
+            _options = options;
         }
         public DbSet<QuestionEntity> Questions { get; set; }
 
         public DbSet<OptionEntity> Options { get; set; }
 
         public DbSet<TestEntity> Tests { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<QuestionTestEntity> QuestionTests { get; set; }
+        public DbSet<QuestionChapterEntity> QuestionChapters { get; set; }
         public DbSet<ResultQuestionEntity> ResultQuestions { get; set; }
         public DbSet<AnswerEntity> Answers { get; set; }
         public DbSet<ClassroomEntity> Classrooms { get; set; }
@@ -114,7 +113,7 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
                 entity.HasKey(u => u.chapter_id);
             }
             );
-            modelBuilder.Entity<QuestionChapterEntity>().HasKey(a => a.questio_chapter_id);
+            modelBuilder.Entity<QuestionChapterEntity>().HasKey(a => a.question_chapter_id);
             //modelBuilder.Entity<Answer>().HasOne(a => a.Question).WithMany(q => q.Answers).HasForeignKey(a => a.QuestionID).OnDelete(DeleteBehavior.Cascade);
             ModelBuilderExtension.SeedUser(modelBuilder);
         }

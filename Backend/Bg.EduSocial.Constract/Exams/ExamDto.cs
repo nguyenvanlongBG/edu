@@ -9,5 +9,6 @@ namespace Bg.EduSocial.Constract.Exams
         public Guid user_id { get; set; }
         public Guid test_id { get; set; }
         public decimal point { get; set; }
+        public string name { get; set; }
     }
 }

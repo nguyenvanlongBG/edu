@@ -61,14 +61,14 @@ namespace Bg.EduSocial.EFCore.Repositories
         public virtual async Task<List<TEntity>> FilterAsync(List<FilterCondition> filterConditions)
         {
             var query = Records.AsQueryable();
-            //if (filterConditions != null && filterConditions.Count > 0)
-            //{
-            //    filterConditions.ForEach(filter =>
-            //    {
-            //        query = this.ApplyCondition(query, filter);
-            //    });
-            //}
-            var data = await Records.ToListAsync();
+            if (filterConditions != null && filterConditions.Count > 0)
+            {
+                filterConditions.ForEach(filter =>
+                {
+                    query = this.ApplyCondition(query, filter);
+                });
+            }
+            var data = await query.ToListAsync();
             return data;
         }
         public virtual async Task<List<TEntity>> GetPagingAsync(int skip, int take, List<FilterCondition> filters)
@@ -88,15 +88,53 @@ namespace Bg.EduSocial.EFCore.Repositories
         private IQueryable<T> ApplyCondition<T>(IQueryable<T> query, FilterCondition condition)
         {
             var parameter = Expression.Parameter(typeof(T), "x");
+            var expression = BuildExpression(parameter, condition);
+
+            if (expression != null)
+            {
+                var lambda = Expression.Lambda<Func<T, bool>>(expression, parameter);
+                query = query.Where(lambda);
+            }
+
+            return query;
+        }
+
+        private Expression? BuildExpression(ParameterExpression parameter, FilterCondition condition)
+        {
+            // Nếu có SubConditions, xử lý logic AND/OR
+            if (condition.SubConditions?.Any() == true)
+            {
+                Expression? combined = null;
+
+                foreach (var subCondition in condition.SubConditions)
+                {
+                    var subExpression = BuildExpression(parameter, subCondition);
+
+                    if (subExpression != null)
+                    {
+                        combined = combined == null
+                            ? subExpression
+                            : condition.LogicalOperator == LogicalOperator.AND
+                                ? Expression.AndAlso(combined, subExpression)
+                                : Expression.OrElse(combined, subExpression);
+                    }
+                }
+
+                return combined;
+            }
+
             var property = Expression.Property(parameter, condition.Field);
 
-            // Chuyển đổi giá trị constant sang kiểu dữ liệu của property
-            var valueCondition = CommonFunction.ConvertToType(condition.Value, property.Type);
-            var constant = Expression.Constant(
-                valueCondition
-            );
+            // Chuyển đổi giá trị cho các toán tử khác
+            if (condition.Operator == FilterOperator.In)
+            {
+                return BuildInExpression(property, condition.Value);
+            }
 
-            Expression? comparison = condition.Operator switch
+            var valueCondition = CommonFunction.ConvertToType(condition.Value, property.Type);
+            var constant = Expression.Constant(valueCondition);
+
+            return condition.Operator switch
             {
                 FilterOperator.Equal => Expression.Equal(property, constant),
                 FilterOperator.NotEqual => Expression.NotEqual(property, constant),
@@ -119,29 +157,53 @@ namespace Bg.EduSocial.EFCore.Repositories
                     typeof(string).GetMethod("EndsWith", new[] { typeof(string) }),
                     constant
                 ),
-                FilterOperator.In => Expression.Call(
-                    typeof(Enumerable),
-                    "Contains",
-                    new Type[] { property.Type },
-                    Expression.Constant(((IEnumerable)condition.Value).Cast<object>().ToList()),
-                    property
-                ),
                 _ => throw new NotSupportedException($"Operator '{condition.Operator}' is not supported.")
             };
-
-            var lambda = Expression.Lambda<Func<T, bool>>(comparison!, parameter);
-
-            return query.Where(lambda);
         }
 
-        // Hàm đảm bảo rằng property là kiểu string
-        private static Expression EnsureString(Expression property)
+        private Expression BuildInExpression(MemberExpression property, object? value)
         {
-            if (property.Type != typeof(string))
+            if (value is IEnumerable enumerable)
             {
-                throw new InvalidOperationException($"Property '{property}' must be a string for this operator.");
+                // Lấy kiểu dữ liệu của property
+                var elementType = property.Type;
+
+                // Chuyển đổi các giá trị trong danh sách sang kiểu tương ứng
+                var convertedValues = enumerable.Cast<object>()
+                    .Select(v => Convert.ChangeType(v, elementType))
+                    .ToList();
+
+                // Chuyển các giá trị đã chuyển đổi thành List<elementType>
+                var listType = typeof(List<>).MakeGenericType(elementType);
+                var resultList = Activator.CreateInstance(listType);
+
+                // Dùng Reflection để thêm từng phần tử vào danh sách
+                foreach (var item in convertedValues)
+                {
+                    listType.GetMethod("Add").Invoke(resultList, new[] { item });
+                }
+
+                // Tạo mảng hằng số chứa danh sách giá trị
+                var constantArray = Expression.Constant(resultList, typeof(List<>).MakeGenericType(elementType));
+                // Lấy phương thức Contains phù hợp với kiểu phần tử
+                var containsMethod = typeof(Enumerable).GetMethods()
+                    .First(m => m.Name == "Contains" && m.GetParameters().Length == 2)
+                    .MakeGenericMethod(elementType);
+
+                // Tạo biểu thức Contains
+                return Expression.Call(containsMethod, constantArray, property);
             }
-            return property;
+
+            throw new ArgumentException("Value for 'In' operator must be an IEnumerable.");
         }
+
+
+        private Expression EnsureString(Expression expression)
+        {
+            return expression.Type == typeof(string)
+                ? expression
+                : Expression.Call(expression, typeof(object).GetMethod("ToString")!);
+        }
+
     }
 }

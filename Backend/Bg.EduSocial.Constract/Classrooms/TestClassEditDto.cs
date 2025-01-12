@@ -1,4 +1,5 @@
-﻿using Bg.EduSocial.Domain.Shared.Modes;
+﻿using Bg.EduSocial.Domain;
+using Bg.EduSocial.Domain.Shared.Modes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Bg.EduSocial.Constract.Classrooms
 {
-    public class TestClassEditDto
+    public class TestClassEditDto: TestClassroomEntity
     {
         public Guid ID { get; set; }
         public Guid ClassroomID { get; set; }

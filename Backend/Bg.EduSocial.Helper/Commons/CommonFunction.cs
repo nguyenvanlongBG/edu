@@ -1,7 +1,4 @@
 ﻿using Bg.EduSocial.Domain;
-using Bg.EduSocial.Domain.Auths;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace Bg.EduSocial.Helper.Commons
 {
@@ -23,28 +20,69 @@ namespace Bg.EduSocial.Helper.Commons
             //}
             return default;
         }
-        public static object ConvertToType(object value, Type targetType)
+        public static object? ConvertToType(object? value, Type targetType)
         {
-            if (value == null)
-                return null;
+            if (value == null) return null;
 
-            if (targetType == typeof(string))
-                return value.ToString();
+            // Lấy kiểu cơ bản nếu là nullable
+            var underlyingType = Nullable.GetUnderlyingType(targetType) ?? targetType;
 
-            if (targetType == typeof(int) && int.TryParse(value.ToString(), out var intValue))
-                return intValue;
+            try
+            {
+                // Nếu là kiểu Enum
+                if (underlyingType.IsEnum)
+                {
+                    return Enum.Parse(underlyingType, value.ToString() ?? string.Empty, ignoreCase: true);
+                }
 
-            if (targetType == typeof(double) && double.TryParse(value.ToString(), out var doubleValue))
-                return doubleValue;
+                // Nếu là kiểu Guid
+                if (underlyingType == typeof(Guid))
+                {
+                    return Guid.TryParse(value.ToString(), out var result) ? result : null;
+                }
 
-            if (targetType == typeof(DateTime) && DateTime.TryParse(value.ToString(), out var dateTimeValue))
-                return dateTimeValue;
+                // Nếu là kiểu DateTime
+                if (underlyingType == typeof(DateTime))
+                {
+                    return DateTime.TryParse(value.ToString(), out var result) ? result : null;
+                }
 
-            if (targetType == typeof(bool) && bool.TryParse(value.ToString(), out var boolValue))
-                return boolValue;
+                // Nếu là kiểu TimeSpan
+                if (underlyingType == typeof(TimeSpan))
+                {
+                    return TimeSpan.TryParse(value.ToString(), out var result) ? result : null;
+                }
 
-            throw new InvalidOperationException($"Cannot convert value '{value}' to type {targetType.Name}");
+                // Nếu là kiểu Uri
+                if (underlyingType == typeof(Uri))
+                {
+                    return Uri.TryCreate(value.ToString(), UriKind.RelativeOrAbsolute, out var result) ? result : null;
+                }
+
+                // Nếu là kiểu bool
+                if (underlyingType == typeof(bool))
+                {
+                    return bool.TryParse(value.ToString(), out var result) ? result : null;
+                }
+
+                // Nếu là kiểu số nguyên, số thực
+                if (underlyingType.IsPrimitive || underlyingType == typeof(decimal))
+                {
+                    return Convert.ChangeType(value, underlyingType);
+                }
+
+               
+                // Các kiểu khác
+                return Convert.ChangeType(value, underlyingType);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Cannot convert value '{value}' to type {targetType.Name}.", ex);
+            }
         }
+
+
+
 
     }
 }

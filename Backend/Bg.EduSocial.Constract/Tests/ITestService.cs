@@ -1,5 +1,4 @@
 ﻿using Bg.EduSocial.Constract.Exams;
-using Bg.EduSocial.Constract.Questions;
 using Bg.EduSocial.Domain;
 using Microsoft.AspNetCore.Http;
 
@@ -39,6 +38,14 @@ namespace Bg.EduSocial.Constract.Tests
         /// <param name="regexStr"></param>
         /// <returns></returns>
         /// Created By: NVLong 11/5/2024
+        Task<TestDoingDto> HandleGetDoTest(Guid testId);
+        /// <summary>
+        /// Lấy danh sách câu hỏi của đề 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="regexStr"></param>
+        /// <returns></returns>
+        /// Created By: NVLong 11/5/2024
         Task<List<QuestionDto>> GetQuestionOfTestEditAsync(Guid testId);
         /// <summary>
         /// Lấy danh sách bài thi cho lịch sử làm bài
@@ -48,7 +55,10 @@ namespace Bg.EduSocial.Constract.Tests
         /// <returns></returns>
         /// Created By: NVLong 11/5/2024
         Task<List<ExamDto>> GetExamUserHistory(Guid testId);
-        Task<bool> MarkTest(Guid testId);
-        void MapResultsToQuestion(List<QuestionDto> questions, List<ResultQuestionDto> results);
+        Task<List<ExamDto>> MarkTest(Guid testId);
+        Task<List<ExamDto>> GetExamMarkAsync(Guid testId);
+
+        Task<List<QuestionDto>> GenAutoTest(ParamAutoGenTest param);
+        Task<List<TestDto>> GetTestOfUserAsync();
     }
 }

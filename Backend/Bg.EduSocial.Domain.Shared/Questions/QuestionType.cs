@@ -9,7 +9,7 @@
     public enum QuestionLevel
     {
         Recognition = 1,         // Nhận biết
-        Understanding = 2,       // Thông hiểu
+        Comprehension = 2,       // Thông hiểu
         Application = 3,         // Vận dụng
         AdvancedApplication = 4  // Vận dụng cao
     }

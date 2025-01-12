@@ -40,6 +40,10 @@ namespace Bg.EduSocial.Helper.Commons
                 {
                     return Guid.TryParse(value.ToString(), out var result) ? result : null;
                 }
+                if (underlyingType == typeof(String))
+                {
+                    return value.ToString();
+                }
 
                 // Nếu là kiểu DateTime
                 if (underlyingType == typeof(DateTime))

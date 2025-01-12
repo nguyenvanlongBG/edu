@@ -4,9 +4,11 @@ using Bg.EduSocial.Constract.Answers;
 using Bg.EduSocial.Constract.Chapter;
 using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Constract.Exams;
+using Bg.EduSocial.Constract.Posts;
 using Bg.EduSocial.Constract.Questions;
 using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
+using Bg.EduSocial.Domain.Posts;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -17,6 +19,8 @@ namespace Bg.EduSocial.Application.Mapper
         public EduSocialProfile() {
             CreateMap<QuestionEntity, QuestionDto>();
             CreateMap<QuestionEntity, QuestionEditDto>();
+            CreateMap<PostEntity, PostEditDto>();
+            CreateMap<PostEntity, PostDto>();
             CreateMap<QuestionEditDto, QuestionDto>();
             CreateMap<QuestionEditDto, QuestionEntity>();
             CreateMap<QuestionDto, QuestionEditDto>();
@@ -34,6 +38,8 @@ namespace Bg.EduSocial.Application.Mapper
 
             CreateMap<ChapterEntity, ChapterDto>();
             CreateMap<ChapterEntity, ChapterEditDto>();
+            CreateMap<EnrollmentClassEntity, EnrollmentClassDto>();
+            CreateMap<EnrollmentClassEntity, EnrollmentClassEditDto>();
             CreateMap<UserEntity, UserEditDto>();
             CreateMap<UserEntity, UserDto>();
             CreateMap<ClassroomEntity, ClassroomEditDto>();

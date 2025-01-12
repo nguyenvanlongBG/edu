@@ -10,5 +10,7 @@ namespace Bg.EduSocial.Constract
         Task<List<T>> FilterAsync<T>(List<FilterCondition> filters);
 
         Task<List<TEntityDto>> GetPagingAsync(PagingParam pagingParam);
+        Task<int> GetSummaryData(PagingParam pagingParam);
+
     }
 }

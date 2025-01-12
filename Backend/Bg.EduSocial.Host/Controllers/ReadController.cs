@@ -33,5 +33,11 @@ namespace Bg.EduSocial.Host.Controllers
             var response = await _service.GetPagingAsync(pagingParam);
             return Ok(response);
         }
+        [HttpPost("summary")]
+        public virtual async Task<IActionResult?> GetSummayData(PagingParam pagingParam)
+        {
+            var response = await _service.GetSummaryData(pagingParam);
+            return Ok(response);
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace Bg.EduSocial.Domain.Cores
         Task<List<TEntity>> FilterAsync(List<FilterCondition> filters);
         Task<TEntity> GetById(Guid id);
         Task<List<TEntity>> GetPagingAsync(int skip, int take, List<FilterCondition> filters);
+        Task<int> GetSummaryAsync( List<FilterCondition> filters);
+
     }
 }

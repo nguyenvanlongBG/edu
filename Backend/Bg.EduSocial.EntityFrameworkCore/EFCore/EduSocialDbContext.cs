@@ -1,4 +1,5 @@
 ﻿using Bg.EduSocial.Domain;
+using Bg.EduSocial.Domain.Posts;
 using Bg.EduSocial.EntityFrameworkCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,10 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
         public DbSet<AnswerEntity> Answers { get; set; }
         public DbSet<ClassroomEntity> Classrooms { get; set; }
         public DbSet<TestClassroomEntity> TestClasses { get; set; }
+        public DbSet<PostEntity> Posts { get; set; }
+        public DbSet<EnrollmentClassEntity> EnrollmentClasses { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var builder = new ConfigurationBuilder()

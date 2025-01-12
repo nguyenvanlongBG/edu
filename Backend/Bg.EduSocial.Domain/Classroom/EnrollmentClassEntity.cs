@@ -9,9 +9,9 @@ namespace Bg.EduSocial.Domain
     public class EnrollmentClassEntity: BaseEntity
     {
         [Key]
-        public Guid enrollmen_class_id { get; set; }
+        public Guid enrollment_class_id { get; set; }
         public Guid user_id { get; set; }
         public Guid classroom_id { get; set; }
-        public EnrollmentClassType Status { get; set; }
+        public EnrollmentClassType status { get; set; }
     }
 }

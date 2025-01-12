@@ -74,5 +74,10 @@ namespace Bg.EduSocial.Application
             }
             return default;
         }
+
+        public async Task<int> GetSummaryData(PagingParam pagingParam)
+        {
+            return await _repo.GetSummaryAsync(pagingParam.filters);
+        }
     }
 }

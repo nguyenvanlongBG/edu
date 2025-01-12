@@ -26,10 +26,22 @@ namespace Bg.EduSocial.Application
             return exam;
         }
 
+        public async Task<ExamEditDto> SubmitExam(ExamEditDto exam)
+        {
+            var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
+            var answers = exam.answers;
+            await answerService.SubmitManyAsync(answers);
+            var examEditDto = await this.GetById<ExamEditDto>(exam.exam_id);
+            examEditDto.status = ExamStatus.Finish;
+            await this.UpdateAsync(examEditDto);
+            return exam;
+        }
+
         public ExamEditDto MarkExam(ExamEditDto exam, TestDto test)
         {
             var answers = exam.answers;
             var questions = test.questions;
+            if (!(questions?.Count > 0) || !(answers?.Count > 0)) return default;
             foreach (var question in questions)
             {
                 var answer = answers?.FirstOrDefault(a => a.question_id ==  question.question_id);
@@ -61,6 +73,8 @@ namespace Bg.EduSocial.Application
                     }
                 }
             }
+            exam.point = answers.Sum(a => a.point);
+            exam.status = ExamStatus.Marked;
             return exam;
         }
         public static bool CompareGuidStrings(string str1, string str2)
@@ -91,6 +105,7 @@ namespace Bg.EduSocial.Application
                 user_id = contextData.user.user_id,
                 status = ExamStatus.Doing,
                 point = 0,
+                created_date = DateTime.Now
             };
             await this.InsertAsync(newExam);
             return newExam;
@@ -162,9 +177,10 @@ namespace Bg.EduSocial.Application
             return test;
         }
 
-        public async Task<TestDto> HistoryDoingExam(Guid examId)
+        public async Task<TestDto> HandleDoingExam(ExamEntity examDoing)
         {
-            var test = await this.TestOfExam(examId);
+            var test = await this.TestOfExam(examDoing.exam_id);
+            // Tính toán thời điểm kết thúc dựa trên created_date và duration
             var questions = test.questions;
             if (questions == null || questions?.Count == 0) return default;
             var testService = _serviceProvider.GetRequiredService<ITestService>();
@@ -173,7 +189,7 @@ namespace Bg.EduSocial.Application
             {
                 Field = "exam_id",
                 Operator = FilterOperator.Equal,
-                Value = examId
+                Value = examDoing.exam_id
             };
             var answers = await answerService.FilterAsync<AnswerDto>(new List<FilterCondition> { filterAnswer });
 
@@ -205,7 +221,7 @@ namespace Bg.EduSocial.Application
             }
             else
             {
-                test= await HistoryDoingExam(examDoing.exam_id);
+                test= await HandleDoingExam(examDoing);
                 return new TestDoingDto
                 {
                     test = test,

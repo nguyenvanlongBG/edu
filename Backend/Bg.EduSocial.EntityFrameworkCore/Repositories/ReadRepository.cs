@@ -85,6 +85,20 @@ namespace Bg.EduSocial.EFCore.Repositories
             return data;
         }
 
+        public virtual async Task<int> GetSummaryAsync(List<FilterCondition> filters)
+        {
+            var query = Records.AsQueryable();
+            if (filters != null && filters.Count > 0)
+            {
+                filters.ForEach(filter =>
+                {
+                    query = this.ApplyCondition(query, filter);
+                });
+            }
+            var data = await query.ToListAsync();
+
+            return data.Count;
+        }
         private IQueryable<T> ApplyCondition<T>(IQueryable<T> query, FilterCondition condition)
         {
             var parameter = Expression.Parameter(typeof(T), "x");

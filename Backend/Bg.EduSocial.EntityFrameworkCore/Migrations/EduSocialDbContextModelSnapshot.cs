@@ -125,12 +125,49 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("classroom_id");
 
                     b.HasIndex("classroom_code")
                         .IsUnique();
 
                     b.ToTable("classroom");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.EnrollmentClassEntity", b =>
+                {
+                    b.Property<Guid>("enrollment_class_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("classroom_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("enrollment_class_id");
+
+                    b.ToTable("enrollment_class");
                 });
 
             modelBuilder.Entity("Bg.EduSocial.Domain.ExamEntity", b =>
@@ -202,6 +239,41 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.ToTable("option");
                 });
 
+            modelBuilder.Entity("Bg.EduSocial.Domain.Posts.PostEntity", b =>
+                {
+                    b.Property<Guid>("post_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("group_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("post_id");
+
+                    b.ToTable("post");
+                });
+
             modelBuilder.Entity("Bg.EduSocial.Domain.QuestionChapterEntity", b =>
                 {
                     b.Property<Guid>("question_chapter_id")
@@ -242,6 +314,9 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("chapter_ids")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("content")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -263,16 +338,13 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<decimal>("point")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<Guid>("subject_id")
                         .HasColumnType("char(36)");
 
                     b.Property<int>("type")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("user_id")
+                    b.Property<Guid>("user_id")
                         .HasColumnType("char(36)");
 
                     b.HasKey("question_id");
@@ -438,6 +510,9 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime>("start_time")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("test_id");
 

@@ -5,6 +5,7 @@ using Bg.EduSocial.Constract.Questions;
 using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Cores;
+using Bg.EduSocial.Domain.Shared;
 using Bg.EduSocial.Domain.Shared.ModelState;
 using Bg.EduSocial.Domain.Shared.Roles;
 using Bg.EduSocial.Domain.Tests;
@@ -187,10 +188,25 @@ namespace Bg.EduSocial.Application
                 Operator = FilterOperator.Equal,
                 Value = testId
             };
+            var filterExam = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "test_id",
+                    Operator = FilterOperator.Equal,
+                    Value = testId
+                },
+                new FilterCondition
+                {
+                    Field = "status",
+                    Operator = FilterOperator.NotEqual,
+                    Value = ExamStatus.Marked
+                },
+            };
 
             // Gọi các API một cách song song
             var questionsTestTask = await questionTestService.FilterAsync(new List<FilterCondition> { filterCondition });
-            var examsTask = await examService.FilterAsync<ExamEditDto>(new List<FilterCondition> { filterCondition });
+            var examsTask = await examService.FilterAsync<ExamEditDto>(filterExam);
 
             // Đợi tất cả các Task hoàn thành
             //await Task.WhenAll(testTask, questionsTestTask, examsTask);
@@ -225,19 +241,23 @@ namespace Bg.EduSocial.Application
             questionService.MapResultsToQuestion(questions, results);
             test.questions = questions;
             var examIds = exams.Select(e => e.exam_id).ToList();
-            var filterAnswer = new FilterCondition
+            var filterAnswer = new List<FilterCondition>
             {
-                Field = "exam_id",
-                Operator = FilterOperator.In,
-                Value = examIds
+                new FilterCondition
+                {
+                    Field = "exam_id",
+                    Operator = FilterOperator.In,
+                    Value = examIds
+                }
             };
-            var answers = await answerService.FilterAsync<AnswerEditDto>(new List<FilterCondition> { filterAnswer });
+            var answers = await answerService.FilterAsync<AnswerEditDto>(filterAnswer);
             if (answers?.Count == 0) return default;
             MapAnswersToExam(answers, exams);
             for (var index =0; index < exams.Count; index++)
             {
                 examService.MarkExam(exams[index], test);
             }
+            await examService.UpdateManyAsync(exams);
             var examsDto = _mapper.Map<List<ExamDto>>(exams);
             var userService = _serviceProvider.GetRequiredService<IUserService>();
             var userIds = exams?.Select(e => e.user_id).ToList();

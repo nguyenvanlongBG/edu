@@ -5,6 +5,7 @@ using Bg.EduSocial.Constract.Auth;
 using Bg.EduSocial.Constract.Chapter;
 using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Constract.Cores;
+using Bg.EduSocial.Constract.ExamNotes;
 using Bg.EduSocial.Constract.Exams;
 using Bg.EduSocial.Constract.FileQuestion;
 using Bg.EduSocial.Constract.Posts;
@@ -93,6 +94,9 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IPostRepo, PostRepo>();
 builder.Services.AddScoped<IEnrollmentClassService, EnrollmentClassService>();
 builder.Services.AddScoped<IEnrollmentClassRepository, EnrollmentClassRepo>();
+builder.Services.AddScoped<IExamNoteService, ExamNoteService>();
+builder.Services.AddScoped<IExamNoteRepo, ExamNoteRepo>();
+
 builder.Services.AddDbContext<EduSocialDbContext>(
     options => options.UseMySQL("server=localhost;database=edusocial;user=root;password=")
 );

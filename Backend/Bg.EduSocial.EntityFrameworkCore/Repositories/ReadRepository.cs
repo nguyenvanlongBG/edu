@@ -137,43 +137,82 @@ namespace Bg.EduSocial.EFCore.Repositories
                 return combined;
             }
 
+            // Lấy thuộc tính của tham số
             var property = Expression.Property(parameter, condition.Field);
 
-            // Chuyển đổi giá trị cho các toán tử khác
+            // Xử lý riêng cho toán tử "In"
             if (condition.Operator == FilterOperator.In)
             {
                 return BuildInExpression(property, condition.Value);
             }
 
-            var valueCondition = CommonFunction.ConvertToType(condition.Value, property.Type);
-            var constant = Expression.Constant(valueCondition);
+            // Sử dụng ExpressionBuilder để tạo biểu thức dựa trên toán tử
+            return BuildFilterExpression(property, condition.Value, condition.Operator);
+        }
 
-            return condition.Operator switch
+
+
+
+
+        public Expression BuildFilterExpression(
+        Expression property,
+        object? value,
+        FilterOperator filterOperator)
+        {
+            // Chuyển đổi giá trị sang kiểu của thuộc tính
+            var valueCondition = CommonFunction.ConvertToType(value, property.Type);
+            var constant = Expression.Constant(valueCondition, property.Type);
+
+            // Tạo biểu thức dựa trên toán tử
+            return filterOperator switch
             {
-                FilterOperator.Equal => Expression.Equal(property, constant),
-                FilterOperator.NotEqual => Expression.NotEqual(property, constant),
+                FilterOperator.Equal => BuildEqualityExpression(property, constant, true),
+                FilterOperator.NotEqual => BuildEqualityExpression(property, constant, false),
                 FilterOperator.GreaterThan => Expression.GreaterThan(property, constant),
                 FilterOperator.LessThan => Expression.LessThan(property, constant),
                 FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, constant),
                 FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(property, constant),
-                FilterOperator.Contains => Expression.Call(
-                    EnsureString(property),
-                    typeof(string).GetMethod("Contains", new[] { typeof(string) }),
-                    constant
-                ),
-                FilterOperator.StartsWith => Expression.Call(
-                    EnsureString(property),
-                    typeof(string).GetMethod("StartsWith", new[] { typeof(string) }),
-                    constant
-                ),
-                FilterOperator.EndsWith => Expression.Call(
-                    EnsureString(property),
-                    typeof(string).GetMethod("EndsWith", new[] { typeof(string) }),
-                    constant
-                ),
-                _ => throw new NotSupportedException($"Operator '{condition.Operator}' is not supported.")
+                FilterOperator.Contains => BuildStringMethodExpression(property, "Contains", constant),
+                FilterOperator.StartsWith => BuildStringMethodExpression(property, "StartsWith", constant),
+                FilterOperator.EndsWith => BuildStringMethodExpression(property, "EndsWith", constant),
+                _ => throw new NotSupportedException($"Operator '{filterOperator}' is not supported.")
             };
         }
+
+        private Expression BuildEqualityExpression(Expression property, Expression constant, bool isEqual)
+        {
+            // Nếu property là Nullable, sử dụng HasValue và Value
+            if (IsNullableType(property.Type))
+            {
+                var hasValue = Expression.Property(property, "HasValue");
+                var valueProperty = Expression.Property(property, "Value");
+                var equality = Expression.Equal(valueProperty, constant);
+
+                return isEqual ? Expression.AndAlso(hasValue, equality) : Expression.Not(equality);
+            }
+
+            // Trường hợp không phải Nullable
+            return isEqual ? Expression.Equal(property, constant) : Expression.NotEqual(property, constant);
+        }
+
+        private Expression BuildStringMethodExpression(Expression property, string methodName, Expression constant)
+        {
+            // Đảm bảo property là kiểu string
+            var stringProperty = EnsureString(property);
+            var method = typeof(string).GetMethod(methodName, new[] { typeof(string) });
+
+            if (method == null)
+                throw new InvalidOperationException($"String method '{methodName}' not found.");
+
+            return Expression.Call(stringProperty, method, constant);
+        }
+
+        private bool IsNullableType(Type type)
+        {
+            return Nullable.GetUnderlyingType(type) != null;
+        }
+
+
 
         private Expression BuildInExpression(MemberExpression property, object? value)
         {

@@ -1,5 +1,6 @@
 ﻿using Bg.EduSocial.Constract;
 using Bg.EduSocial.Constract.Answers;
+using Bg.EduSocial.Constract.ExamNotes;
 using Bg.EduSocial.Constract.Exams;
 using Bg.EduSocial.Constract.Questions;
 using Bg.EduSocial.Constract.Tests;
@@ -118,6 +119,7 @@ namespace Bg.EduSocial.Application
             if (exam != null)
             {
                 var test = await testService.GetTestDetail(exam.test_id);
+                test.exam = exam;
                 return test;
             }
             return default;
@@ -140,8 +142,9 @@ namespace Bg.EduSocial.Application
             var testService = _serviceProvider.GetRequiredService<ITestService>();
             var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
-
+            var examNoteService = _serviceProvider.GetRequiredService<IExamNoteService>();
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
+            
             var filterAnswer = new FilterCondition
             {
                 Field = "exam_id",
@@ -161,6 +164,19 @@ namespace Bg.EduSocial.Application
             // Gọi song song các truy vấn lấy thông tin chi tiết các câu hỏi và kết quả
             var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterQuestions });
 
+            var filtersExamNote = new List<FilterCondition>
+            {
+                new FilterCondition {
+                    Field = "exam_id",
+                    Operator = FilterOperator.Equal,
+                    Value = examId
+                }
+            };
+            if (test?.exam != null)
+            {
+                var notes = await examNoteService.FilterAsync(filtersExamNote);
+                test.exam.notes = notes;
+            }
             // Tiếp tục xử lý logic dựa trên kết quả trên
             questionService.MapResultsToQuestion(questions, results);
 
@@ -207,7 +223,8 @@ namespace Bg.EduSocial.Application
 
         public async Task<TestDoingDto> LastExam(Guid testId)
         {
-            var examDoing = await _repo.ExamDoing(testId);
+            var user = contextData.user;
+            var examDoing = await _repo.ExamDoing(testId, user.user_id);
             TestDto test = null;
             if (examDoing == null)
             {
@@ -228,6 +245,18 @@ namespace Bg.EduSocial.Application
                     exam_id = examDoing.exam_id
                 };
             }
+        }
+
+        public async Task<ExamEditDto> NoteExam(ExamEditDto exam)
+        {
+            var examUpdate = await this.GetById<ExamEditDto>(exam.exam_id);
+            examUpdate.question_ids_attention = exam.question_ids_attention;
+            if (exam.notes?.Count() > 0)
+            {
+                var examNoteService = _serviceProvider.GetRequiredService<IExamNoteService>();
+                await examNoteService.SubmitManyAsync(exam.notes);
+            }
+            return await this.UpdateAsync(examUpdate);
         }
     }
 }

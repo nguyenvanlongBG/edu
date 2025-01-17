@@ -70,25 +70,44 @@ namespace Bg.EduSocial.Application
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
             var optionService = _serviceProvider.GetRequiredService<IOptionService>();
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
+            var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
+
 
             var questionIds = questions.Select(question => question.question_id).ToList();
             var filterOptionOfTest = new FilterCondition
             {
                 Field = "question_id",
-                Operator = FilterOperator.Equal,
+                Operator = FilterOperator.In,
                 Value = questionIds
             };
             var options = await optionService.FilterAsync(new List<FilterCondition> { filterOptionOfTest });
             var filterResultOfTest = new FilterCondition
             {
                 Field = "question_id",
-                Operator = FilterOperator.Equal,
+                Operator = FilterOperator.In,
                 Value = questionIds
             };
+            var filtersQuestionTest = new List<FilterCondition>
+            {
+                new FilterCondition {
+                    Field = "test_id",
+                    Operator = FilterOperator.Equal,
+                    Value = testId
+                },
+                new FilterCondition {
+                    Field = "question_id",
+                    Operator = FilterOperator.In,
+                    Value = questionIds
+                }
+            };
+            var resultsQuestionTest = await questionTestService.FilterAsync(filtersQuestionTest);
+
             var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterResultOfTest });
             var questionsReturn = _mapper.Map<List<QuestionDto>>(questions);
             questionService.MapOptionsToQuestion(questionsReturn, options);
             questionService.MapResultsToQuestion(questionsReturn, results);
+            questionService.MapQuestionTestToQuestion(questionsReturn, resultsQuestionTest);
+
             return questionsReturn;
         }
 
@@ -136,15 +155,38 @@ namespace Bg.EduSocial.Application
             }
             if (questionsHandle?.Count > 0)
             {
-               await questionTestService.SubmitManyAsync(
-                    questionsHandle.Select(question => new QuestionTestEditDto
+                var filtersQuestionTest = new List<FilterCondition> {
+                    new FilterCondition
                     {
-                        question_test_id = Guid.NewGuid(),
-                        test_id = test.test_id,
-                        question_id = question.question_id,
-                        State = question.State
-                    }).ToList()
-                    );
+                        Field = "test_id",
+                        Operator = FilterOperator.Equal,
+                        Value = test.test_id
+                    },
+                    new FilterCondition
+                    {
+                        Field = "question_id",
+                        Operator = FilterOperator.In,
+                        Value = questionsHandle.Select(q => q.question_id).ToList()
+                    },
+                };
+                var questionsTesthandle = await questionTestService.FilterAsync(filtersQuestionTest);
+                questionsHandle.Where(q => q.State != ModelState.Insert).ToList().ForEach(question => {
+                    var questionTmp = questionsTesthandle.FirstOrDefault(q => q.question_id == question.question_id);
+                    if (questionTmp != null)
+                    {
+                        questionTmp.point = question.point;
+                        questionTmp.State = question.State;
+                    }
+                });
+                var questionTestAdd = questionsHandle.Where(q => q.State == ModelState.Insert).Select(question => new QuestionTestEditDto
+                {
+                    question_test_id = Guid.NewGuid(),
+                    test_id = test.test_id,
+                    question_id = question.question_id,
+                    State = question.State
+                }).ToList();
+                questionsTesthandle.AddRange(questionTestAdd);
+                await questionTestService.SubmitManyAsync(questionsTesthandle);
             };
         }
 
@@ -239,6 +281,8 @@ namespace Bg.EduSocial.Application
 
             // Tiếp tục xử lý logic dựa trên kết quả trên
             questionService.MapResultsToQuestion(questions, results);
+            questionService.MapQuestionTestToQuestion(questions, questionsTestTask);
+
             test.questions = questions;
             var examIds = exams.Select(e => e.exam_id).ToList();
             var filterAnswer = new List<FilterCondition>
@@ -253,6 +297,7 @@ namespace Bg.EduSocial.Application
             var answers = await answerService.FilterAsync<AnswerEditDto>(filterAnswer);
             if (answers?.Count == 0) return default;
             MapAnswersToExam(answers, exams);
+            
             for (var index =0; index < exams.Count; index++)
             {
                 examService.MarkExam(exams[index], test);
@@ -316,6 +361,12 @@ namespace Bg.EduSocial.Application
                     Field = "user_id",
                     Operator = FilterOperator.Equal,
                     Value = contextData.user.user_id
+                },
+                new FilterCondition
+                {
+                    Field = "status",
+                    Operator = FilterOperator.Equal,
+                    Value = ExamStatus.Marked
                 }
             };
             return await examService.FilterAsync<ExamDto>(filters);
@@ -350,14 +401,14 @@ namespace Bg.EduSocial.Application
                 var filterOptionOfTest = new FilterCondition
                 {
                     Field = "question_id",
-                    Operator = FilterOperator.Equal,
+                    Operator = FilterOperator.In,
                     Value = questionIds
                 };
                 var options = await optionService.FilterAsync(new List<FilterCondition> { filterOptionOfTest });
                 var filterResultOfTest = new FilterCondition
                 {
                     Field = "question_id",
-                    Operator = FilterOperator.Equal,
+                    Operator = FilterOperator.In,
                     Value = questionIds
                 };
                 var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterResultOfTest });

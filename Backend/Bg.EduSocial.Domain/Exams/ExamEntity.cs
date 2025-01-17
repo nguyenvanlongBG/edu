@@ -10,9 +10,11 @@ namespace Bg.EduSocial.Domain
     {
         [Key]
         public Guid exam_id { get; set; }
-        public Guid? user_id { get; set; }
+        public Guid user_id { get; set; }
         public Guid test_id { get; set; }
         public decimal point { get; set; }
         public ExamStatus status { get; set; }
+        public string question_ids_attention { get; set; } = string.Empty;
+
     }
 }

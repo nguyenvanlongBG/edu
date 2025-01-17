@@ -1,5 +1,6 @@
 ﻿using Bg.EduSocial.Constract.Answers;
 using Bg.EduSocial.Constract.Cores;
+using Bg.EduSocial.Constract.ExamNotes;
 using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Shared.ModelState;
 
@@ -9,5 +10,7 @@ namespace Bg.EduSocial.Constract.Exams
     {
         public ModelState State { get; set; } = ModelState.View;
         public List<AnswerEditDto> answers { get; set; }
+        public List<ExamNoteEditDto> notes { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Bg.EduSocial.Constract.Classrooms;
+﻿using Bg.EduSocial.Constract.Base;
+using Bg.EduSocial.Constract.Classrooms;
 using Bg.EduSocial.Constract.Exams;
 using Bg.EduSocial.Constract.Tests;
 using Bg.EduSocial.Domain;
@@ -6,6 +7,7 @@ using Bg.EduSocial.Domain.Classes;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Shared.Roles;
 using Microsoft.Extensions.DependencyInjection;
+using MySqlX.XDevAPI;
 
 namespace Bg.EduSocial.Application
 {
@@ -74,6 +76,40 @@ namespace Bg.EduSocial.Application
                     Value = user.user_id
                 });
                 return await this.FilterAsync<ClassroomDto>(filterClass);
+            }
+            return default;
+        }
+
+        public async Task<List<ClassroomDto>> PagingClassroom(PagingParam param)
+        {
+            var enrollmentService = _serviceProvider.GetRequiredService<IEnrollmentClassService>();
+            var classrooms = await this.GetPagingAsync(param);
+            var user = contextData.user;
+            if (classrooms?.Count > 0 && user != null)
+            {
+                var filterEnrolls = new List<FilterCondition> {
+                    new FilterCondition
+                    {
+                        Field = "classroom_id",
+                        Operator = FilterOperator.In,
+                        Value = classrooms.Select(c => c.classroom_id).ToList()
+                    },
+                    new FilterCondition {
+                        Field = "user_id",
+                        Operator = FilterOperator.Equal,
+                        Value = user.user_id
+                    },
+                };
+                var enrollmens = await enrollmentService.FilterAsync(filterEnrolls);
+                classrooms.ForEach(c =>
+                {
+                    var enroll = enrollmens.FirstOrDefault(e => e.classroom_id == c.classroom_id);
+                    if (enroll != null)
+                    {
+                        c.status = enroll.Status;
+                    }
+                });
+                return classrooms;
             }
             return default;
         }

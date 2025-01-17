@@ -1,4 +1,6 @@
-﻿using Bg.EduSocial.Domain;
+﻿using BCrypt.Net;
+using Bg.EduSocial.Domain;
+using DocumentFormat.OpenXml.Math;
 
 namespace Bg.EduSocial.Helper.Commons
 {
@@ -69,6 +71,15 @@ namespace Bg.EduSocial.Helper.Commons
                     return bool.TryParse(value.ToString(), out var result) ? result : null;
                 }
 
+                // Nếu là kiểu bool
+                if (underlyingType == typeof(Int32))
+                {
+                    return int.TryParse(value.ToString(), out var result) ? result : null;
+                }
+                if (underlyingType == typeof(decimal))
+                {
+                    return decimal.TryParse(value.ToString(), out var result) ? result : null;
+                }
                 // Nếu là kiểu số nguyên, số thực
                 if (underlyingType.IsPrimitive || underlyingType == typeof(decimal))
                 {
@@ -85,7 +96,11 @@ namespace Bg.EduSocial.Helper.Commons
             }
         }
 
-
+        public static string HashData(object password)
+        {
+            // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+            return BCrypt.Net.BCrypt.HashPassword(password.ToString());
+        }
 
 
     }

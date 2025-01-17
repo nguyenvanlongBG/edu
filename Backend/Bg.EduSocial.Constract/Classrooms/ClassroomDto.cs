@@ -1,4 +1,5 @@
-﻿using Bg.EduSocial.Domain.Shared.Modes;
+﻿using Bg.EduSocial.Domain.Shared.Classrooms;
+using Bg.EduSocial.Domain.Shared.Modes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Bg.EduSocial.Constract.Classrooms
         public string description { get; set; }
         public string avatar { get; set; }
         public Guid user_id { get; set; }
+        public EnrollmentClassType status { get; set; }
 
     }
 }

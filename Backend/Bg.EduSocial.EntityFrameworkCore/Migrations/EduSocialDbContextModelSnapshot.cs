@@ -87,6 +87,88 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasKey("chapter_id");
 
                     b.ToTable("chapter");
+
+                    b.HasData(
+                        new
+                        {
+                            chapterid = new Guid("761b89af-3248-4404-a25e-9199d4798a83"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3625),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3625),
+                            name = "Hàm số lượng giác và phương trình lượng giác",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("6be67470-51a7-400c-9821-a559576d1114"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3643),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3644),
+                            name = "Dãy số cấp số cộng và cấp số nhân",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("8fb40e6c-410e-492b-a9b3-1e73d14dbba5"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3647),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3648),
+                            name = "Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("2879766d-b5f3-417d-b654-5d7d6e93ea5e"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3650),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3651),
+                            name = "Giới hạn. Hàm số liên tục",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("f623bc8d-b550-464a-9f11-aeb33739310d"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3653),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3653),
+                            name = "Hàm số mũ và hàm số Logarit",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("fbd22239-b3a3-47c8-810a-14acd7fb7fd7"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3663),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3664),
+                            name = "Quan hệ vuông góc trong không gian",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("662bb210-1f47-4d57-84dd-349f737e4c10"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3666),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3667),
+                            name = "Các quy tắc tính xác suất",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        },
+                        new
+                        {
+                            chapterid = new Guid("d9310d79-6d78-4ad3-9f79-8b94ba473c40"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3670),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3671),
+                            name = "Đạo hàm",
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
+                        });
                 });
 
             modelBuilder.Entity("Bg.EduSocial.Domain.ClassroomEntity", b =>
@@ -193,18 +275,57 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.Property<decimal>("point")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("question_ids_attention")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("status")
                         .HasColumnType("int");
 
                     b.Property<Guid>("test_id")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("user_id")
+                    b.Property<Guid>("user_id")
                         .HasColumnType("char(36)");
 
                     b.HasKey("exam_id");
 
                     b.ToTable("exam");
+                });
+
+            modelBuilder.Entity("Bg.EduSocial.Domain.ExamNotes.ExamNoteEntity", b =>
+                {
+                    b.Property<Guid>("exam_note_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("created_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("exam_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("modified_by")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("question_id")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("exam_note_id");
+
+                    b.ToTable("exam_note");
                 });
 
             modelBuilder.Entity("Bg.EduSocial.Domain.OptionEntity", b =>
@@ -328,6 +449,9 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("from")
+                        .HasColumnType("int");
+
                     b.Property<int>("level")
                         .HasColumnType("int");
 
@@ -445,6 +569,17 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasKey("subject_id");
 
                     b.ToTable("subject");
+
+                    b.HasData(
+                        new
+                        {
+                            subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3318),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3319),
+                            subjectname = "Toán"
+                        });
                 });
 
             modelBuilder.Entity("Bg.EduSocial.Domain.TestClassroomEntity", b =>
@@ -557,6 +692,20 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasKey("user_id");
 
                     b.ToTable("user");
+
+                    b.HasData(
+                        new
+                        {
+                            userid = new Guid("bb871d62-5757-4f28-8e0f-e578ce59753c"),
+                            createdby = "",
+                            createddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3011),
+                            modifiedby = "",
+                            modifieddate = new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3029),
+                            name = "Admin",
+                            password = "$2a$11$EFO4JJTdJMg5wZ/Szd47sef0tew2gIlzvidDR9vFn.0G2DLdGSiLO",
+                            roleid = 1,
+                            username = "admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

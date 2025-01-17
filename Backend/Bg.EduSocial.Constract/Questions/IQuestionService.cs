@@ -13,5 +13,6 @@ namespace Bg.EduSocial.Constract.Questions
         Task<List<QuestionDto>> PagingQuestionLibraryAsync(PagingParam pagingParam);
         void MapOptionsToQuestion(List<QuestionDto> questions, List<OptionDto> options);
         void MapResultsToQuestion(List<QuestionDto> questions, List<ResultQuestionDto> results);
+        void MapQuestionTestToQuestion(List<QuestionDto> questions, List<QuestionTestEditDto> questionTests);
     }
 }

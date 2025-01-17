@@ -27,6 +27,8 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
         public DbSet<TestClassroomEntity> TestClasses { get; set; }
         public DbSet<PostEntity> Posts { get; set; }
         public DbSet<EnrollmentClassEntity> EnrollmentClasses { get; set; }
+        public DbSet<ExamNoteEntity> ExamNotes { get; set; }
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -118,9 +120,16 @@ namespace Bg.EduSocial.EntityFrameworkCore.EFCore
                 entity.HasKey(u => u.chapter_id);
             }
             );
+            modelBuilder.Entity<ExamNoteEntity>(entity =>
+            {
+                entity.HasKey(u => u.exam_note_id);
+            }
+            );
             modelBuilder.Entity<QuestionChapterEntity>().HasKey(a => a.question_chapter_id);
             //modelBuilder.Entity<Answer>().HasOne(a => a.Question).WithMany(q => q.Answers).HasForeignKey(a => a.QuestionID).OnDelete(DeleteBehavior.Cascade);
             ModelBuilderExtension.SeedUser(modelBuilder);
+            ModelBuilderExtension.SeedSubject(modelBuilder);
+            ModelBuilderExtension.SeedChapter(modelBuilder);
         }
     }
 }

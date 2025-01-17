@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Bg.EduSocial.Constract.ExamNotes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bg.EduSocial.Constract.Exams
 {
@@ -10,5 +11,7 @@ namespace Bg.EduSocial.Constract.Exams
         public Guid test_id { get; set; }
         public decimal point { get; set; }
         public string name { get; set; }
+        public string question_ids_attention { get; set; } = string.Empty;
+        public List<ExamNoteDto>? notes { get; set; }
     }
 }

@@ -12,9 +12,9 @@ namespace Bg.EduSocial.EntityFrameworkCore.Repositories
         public ExamRepo(IUnitOfWork<EduSocialDbContext> unitOfWork) : base(unitOfWork)
         {
         }
-        public async Task<ExamEntity> ExamDoing(Guid testId)
+        public async Task<ExamEntity> ExamDoing(Guid testId, Guid userId)
         {
-            return Records.Where(exam => exam.status == ExamStatus.Doing && exam.test_id == testId).FirstOrDefault();
+            return Records.Where(exam => exam.status == ExamStatus.Doing && exam.test_id == testId && exam.user_id == userId).FirstOrDefault();
         }
     }
 }

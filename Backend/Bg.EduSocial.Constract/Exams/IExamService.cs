@@ -14,5 +14,6 @@ namespace Bg.EduSocial.Constract.Exams
         Task<TestDto> HistoryExam(Guid examId);
         Task<ExamEditDto> MarkExam(ExamEditDto exam);
         ExamEditDto MarkExam(ExamEditDto exam, TestDto test);
+        Task<ExamEditDto> NoteExam(ExamEditDto exam);
     }
 }

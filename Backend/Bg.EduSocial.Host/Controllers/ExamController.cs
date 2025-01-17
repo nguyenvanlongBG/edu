@@ -33,6 +33,12 @@ namespace Bg.EduSocial.Host.Controllers
             var examResult = await _service.DoExam(exam);
             return Ok(examResult);
         }
+        [HttpPut("note")]
+        public async Task<IActionResult> NoteExam([FromBody] ExamEditDto exam)
+        {
+            var examResult = await _service.NoteExam(exam);
+            return Ok(examResult);
+        }
         [HttpPut("submit")]
         public async Task<IActionResult> Submit([FromBody] ExamEditDto exam)
         {

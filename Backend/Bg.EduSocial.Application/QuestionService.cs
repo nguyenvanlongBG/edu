@@ -7,6 +7,7 @@ using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Questions;
 using Bg.EduSocial.Domain.Shared.ModelState;
 using Microsoft.Extensions.DependencyInjection;
+using MySqlX.XDevAPI.Common;
 
 namespace Bg.EduSocial.Application
 {
@@ -103,7 +104,8 @@ namespace Bg.EduSocial.Application
 
         public async Task<List<QuestionEntity>> GetRandomQuestion(ChapterGenQuestionConfig param)
         {
-            return await _repo.GetRandomQuestion(param.chapter_id, param.recognition, param.comprehension, param.application, param.advanced_application);
+            var user = contextData.user;
+            return await _repo.GetRandomQuestion(user.user_id, param.chapter_id, param.recognition, param.comprehension, param.application, param.advanced_application);
         }
 
         public async Task<List<QuestionEditDto>> InsertQuestionLibrary(List<QuestionEditDto> questions)
@@ -157,13 +159,15 @@ namespace Bg.EduSocial.Application
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
 
             var questionIds = questions.Select(question => question.question_id).ToList();
-            var filterOptionOfTest = new FilterCondition
+            var filterOptionOfTest = new List<FilterCondition>
             {
-                Field = "question_id",
-                Operator = FilterOperator.In,
-                Value = questionIds
+                new FilterCondition {
+                    Field = "question_id",
+                    Operator = FilterOperator.In,
+                    Value = questionIds
+                },
             };
-            var options = await optionService.FilterAsync(new List<FilterCondition> { filterOptionOfTest });
+            var options = await optionService.FilterAsync(filterOptionOfTest);
             var filterResultOfTest = new FilterCondition
             {
                 Field = "question_id",
@@ -210,6 +214,24 @@ namespace Bg.EduSocial.Application
                     if (resultsByQuestionId.TryGetValue(question.question_id, out var relevantResults))
                     {
                         question.results = relevantResults;
+                    }
+                }
+            }
+        }
+        public void MapQuestionTestToQuestion(List<QuestionDto> questions, List<QuestionTestEditDto> questionTests)
+        {
+            if (questions.Count > 0 && questionTests?.Count > 0)
+            {
+                // Tạo một dictionary để nhóm các options theo QuestionId
+                var questionTestDic = questionTests.GroupBy(o => o.question_id)
+                                                 .ToDictionary(g => g.Key, g => g.FirstOrDefault());
+
+                foreach (var question in questions)
+                {
+                    // Lấy ra danh sách options từ dictionary bằng QuestionId của câu hỏi
+                    if (questionTestDic.TryGetValue(question.question_id, out var questionTest) && questionTest != null)
+                    {
+                        question.point = questionTest.point;
                     }
                 }
             }

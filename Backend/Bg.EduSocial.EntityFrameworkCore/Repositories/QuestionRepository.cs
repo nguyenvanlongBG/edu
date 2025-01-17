@@ -4,6 +4,7 @@ using Bg.EduSocial.Domain.Questions;
 using Bg.EduSocial.Domain.Shared.Questions;
 using Bg.EduSocial.EntityFrameworkCore.EFCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Bg.EduSocial.EFCore.Repositories
 {
@@ -27,54 +28,34 @@ namespace Bg.EduSocial.EFCore.Repositories
            // var questions = Context.QuestionTests.Where(qt => qt.test_id == testID).Include(qt => qt.Question).ThenInclude(q => q).Select(qu => qu.Question).ToList();
             return default;
         }
-        public async Task<List<QuestionEntity>> GetRandomQuestion(Guid chapter_id, int recognition, int comprehension, int application, int advanced_application)
+        public async Task<List<QuestionEntity>> GetRandomQuestion(Guid userId, Guid chapter_id, int recognition, int comprehension, int application, int advanced_application)
         {
             var result = new List<QuestionEntity>();
-            var joinedData = await Records
-            .GroupJoin(
-                Context.QuestionChapters,            // Bảng QuestionChapters
-                r => r.question_id,                  // Khóa từ bảng Records
-                qc => qc.question_id,                // Khóa từ bảng QuestionChapters
-                (r, qcs) => new { Record = r, QuestionChapters = qcs.DefaultIfEmpty() }
-            )
-            .SelectMany(
-                x => x.QuestionChapters,             // Mở rộng tập hợp kết quả từ GroupJoin
-                (x, qc) => new
-                {
-                    Record = x.Record,               // Dữ liệu từ Records
-                    QuestionChapter = qc             // Dữ liệu từ QuestionChapters
-                }
-            )
-            .Where(x => x.QuestionChapter != null && x.QuestionChapter.chapter_id == chapter_id) // Lọc theo chapter_id
-            .Select(x => new
-            {
-                x.Record,                            // Dữ liệu từ bảng Records
-                x.QuestionChapter                    // Dữ liệu từ bảng QuestionChapters
-            })
+            var joinedData = await Records.Where(r => (r.user_id == Guid.Empty || r.user_id == userId) && r.from == 0 && !string.IsNullOrEmpty(r.chapter_ids) && r.chapter_ids.Contains(chapter_id.ToString()))
             .ToListAsync();
             var level1Questions = joinedData
-                .Where(x => x.Record.level == QuestionLevel.Recognition)
+                .Where(x => x.level == QuestionLevel.Recognition)
                 .OrderBy(_ => Guid.NewGuid()) // Random
                 .Take(recognition)
-                .Select(x => x.Record);
+                .Select(x => x);
 
             var level2Questions = joinedData
-                .Where(x => x.Record.level == QuestionLevel.Comprehension)
+                .Where(x => x.level == QuestionLevel.Comprehension)
                 .OrderBy(_ => Guid.NewGuid()) // Random
                 .Take(comprehension)
-                .Select(x => x.Record);
+                .Select(x => x);
 
             var level3Questions = joinedData
-                .Where(x => x.Record.level == QuestionLevel.Application)
+                .Where(x => x.level == QuestionLevel.Application)
                 .OrderBy(_ => Guid.NewGuid()) // Random
                 .Take(application)
-                .Select(x => x.Record);
+                .Select(x => x);
 
             var level4Questions = joinedData
-                .Where(x => x.Record.level == QuestionLevel.AdvancedApplication)
+                .Where(x => x.level == QuestionLevel.AdvancedApplication)
                 .OrderBy(_ => Guid.NewGuid()) // Random
                 .Take(advanced_application)
-                .Select(x => x.Record);
+                .Select(x => x);
             result.AddRange(level1Questions);
             result.AddRange(level2Questions);
             result.AddRange(level3Questions);

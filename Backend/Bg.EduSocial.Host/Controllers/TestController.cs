@@ -40,6 +40,7 @@ namespace Bg.EduSocial.Host.Controllers
 
         }
         [HttpGet("{testId}/do")]
+        [Authorize]
         public async Task<IActionResult> GetTestDo(Guid testId)
         {
             var questions = await _service.HandleGetDoTest(testId);
@@ -55,18 +56,21 @@ namespace Bg.EduSocial.Host.Controllers
 
         }
         [HttpGet("{testId}/mark")]
+        [Authorize]
         public async Task<IActionResult> MarkTest(Guid testId)
         {
             var exams = await _service.MarkTest(testId);
             return Ok(exams);
         }
         [HttpGet("{testId}/exam-mark")]
+        [Authorize]
         public async Task<IActionResult> GetExamMax(Guid testId)
         {
             var exams = await _service.GetExamMarkAsync(testId);
             return Ok(exams);
         }
         [HttpGet("{testId}/edit")]
+        [Authorize]
         public async Task<IActionResult> GetQuestionTestEdit(Guid testId)
         {
             var questions = await _service.GetQuestionOfTestEditAsync(testId);
@@ -81,6 +85,7 @@ namespace Bg.EduSocial.Host.Controllers
 
         }
         [HttpGet("{testId}/history")]
+        [Authorize]
         public async Task<IActionResult> GetExamsHistory(Guid testId)
         {
             var exams = await _service.GetExamUserHistory(testId);

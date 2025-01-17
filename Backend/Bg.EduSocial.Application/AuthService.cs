@@ -5,6 +5,7 @@ using Bg.EduSocial.Constract.Users;
 using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Shared.ModelState;
+using Bg.EduSocial.Helper.Commons;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -103,7 +104,7 @@ namespace Bg.EduSocial.Application
         public string HashPassword(string password)
         {
             // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-            return BCrypt.Net.BCrypt.HashPassword(password);
+            return CommonFunction.HashData(password);
         }
         public bool VerifyPassword(string hashedPassword, string password)
         {

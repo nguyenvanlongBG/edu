@@ -16,10 +16,6 @@ namespace Bg.EduSocial.Application
         public QuestionService(IServiceProvider serviceProvider): base(serviceProvider)
         { 
         }
-        public override async Task HandleBeforeSaveAsync(QuestionEditDto questionEditDto)
-        {
-            Task.CompletedTask.Wait();
-        }
         public override async Task<List<QuestionDto>> GetPagingAsync(PagingParam pagingParam)
         {
             var data = await _repo.GetPagingAsync(pagingParam.skip, pagingParam.take, pagingParam.filters);
@@ -85,20 +81,15 @@ namespace Bg.EduSocial.Application
                                 r.State == ModelState.Delete)
                 .ToList();
 
-            var tasks = new List<Task>();
 
             if (optionsHandle?.Count > 0)
             {
-                tasks.Add(optionService.SubmitManyAsync(optionsHandle));
+                await optionService.SubmitManyAsync(optionsHandle);
             }
             if (resultsHandle?.Count > 0)
             {
                 var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
-                tasks.Add(resultQuestionService.SubmitManyAsync(resultsHandle));
-            }
-            if (tasks.Count > 0)
-            {
-                await Task.WhenAll(tasks);
+                await resultQuestionService.SubmitManyAsync(resultsHandle);
             }
         }
 
@@ -127,25 +118,20 @@ namespace Bg.EduSocial.Application
                                 r.State == ModelState.Delete)
                 .ToList();
 
-            var tasks = new List<Task>();
 
             if (questionsHandle?.Count > 0)
             {
-                tasks.Add(this.SubmitManyAsync(questionsHandle));
+                await this.SubmitManyAsync(questionsHandle);
             }
             if (optionsHandle?.Count > 0)
             {
                 var optionService = _serviceProvider.GetRequiredService<IOptionService>();
-                tasks.Add(optionService.SubmitManyAsync(optionsHandle));
+                await optionService.SubmitManyAsync(optionsHandle);
             }
             if (resultsHandle?.Count > 0)
             {
                 var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
-                tasks.Add(resultQuestionService.SubmitManyAsync(resultsHandle));
-            }
-            if (tasks.Count > 0)
-            {
-                await Task.WhenAll(tasks);
+                await resultQuestionService.SubmitManyAsync(resultsHandle);
             }
 
             return questions;

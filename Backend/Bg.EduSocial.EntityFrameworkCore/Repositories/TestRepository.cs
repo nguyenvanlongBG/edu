@@ -13,10 +13,5 @@ namespace Bg.EduSocial.EntityFrameworkCore.Repositories
         public TestRepository(IUnitOfWork<EduSocialDbContext> unitOfWork) : base(unitOfWork)
         {
         }
-        public async Task<List<QuestionEntity>> GetQuestionOfTest(Guid testId)
-        {
-            var questions = Context.Questions.ToList();
-            return questions;
-        }
     }
 }

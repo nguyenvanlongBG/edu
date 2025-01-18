@@ -179,7 +179,7 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     userid = table.Column<Guid>(name: "user_id", type: "char(36)", nullable: false),
                     type = table.Column<int>(type: "int", nullable: false),
                     subjectid = table.Column<Guid>(name: "subject_id", type: "char(36)", nullable: false),
-                    level = table.Column<int>(type: "int", nullable: false),
+                    level = table.Column<int>(type: "int", nullable: true),
                     content = table.Column<string>(type: "longtext", nullable: false),
                     chapterids = table.Column<string>(name: "chapter_ids", type: "longtext", nullable: true),
                     from = table.Column<int>(type: "int", nullable: false),
@@ -331,25 +331,25 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                 columns: new[] { "chapter_id", "created_by", "created_date", "modified_by", "modified_date", "name", "subject_id" },
                 values: new object[,]
                 {
-                    { new Guid("2879766d-b5f3-417d-b654-5d7d6e93ea5e"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3650), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3651), "Giới hạn. Hàm số liên tục", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("662bb210-1f47-4d57-84dd-349f737e4c10"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3666), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3667), "Các quy tắc tính xác suất", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("6be67470-51a7-400c-9821-a559576d1114"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3643), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3644), "Dãy số cấp số cộng và cấp số nhân", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("761b89af-3248-4404-a25e-9199d4798a83"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3625), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3625), "Hàm số lượng giác và phương trình lượng giác", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("8fb40e6c-410e-492b-a9b3-1e73d14dbba5"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3647), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3648), "Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("d9310d79-6d78-4ad3-9f79-8b94ba473c40"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3670), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3671), "Đạo hàm", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("f623bc8d-b550-464a-9f11-aeb33739310d"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3653), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3653), "Hàm số mũ và hàm số Logarit", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
-                    { new Guid("fbd22239-b3a3-47c8-810a-14acd7fb7fd7"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3663), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3664), "Quan hệ vuông góc trong không gian", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") }
+                    { new Guid("08cb38ea-5786-4963-a7d0-fa35a42ad5da"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2874), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2875), "Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("0b8ab62d-ee23-415c-9eea-a4497c93529b"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2877), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2877), "Giới hạn. Hàm số liên tục", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("196214b4-d7df-49f5-8b09-87ec82576c59"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2880), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2881), "Hàm số mũ và hàm số Logarit", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("44cc456c-116f-4381-84e3-3a04177f5ea1"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2906), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2906), "Các quy tắc tính xác suất", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("62854655-647b-4e13-97cb-d419f9b1e0e6"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2844), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2845), "Hàm số lượng giác và phương trình lượng giác", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("631929e6-cf27-460e-8c2f-a0eab1f66cd5"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2870), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2871), "Dãy số cấp số cộng và cấp số nhân", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("f28b0c31-190c-4ecf-9f29-3e5e994d8a2d"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2909), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2909), "Đạo hàm", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") },
+                    { new Guid("f7aac895-7913-40b8-82a5-22c30c7fdf57"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2891), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2891), "Quan hệ vuông góc trong không gian", new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2") }
                 });
 
             migrationBuilder.InsertData(
                 table: "subject",
                 columns: new[] { "subject_id", "created_by", "created_date", "modified_by", "modified_date", "subject_name" },
-                values: new object[] { new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3318), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3319), "Toán" });
+                values: new object[] { new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2750), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2752), "Toán" });
 
             migrationBuilder.InsertData(
                 table: "user",
                 columns: new[] { "user_id", "created_by", "created_date", "modified_by", "modified_date", "name", "password", "role_id", "user_name" },
-                values: new object[] { new Guid("bb871d62-5757-4f28-8e0f-e578ce59753c"), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3011), "", new DateTime(2025, 1, 17, 7, 38, 13, 219, DateTimeKind.Local).AddTicks(3029), "Admin", "$2a$11$EFO4JJTdJMg5wZ/Szd47sef0tew2gIlzvidDR9vFn.0G2DLdGSiLO", 1, "admin" });
+                values: new object[] { new Guid("ee3feb55-5904-4fc2-bbc6-7c867eca34d3"), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2300), "", new DateTime(2025, 1, 18, 12, 56, 44, 685, DateTimeKind.Local).AddTicks(2317), "Admin", "$2a$11$0WYlkW6cptRox/EhTPwaQ.SpSM5wWEErz4ZqcxdyJGHoIYDfbSgNO", 1, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_classroom_classroom_code",

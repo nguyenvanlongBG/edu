@@ -44,141 +44,153 @@ namespace Bg.EduSocial.Application
             var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
 
-
             var user = contextData.user;
             var chapters = await chapterService.FilterAsync(new List<FilterCondition>());
             var filtersTest = new List<FilterCondition>();
 
-            if (param != null && param.TestIds?.Count > 0)
+            if (param?.TestIds?.Count > 0)
             {
-                filtersTest.Add(new FilterCondition
-                {
-                    Field = "test_id",
-                    Operator = FilterOperator.In,
-                    Value = param.TestIds
-                });
+                filtersTest.Add(new FilterCondition { Field = "test_id", Operator = FilterOperator.In, Value = param.TestIds });
             }
             else
             {
                 var testOfUser = await testService.GetTestOfUserAsync();
-                if (testOfUser?.Count > 0)
+                if (testOfUser?.Any() == true)
                 {
-                    filtersTest.Add(new FilterCondition
-                    {
-                        Field = "test_id",
-                        Operator = FilterOperator.In,
-                        Value = testOfUser?.Select(test => test.test_id).ToList()
-                    });
-                } else
+                    filtersTest.Add(new FilterCondition { Field = "test_id", Operator = FilterOperator.In, Value = testOfUser.Select(t => t.test_id).ToList() });
+                }
+                else
                 {
                     return default;
                 }
             }
+
             var tests = await testService.FilterAsync(filtersTest);
-            if (param!= null && param.ClassIds?.Count > 0 && (user.role_id == Role.Admin || user.role_id == Role.Teacher))
+            if (!tests.Any()) return new List<Dictionary<string, object>>();
+
+            if (param?.ClassIds?.Count > 0 && (user.role_id == Role.Admin || user.role_id == Role.Teacher))
             {
                 var enrollmentClassService = _serviceProvider.GetRequiredService<IEnrollmentClassService>();
                 var filterClassroom = new List<FilterCondition> { new FilterCondition { Field = "classroom_id", Operator = FilterOperator.In, Value = param.ClassIds } };
                 var userInClassrooms = await enrollmentClassService.FilterAsync<EnrollmentClassDto>(filterClassroom);
-                if (filtersTest?.Count > 0)
+
+                if (userInClassrooms?.Any() == true)
                 {
-                    filtersTest.Add(new FilterCondition
-                    {
-                        Field = "user_id",
-                        Operator = FilterOperator.In,
-                        Value = userInClassrooms?.Select(u => u.user_id).ToList(),
-                    });
+                    filtersTest.Add(new FilterCondition { Field = "user_id", Operator = FilterOperator.In, Value = userInClassrooms.Select(u => u.user_id).ToList() });
                 }
-            };
-            filtersTest?.Add(new FilterCondition
-            {
-                Field = "status",
-                Operator = FilterOperator.Equal,
-                Value = ExamStatus.Marked
-            });
+            }
+
+            filtersTest.Add(new FilterCondition { Field = "status", Operator = FilterOperator.Equal, Value = ExamStatus.Marked });
 
             var exams = await examService.FilterAsync<ExamDto>(filtersTest);
-            if (exams == null || exams.Count == 0)
-                return new List<Dictionary<string, object>>();
-            var filterAnswerExam = new List<FilterCondition> 
-            {
-                new FilterCondition
-                {
-                    Field = "exam_id",
-                    Operator = FilterOperator.In,
-                    Value = exams.Select(e => e.exam_id).ToList(),
-                }
-            };
-            var answersHandle = await answerService.FilterAsync<AnswerDto>(filterAnswerExam);
-            if (answersHandle == null || answersHandle.Count == 0) return new List<Dictionary<string, object>>();
+            if (!exams.Any()) return new List<Dictionary<string, object>>();
 
-            var filterQuestionTest = new List<FilterCondition>
-            {
-                new FilterCondition
-                {
-                    Field = "test_id",
-                    Operator = FilterOperator.In,
-                    Value = tests?.Select(e => e.test_id).ToList(),
-                }
-            };
+            var filterAnswerExam = new List<FilterCondition> { new FilterCondition { Field = "exam_id", Operator = FilterOperator.In, Value = exams.Select(e => e.exam_id).ToList() } };
+            var answersHandle = await answerService.FilterAsync<AnswerDto>(filterAnswerExam);
+            if (!answersHandle.Any()) return new List<Dictionary<string, object>>();
+
+            var filterQuestionTest = new List<FilterCondition> { new FilterCondition { Field = "test_id", Operator = FilterOperator.In, Value = tests.Select(e => e.test_id).ToList() } };
             var questionsTest = await questionTestService.FilterAsync(filterQuestionTest);
-            if (!(questionsTest?.Count > 0)) return default;
-            var filterQuestion = new List<FilterCondition>
-            {
-                new FilterCondition
-                {
-                    Field = "question_id",
-                    Operator = FilterOperator.In,
-                    Value = questionsTest?.Select(e => e.question_id).ToList(),
-                }
-            };
+            if (!questionsTest.Any()) return default;
+
+            var filterQuestion = new List<FilterCondition> { new FilterCondition { Field = "question_id", Operator = FilterOperator.In, Value = questionsTest.Select(q => q.question_id).ToList() } };
             var questionsHandle = await questionService.FilterAsync(filterQuestion);
 
-            var result = chapters.Select(chapter =>
+            // Tạo từ điển ánh xạ `test_id` với `exams` và `questionsTest`
+            var examsByTestId = exams.GroupBy(e => e.test_id).ToDictionary(g => g.Key, g => g.ToList());
+            var questionsTestByTestId = questionsTest.GroupBy(q => q.test_id).ToDictionary(g => g.Key, g => g.ToList());
+            var answersByQuestionId = answersHandle.GroupBy(a => a.question_id).ToDictionary(g => g.Key, g => g.ToList());
+
+            var result = new List<Dictionary<string, object>>();
+            Parallel.ForEach(chapters, chapter =>
             {
                 decimal totalPointChapter = 0;
                 decimal totalPointCorrectChapter = 0;
                 decimal totalPointInCorrectChapter = 0;
-                decimal totalPointUnAttemptChapter = 0;
 
-
-                tests.ForEach(test =>
+                foreach (var test in tests)
                 {
-                    var examOfThisTest = exams.Where(e => e.test_id == test.test_id).ToList();
-                    var questionTestOfThisTest = questionsTest.Where(q => q.test_id == test.test_id).ToList();
-                    var questionIdsInTest = questionTestOfThisTest.Select(q => q.question_id).ToList();
-                    var questionChapterOfThisTest = questionsHandle.Where(q => questionIdsInTest.Contains(q.question_id) && q.chapter_ids != null && q.chapter_ids.Contains(chapter.chapter_id.ToString())).ToList();
-                    if (questionChapterOfThisTest?.Count > 0)
+                    if (!examsByTestId.TryGetValue(test.test_id, out var examOfThisTest)) continue;
+                    if (!questionsTestByTestId.TryGetValue(test.test_id, out var questionTestOfThisTest)) continue;
+
+                    var questionIdsInTest = questionTestOfThisTest.Select(q => q.question_id).ToHashSet();
+                    var questionChapterOfThisTest = questionsHandle
+                        .Where(q => questionIdsInTest.Contains(q.question_id) && q.chapter_ids?.Contains(chapter.chapter_id.ToString()) == true)
+                        .ToList();
+
+                    if (!questionChapterOfThisTest.Any()) continue;
+
+                    var questionIdsChapter = questionChapterOfThisTest.Select(q => q.question_id).ToHashSet();
+                    decimal totalPointChapterThisTest = questionTestOfThisTest.Where(q => questionIdsChapter.Contains(q.question_id)).Sum(q => q.point);
+                    totalPointChapter += examOfThisTest.Count * totalPointChapterThisTest;
+
+                    foreach (var exam in examOfThisTest)
                     {
-                        var questionIdsChapter = questionChapterOfThisTest?.Select(q => q.question_id).ToList();
-                        if (questionIdsChapter?.Count > 0)
-                        {
-                            decimal totalPointChapterThisTest = questionTestOfThisTest.Where(question => questionIdsChapter.Contains(question.question_id))?.Sum(q => q.point) ?? 0;
-                            totalPointChapter += (examOfThisTest?.Count ?? 0) * totalPointChapterThisTest;
-                            examOfThisTest?.ForEach(e =>
-                            {
-                                var answerOfChapter = answersHandle?.Where(a => questionIdsChapter?.Count > 0 && questionIdsChapter.Contains(a.question_id)).ToList();
-                                var totalAnswerCorrect = answerOfChapter?.Sum(a => a.point) ?? 0;
-                                totalPointCorrectChapter += totalAnswerCorrect;
-                                totalPointInCorrectChapter += (totalPointChapterThisTest - totalAnswerCorrect);
-                            });
-                        }
+                        decimal totalAnswerCorrect = questionIdsChapter
+                            .Where(id => answersByQuestionId.ContainsKey(id))
+                            .Sum(id => answersByQuestionId[id].Sum(a => a.point));
 
+                        totalPointCorrectChapter += totalAnswerCorrect;
+                        totalPointInCorrectChapter += (totalPointChapterThisTest - totalAnswerCorrect);
                     }
-                });
-                totalPointUnAttemptChapter = (totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter) > 0 ? (totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter) : 0;
-                // Lấy tất cả questionChapter thuộc chapter này
-                return new Dictionary<string, object>
-                {
-                    { "chapter_id", chapter.chapter_id },
-                    { "chapter_name", chapter.name },
-                    { "correct", totalPointCorrectChapter },
-                    { "incorrect", totalPointInCorrectChapter },
-                    { "unattempted",  totalPointUnAttemptChapter}
+                }
 
-                };
-            }).ToList();
+                decimal totalPointUnAttemptChapter = Math.Max(totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter, 0);
+
+                lock (result)
+                {
+                    result.Add(new Dictionary<string, object>
+                    {
+                        { "chapter_id", chapter.chapter_id },
+                        { "chapter_name", chapter.name },
+                        { "correct", totalPointCorrectChapter },
+                        { "incorrect", totalPointInCorrectChapter },
+                        { "unattempted", totalPointUnAttemptChapter }
+                    });
+                }
+            });
+
+            // Xử lý các câu hỏi không thuộc chapter nào
+            decimal totalPointUnclassified = 0;
+            decimal totalPointCorrectUnclassified = 0;
+            decimal totalPointIncorrectUnclassified = 0;
+            var unclassifiedQuestions = questionsHandle.Where(q => q.chapter_ids == null || !q.chapter_ids.Any()).ToList();
+            if (unclassifiedQuestions.Any())
+            {
+                foreach (var test in tests)
+                {
+                    if (!examsByTestId.TryGetValue(test.test_id, out var examOfThisTest)) continue;
+                    if (!questionsTestByTestId.TryGetValue(test.test_id, out var questionTestOfThisTest)) continue;
+
+                    var unclassifiedQuestionIds = unclassifiedQuestions.Select(q => q.question_id).ToHashSet();
+                    decimal totalPointUnclassifiedThisTest = questionTestOfThisTest.Where(q => unclassifiedQuestionIds.Contains(q.question_id)).Sum(q => q.point);
+                    totalPointUnclassified += examOfThisTest.Count * totalPointUnclassifiedThisTest;
+
+                    foreach (var exam in examOfThisTest)
+                    {
+                        decimal totalAnswerCorrect = unclassifiedQuestionIds
+                            .Where(id => answersByQuestionId.ContainsKey(id))
+                            .Sum(id => answersByQuestionId[id].Sum(a => a.point));
+
+                        totalPointCorrectUnclassified += totalAnswerCorrect;
+                        totalPointIncorrectUnclassified += (totalPointUnclassifiedThisTest - totalAnswerCorrect);
+                    }
+                }
+
+                decimal totalPointUnattemptUnclassified = Math.Max(totalPointUnclassified - totalPointCorrectUnclassified - totalPointIncorrectUnclassified, 0);
+
+                result.Add(new Dictionary<string, object>
+                {
+                    { "chapter_id", "unclassified" },
+                    { "chapter_name", "Không xác định" },
+                    { "correct", totalPointCorrectUnclassified },
+                    { "incorrect", totalPointIncorrectUnclassified },
+                    { "unattempted", totalPointUnattemptUnclassified }
+                });
+            }
+
             return result;
+
         }
 
 
@@ -190,11 +202,10 @@ namespace Bg.EduSocial.Application
             var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
 
-
             var user = contextData.user;
             var filtersTest = new List<FilterCondition>();
 
-            if (param != null && param.TestIds?.Count > 0)
+            if (param?.TestIds?.Count > 0)
             {
                 filtersTest.Add(new FilterCondition
                 {
@@ -212,7 +223,7 @@ namespace Bg.EduSocial.Application
                     {
                         Field = "test_id",
                         Operator = FilterOperator.In,
-                        Value = testOfUser?.Select(test => test.test_id).ToList()
+                        Value = testOfUser.Select(test => test.test_id).ToList()
                     });
                 }
                 else
@@ -220,24 +231,28 @@ namespace Bg.EduSocial.Application
                     return default;
                 }
             }
+
             var tests = await testService.FilterAsync(filtersTest);
             if (!(tests?.Count > 0)) return default;
-            if (param != null && param.ClassIds?.Count > 0 && (user.role_id == Role.Admin || user.role_id == Role.Teacher))
+
+            if (param?.ClassIds?.Count > 0 && (user.role_id == Role.Admin || user.role_id == Role.Teacher))
             {
                 var enrollmentClassService = _serviceProvider.GetRequiredService<IEnrollmentClassService>();
                 var filterClassroom = new List<FilterCondition> { new FilterCondition { Field = "classroom_id", Operator = FilterOperator.In, Value = param.ClassIds } };
                 var userInClassrooms = await enrollmentClassService.FilterAsync<EnrollmentClassDto>(filterClassroom);
-                if (filtersTest?.Count > 0)
+
+                if (userInClassrooms?.Count > 0)
                 {
                     filtersTest.Add(new FilterCondition
                     {
                         Field = "user_id",
                         Operator = FilterOperator.In,
-                        Value = userInClassrooms?.Select(u => u.user_id).ToList(),
+                        Value = userInClassrooms.Select(u => u.user_id).ToList(),
                     });
                 }
-            };
-            filtersTest?.Add(new FilterCondition
+            }
+
+            filtersTest.Add(new FilterCondition
             {
                 Field = "status",
                 Operator = FilterOperator.Equal,
@@ -245,8 +260,8 @@ namespace Bg.EduSocial.Application
             });
 
             var exams = await examService.FilterAsync<ExamDto>(filtersTest);
-            if (exams == null || exams.Count == 0)
-                return new List<Dictionary<string, object>>();
+            if (exams == null || exams.Count == 0) return new List<Dictionary<string, object>>();
+
             var filterAnswerExam = new List<FilterCondition>
             {
                 new FilterCondition
@@ -256,81 +271,98 @@ namespace Bg.EduSocial.Application
                     Value = exams.Select(e => e.exam_id).ToList(),
                 }
             };
+
             var answersHandle = await answerService.FilterAsync<AnswerDto>(filterAnswerExam);
             if (answersHandle == null || answersHandle.Count == 0) return new List<Dictionary<string, object>>();
+
             var filterQuestionTest = new List<FilterCondition>
             {
                 new FilterCondition
                 {
                     Field = "test_id",
                     Operator = FilterOperator.In,
-                    Value = tests?.Select(e => e.test_id).ToList(),
+                    Value = tests.Select(e => e.test_id).ToList(),
                 }
             };
+
             var questionsTest = await questionTestService.FilterAsync(filterQuestionTest);
             if (!(questionsTest?.Count > 0)) return default;
+
             var filterQuestion = new List<FilterCondition>
             {
                 new FilterCondition
                 {
                     Field = "question_id",
                     Operator = FilterOperator.In,
-                    Value = questionsTest?.Select(e => e.question_id).ToList(),
+                    Value = questionsTest.Select(e => e.question_id).ToList(),
                 }
             };
+
             var questionsHandle = await questionService.FilterAsync(filterQuestion);
-            var result = Enum.GetValues(typeof(QuestionLevel))
-            .Cast<QuestionLevel>()
-            .Select(level =>
+
+            // **Tạo Dictionary để tra cứu nhanh**
+            var examsByTestId = exams.GroupBy(e => e.test_id).ToDictionary(g => g.Key, g => g.ToList());
+            var questionsTestByTestId = questionsTest.GroupBy(q => q.test_id).ToDictionary(g => g.Key, g => g.ToList());
+            var answersByQuestionId = answersHandle.GroupBy(a => a.question_id).ToDictionary(g => g.Key, g => g.ToList());
+            var questionsByLevel = questionsHandle.GroupBy(q => q.level).ToDictionary(g => g.Key, g => g.ToList());
+
+            var result = new List<Dictionary<string, object>>();
+            decimal totalPointUnclassified = 0;
+            decimal totalPointCorrectUnclassified = 0;
+            decimal totalPointIncorrectUnclassified = 0;
+
+            foreach (var level in Enum.GetValues(typeof(QuestionLevel)).Cast<QuestionLevel>())
             {
-                decimal totalPointChapter = 0;
-                decimal totalPointCorrectChapter = 0;
-                decimal totalPointInCorrectChapter = 0;
-                decimal totalPointUnAttemptChapter = 0;
+                decimal totalPointLevel = 0;
+                decimal totalPointCorrectLevel = 0;
+                decimal totalPointIncorrectLevel = 0;
 
-
-                tests.ForEach(test =>
+                foreach (var test in tests)
                 {
-                    var examOfThisTest = exams.Where(e => e.test_id == test.test_id).ToList();
-                    var questionTestOfThisTest = questionsTest.Where(q => q.test_id == test.test_id).ToList();
-                    var questionIdsInTest = questionTestOfThisTest.Select(q => q.question_id).ToList();
-                    var questionLevelOfThisTest = questionsHandle.Where(q => questionIdsInTest.Contains(q.question_id) && q.level == level).ToList();
-                    if (questionLevelOfThisTest?.Count > 0)
-                    {
-                        var questionIdsLevel = questionLevelOfThisTest?.Select(q => q.question_id).ToList();
-                        if (questionIdsLevel?.Count > 0)
-                        {
-                            decimal totalPointLevelThisTest = questionTestOfThisTest.Where(question => questionIdsLevel.Contains(question.question_id))?.Sum(q => q.point) ?? 0;
-                            totalPointChapter += (examOfThisTest?.Count ?? 0) * totalPointLevelThisTest;
-                            examOfThisTest?.ForEach(e =>
-                            {
-                                var answerOfChapter = answersHandle?.Where(a => questionIdsLevel?.Count > 0 && questionIdsLevel.Contains(a.question_id)).ToList();
-                                var totalAnswerCorrect = answerOfChapter?.Sum(a => a.point) ?? 0;
-                                totalPointCorrectChapter += totalAnswerCorrect;
-                                totalPointInCorrectChapter += (totalPointLevelThisTest - totalAnswerCorrect);
-                            });
-                        }
+                    if (!examsByTestId.TryGetValue(test.test_id, out var examOfThisTest)) continue;
+                    if (!questionsTestByTestId.TryGetValue(test.test_id, out var questionTestOfThisTest)) continue;
 
+                    var questionIdsInTest = questionTestOfThisTest.Select(q => q.question_id).ToHashSet();
+                    if (!questionsByLevel.TryGetValue(level, out var questionLevelOfThisTest)) continue;
+
+                    var questionIdsLevel = questionLevelOfThisTest.Select(q => q.question_id).Where(id => questionIdsInTest.Contains(id)).ToHashSet();
+                    if (!questionIdsLevel.Any()) continue;
+
+                    decimal totalPointLevelThisTest = questionTestOfThisTest.Where(q => questionIdsLevel.Contains(q.question_id)).Sum(q => q.point);
+                    totalPointLevel += examOfThisTest.Count * totalPointLevelThisTest;
+
+                    foreach (var exam in examOfThisTest)
+                    {
+                        decimal totalAnswerCorrect = questionIdsLevel
+                            .Where(id => answersByQuestionId.ContainsKey(id))
+                            .Sum(id => answersByQuestionId[id].Sum(a => a.point));
+
+                        totalPointCorrectLevel += totalAnswerCorrect;
+                        totalPointIncorrectLevel += (totalPointLevelThisTest - totalAnswerCorrect);
                     }
-                });
-                totalPointUnAttemptChapter = (totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter) > 0 ? (totalPointChapter - totalPointCorrectChapter - totalPointInCorrectChapter) : 0;
-                // Lấy tất cả questionChapter thuộc chapter này
-                return new Dictionary<string, object>
+                }
+
+                decimal totalPointUnattemptLevel = Math.Max(totalPointLevel - totalPointCorrectLevel - totalPointIncorrectLevel, 0);
+
+                result.Add(new Dictionary<string, object>
                 {
                     { "level", level },
-                    { "level_name",  this.GetNameLeve(level)},
-                    { "correct", totalPointCorrectChapter },
-                    { "incorrect", totalPointInCorrectChapter },
-                    { "unattempted",  totalPointUnAttemptChapter}
+                    { "level_name", this.GetNameLeve(level) },
+                    { "correct", totalPointCorrectLevel },
+                    { "incorrect", totalPointIncorrectLevel },
+                    { "unattempted", totalPointUnattemptLevel }
+                });
+            }
 
-                };
-            }).ToList();
             return result;
+
         }
         private string GetNameLeve(QuestionLevel level)
         {
             switch (level)
             {
+                case QuestionLevel.None:
+                    return "Không xác định";
                 case QuestionLevel.Recognition:
                     return "Nhận biết";
                 case QuestionLevel.Comprehension:

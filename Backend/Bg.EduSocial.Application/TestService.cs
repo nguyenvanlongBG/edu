@@ -65,14 +65,33 @@ namespace Bg.EduSocial.Application
 
         public async Task<List<QuestionDto>> GetQuestionOfTestEditAsync(Guid testId)
         {
-            var questions = await _repo.GetQuestionOfTest(testId);
-            if (!(questions?.Count > 0)) return default;
             var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
             var optionService = _serviceProvider.GetRequiredService<IOptionService>();
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
             var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
 
+            var filtersQuestionTest = new List<FilterCondition>
+            {
+                new FilterCondition {
+                    Field = "test_id",
+                    Operator = FilterOperator.Equal,
+                    Value = testId
+                },
+            };
+            var resultsQuestionTest = await questionTestService.FilterAsync(filtersQuestionTest);
+            if (resultsQuestionTest == null || resultsQuestionTest.Count == 0) return default;
 
+            var filterQuestions = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "question_id",
+                    Operator = FilterOperator.In,
+                    Value = resultsQuestionTest.Select(q => q.question_id).ToList()
+                }
+            };
+
+            var questions = await questionService.FilterAsync(filterQuestions);
             var questionIds = questions.Select(question => question.question_id).ToList();
             var filterOptionOfTest = new FilterCondition
             {
@@ -87,20 +106,7 @@ namespace Bg.EduSocial.Application
                 Operator = FilterOperator.In,
                 Value = questionIds
             };
-            var filtersQuestionTest = new List<FilterCondition>
-            {
-                new FilterCondition {
-                    Field = "test_id",
-                    Operator = FilterOperator.Equal,
-                    Value = testId
-                },
-                new FilterCondition {
-                    Field = "question_id",
-                    Operator = FilterOperator.In,
-                    Value = questionIds
-                }
-            };
-            var resultsQuestionTest = await questionTestService.FilterAsync(filtersQuestionTest);
+            
 
             var results = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterResultOfTest });
             var questionsReturn = _mapper.Map<List<QuestionDto>>(questions);
@@ -484,7 +490,7 @@ namespace Bg.EduSocial.Application
                     filterTest.Add(new FilterCondition
                     {
                         Field = "test_id",
-                        Operator = FilterOperator.Equal,
+                        Operator = FilterOperator.In,
                         Value = exams.Select(e => e.test_id).ToList()
                     });
                     return await this.FilterAsync<TestDto>(filterTest);

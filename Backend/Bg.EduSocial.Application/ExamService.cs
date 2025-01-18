@@ -42,7 +42,12 @@ namespace Bg.EduSocial.Application
         {
             var answers = exam.answers;
             var questions = test.questions;
-            if (!(questions?.Count > 0) || !(answers?.Count > 0)) return default;
+            if (!(questions?.Count > 0) || !(answers?.Count > 0))
+            {
+                exam.point = 0;
+                exam.status = ExamStatus.Marked;
+                return exam;
+            };
             foreach (var question in questions)
             {
                 var answer = answers?.FirstOrDefault(a => a.question_id ==  question.question_id);

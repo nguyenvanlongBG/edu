@@ -15,7 +15,7 @@ namespace Bg.EduSocial.Domain
 
         public QuestionType type { get; set; }
         public Guid subject_id { get; set; } = Constant.MathSubjectId;
-        public QuestionLevel level { get; set; }
+        public QuestionLevel? level { get; set; }
         public string content { get; set; }
         public string? chapter_ids { get; set; }
         public int from { get; set; } = 1; // 0 Thư viện, 1 từ đề thi

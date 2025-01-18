@@ -51,10 +51,10 @@ namespace Bg.EduSocial.Host.Controllers
             var testHistory = await _service.HistoryExam(examId);
             return Ok(testHistory);
         }
-        [HttpPut("mark")]
-        public async Task<IActionResult> ExamMarking([FromBody] ExamEditDto exam)
+        [HttpGet("{examId}/mark")]
+        public async Task<IActionResult> ExamMarking(Guid examId)
         {
-            var examResult = await _service.MarkExam(exam);
+            var examResult = await _service.MarkExam(examId);
             return Ok(examResult);
         }
     }

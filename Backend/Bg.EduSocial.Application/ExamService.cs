@@ -130,15 +130,57 @@ namespace Bg.EduSocial.Application
             return default;
         }
 
-        public async Task<ExamEditDto> MarkExam(ExamEditDto exam)
+        public async Task<ExamEditDto> MarkExam(Guid examId)
         {
             var testService = _serviceProvider.GetRequiredService<ITestService>();
-            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
-            var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
+            var examUpdate = await this.GetById<ExamEditDto>(examId);
+            // Lấy kết quả từ các Task
+            var test = await testService.prepareTestMark(examUpdate.test_id);
+            // Kiểm tra điều kiện trả về false sớm
+            if (test == null)
+                return default;
+            await prepareExamMark(new List<ExamEditDto> { examUpdate });
 
-            return default;
+            this.MarkExam(examUpdate, test);
+            await this.UpdateAsync(examUpdate);
+            return examUpdate;
         }
+        public async Task<List<ExamEditDto>> prepareExamMark(List<ExamEditDto> exams)
+        {
+            var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
+            var examIds = exams.Select(e => e.exam_id).ToList();
+            var filterAnswer = new List<FilterCondition>
+            {
+                new FilterCondition
+                {
+                    Field = "exam_id",
+                    Operator = FilterOperator.In,
+                    Value = examIds
+                }
+            };
+            var answers = await answerService.FilterAsync<AnswerEditDto>(filterAnswer);
+            if (answers?.Count == 0) return default;
+            MapAnswersToExam(answers, exams);
+            return exams;
+        }
+        private void MapAnswersToExam(List<AnswerEditDto> answers, List<ExamEditDto> exams)
+        {
+            if (answers.Count > 0 && exams?.Count > 0)
+            {
+                // Tạo một dictionary để nhóm các options theo QuestionId
+                var answerByExamId = answers.GroupBy(o => o.exam_id)
+                                                 .ToDictionary(g => g.Key, g => g.ToList());
 
+                foreach (var exam in exams)
+                {
+                    // Lấy ra danh sách options từ dictionary bằng QuestionId của câu hỏi
+                    if (answerByExamId.TryGetValue(exam.exam_id, out var answerByExam))
+                    {
+                        exam.answers = answerByExam;
+                    }
+                }
+            }
+        }
         public async Task<TestDto> HistoryExam(Guid examId)
         {
             var test = await this.TestOfExam(examId);

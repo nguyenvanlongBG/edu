@@ -225,17 +225,7 @@ namespace Bg.EduSocial.Application
             var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
             var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
             var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
-
-            // Lấy thông tin Test dựa trên testId
-            var testTask = await this.GetById<TestDto>(testId);
-
             // Thiết lập các điều kiện lọc
-            var filterCondition = new FilterCondition
-            {
-                Field = "test_id",
-                Operator = FilterOperator.Equal,
-                Value = testId
-            };
             var filterExam = new List<FilterCondition>
             {
                 new FilterCondition
@@ -253,56 +243,19 @@ namespace Bg.EduSocial.Application
             };
 
             // Gọi các API một cách song song
-            var questionsTestTask = await questionTestService.FilterAsync(new List<FilterCondition> { filterCondition });
             var examsTask = await examService.FilterAsync<ExamEditDto>(filterExam);
 
             // Đợi tất cả các Task hoàn thành
             //await Task.WhenAll(testTask, questionsTestTask, examsTask);
 
             // Lấy kết quả từ các Task
-            var test = testTask;
-            var questionsTest = questionsTestTask;
+            var test = await prepareTestMark(testId);
             var exams = examsTask;
 
             // Kiểm tra điều kiện trả về false sớm
-            if (test == null || questionsTest == null || questionsTest.Count == 0 || exams == null || exams.Count == 0)
+            if (test == null)
                 return default;
-
-            // Xử lý tiếp theo
-            var questionIds = questionsTest.Select(q => q.question_id).ToList();
-            var filterQuestions = new FilterCondition
-            {
-                Field = "question_id",
-                Operator = FilterOperator.In,
-                Value = questionIds
-            };
-
-            // Gọi song song các truy vấn lấy thông tin chi tiết các câu hỏi và kết quả
-            var questionsTask = await questionService.FilterAsync(new List<FilterCondition> { filterQuestions });
-            var resultsTask = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterQuestions });
-
-            // Lấy kết quả từ các Task
-            var questions =  questionsTask;
-            var results =  resultsTask;
-
-            // Tiếp tục xử lý logic dựa trên kết quả trên
-            questionService.MapResultsToQuestion(questions, results);
-            questionService.MapQuestionTestToQuestion(questions, questionsTestTask);
-
-            test.questions = questions;
-            var examIds = exams.Select(e => e.exam_id).ToList();
-            var filterAnswer = new List<FilterCondition>
-            {
-                new FilterCondition
-                {
-                    Field = "exam_id",
-                    Operator = FilterOperator.In,
-                    Value = examIds
-                }
-            };
-            var answers = await answerService.FilterAsync<AnswerEditDto>(filterAnswer);
-            if (answers?.Count == 0) return default;
-            MapAnswersToExam(answers, exams);
+            await examService.prepareExamMark(exams);
             
             for (var index =0; index < exams.Count; index++)
             {
@@ -333,24 +286,63 @@ namespace Bg.EduSocial.Application
             return examsDto;
         }
 
-        private void MapAnswersToExam(List<AnswerEditDto> answers, List<ExamEditDto> exams)
-        {
-            if (answers.Count > 0 && exams?.Count > 0)
-            {
-                // Tạo một dictionary để nhóm các options theo QuestionId
-                var answerByExamId = answers.GroupBy(o => o.exam_id)
-                                                 .ToDictionary(g => g.Key, g => g.ToList());
 
-                foreach (var exam in exams)
-                {
-                    // Lấy ra danh sách options từ dictionary bằng QuestionId của câu hỏi
-                    if (answerByExamId.TryGetValue(exam.exam_id, out var answerByExam))
-                    {
-                        exam.answers = answerByExam;
-                    }
-                }
-            }
+        public async Task<TestDto> prepareTestMark(Guid testId)
+        {
+            var questionService = _serviceProvider.GetRequiredService<IQuestionService>();
+            var resultQuestionService = _serviceProvider.GetRequiredService<IResultQuestionService>();
+            var questionTestService = _serviceProvider.GetRequiredService<IQuestionTestService>();
+
+            // Lấy thông tin Test dựa trên testId
+            var testTask = await this.GetById<TestDto>(testId);
+
+            // Thiết lập các điều kiện lọc
+            var filterCondition = new FilterCondition
+            {
+                Field = "test_id",
+                Operator = FilterOperator.Equal,
+                Value = testId
+            };
+
+            // Gọi các API một cách song song
+            var questionsTestTask = await questionTestService.FilterAsync(new List<FilterCondition> { filterCondition });
+
+            // Đợi tất cả các Task hoàn thành
+            //await Task.WhenAll(testTask, questionsTestTask, examsTask);
+
+            // Lấy kết quả từ các Task
+            var test = testTask;
+            var questionsTest = questionsTestTask;
+
+            // Kiểm tra điều kiện trả về false sớm
+            if (test == null || questionsTest == null || questionsTest.Count == 0)
+                return default;
+
+            // Xử lý tiếp theo
+            var questionIds = questionsTest.Select(q => q.question_id).ToList();
+            var filterQuestions = new FilterCondition
+            {
+                Field = "question_id",
+                Operator = FilterOperator.In,
+                Value = questionIds
+            };
+
+            // Gọi song song các truy vấn lấy thông tin chi tiết các câu hỏi và kết quả
+            var questionsTask = await questionService.FilterAsync(new List<FilterCondition> { filterQuestions });
+            var resultsTask = await resultQuestionService.FilterAsync(new List<FilterCondition> { filterQuestions });
+
+            // Lấy kết quả từ các Task
+            var questions = questionsTask;
+            var results = resultsTask;
+
+            // Tiếp tục xử lý logic dựa trên kết quả trên
+            questionService.MapResultsToQuestion(questions, results);
+            questionService.MapQuestionTestToQuestion(questions, questionsTestTask);
+
+            test.questions = questions;
+            return test;
         }
+
 
         public async Task<List<ExamDto>> GetExamUserHistory(Guid testId)
         {

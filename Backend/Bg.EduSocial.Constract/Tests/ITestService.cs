@@ -60,5 +60,6 @@ namespace Bg.EduSocial.Constract.Tests
 
         Task<List<QuestionDto>> GenAutoTest(ParamAutoGenTest param);
         Task<List<TestDto>> GetTestOfUserAsync();
+        Task<TestDto> prepareTestMark(Guid testId);
     }
 }

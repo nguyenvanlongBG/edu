@@ -1,4 +1,5 @@
 ﻿using Bg.EduSocial.Constract.ExamNotes;
+using Bg.EduSocial.Domain.Shared;
 using System.ComponentModel.DataAnnotations;
 
 namespace Bg.EduSocial.Constract.Exams
@@ -13,5 +14,6 @@ namespace Bg.EduSocial.Constract.Exams
         public string name { get; set; }
         public string question_ids_attention { get; set; } = string.Empty;
         public List<ExamNoteDto>? notes { get; set; }
+        public ExamStatus status { get; set; }
     }
 }

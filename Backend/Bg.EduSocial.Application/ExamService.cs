@@ -8,6 +8,7 @@ using Bg.EduSocial.Domain;
 using Bg.EduSocial.Domain.Cores;
 using Bg.EduSocial.Domain.Exams;
 using Bg.EduSocial.Domain.Shared;
+using Bg.EduSocial.Domain.Shared.ModelState;
 using Bg.EduSocial.Domain.Shared.Questions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -59,9 +60,11 @@ namespace Bg.EduSocial.Application
                         case QuestionType.SingleChoice:
                             if (answer.content == resultsQuestion[0].content)
                             {
+                                answer.State = ModelState.Update;
                                 answer.point = question.point;
                             } else
                             {
+                                answer.State = ModelState.Update;
                                 answer.point = 0;
                             }
                             break;
@@ -69,9 +72,11 @@ namespace Bg.EduSocial.Application
                             var isCorrect = CompareGuidStrings(answer.content, resultsQuestion[0].content);
                             if (isCorrect)
                             {
+                                answer.State = ModelState.Update;
                                 answer.point = question.point;
                             } else
                             {
+                                answer.State = ModelState.Update;
                                 answer.point = 0;
                             }
                             break;
@@ -133,6 +138,8 @@ namespace Bg.EduSocial.Application
         public async Task<ExamEditDto> MarkExam(Guid examId)
         {
             var testService = _serviceProvider.GetRequiredService<ITestService>();
+            var answerService = _serviceProvider.GetRequiredService<IAnswerService>();
+
             var examUpdate = await this.GetById<ExamEditDto>(examId);
             // Lấy kết quả từ các Task
             var test = await testService.prepareTestMark(examUpdate.test_id);
@@ -142,6 +149,8 @@ namespace Bg.EduSocial.Application
             await prepareExamMark(new List<ExamEditDto> { examUpdate });
 
             this.MarkExam(examUpdate, test);
+            var answersUpdate = examUpdate?.answers.Where(a => a.State == ModelState.Insert || a.State == ModelState.Update).ToList();
+            await answerService.UpdateManyAsync(answersUpdate);
             await this.UpdateAsync(examUpdate);
             return examUpdate;
         }

@@ -56,6 +56,8 @@ namespace Bg.EduSocial.Constract.Tests
         /// Created By: NVLong 11/5/2024
         Task<List<ExamDto>> GetExamUserHistory(Guid testId);
         Task<List<ExamDto>> MarkTest(Guid testId);
+        Task<List<Dictionary<string, object>>> UsersCorrection(Guid testId, Guid questionId);
+
         Task<List<ExamDto>> GetExamMarkAsync(Guid testId);
 
         Task<List<QuestionDto>> GenAutoTest(ParamAutoGenTest param);

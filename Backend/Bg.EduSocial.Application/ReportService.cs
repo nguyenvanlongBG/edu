@@ -299,12 +299,12 @@ namespace Bg.EduSocial.Application
             };
 
             var questionsHandle = await questionService.FilterAsync(filterQuestion);
-
+            if (!(questionsHandle?.Count > 0)) return default;
             // **Tạo Dictionary để tra cứu nhanh**
             var examsByTestId = exams.GroupBy(e => e.test_id).ToDictionary(g => g.Key, g => g.ToList());
             var questionsTestByTestId = questionsTest.GroupBy(q => q.test_id).ToDictionary(g => g.Key, g => g.ToList());
             var answersByQuestionId = answersHandle.GroupBy(a => a.question_id).ToDictionary(g => g.Key, g => g.ToList());
-            var questionsByLevel = questionsHandle.GroupBy(q => q.level).ToDictionary(g => g.Key, g => g.ToList());
+            var questionsByLevel = questionsHandle.GroupBy(q => q.level ?? QuestionLevel.None).ToDictionary(g => g.Key, g => g.ToList());
 
             var result = new List<Dictionary<string, object>>();
             decimal totalPointUnclassified = 0;

@@ -12,6 +12,7 @@ using Bg.EduSocial.Domain.Tests;
 using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using MySqlX.XDevAPI;
 
 namespace Bg.EduSocial.Application
 {
@@ -261,6 +262,8 @@ namespace Bg.EduSocial.Application
             {
                 examService.MarkExam(exams[index], test);
             }
+            var answersUpdate = exams.SelectMany(e => e.answers).Where(a => a.State == ModelState.Insert || a.State == ModelState.Update).ToList();
+            await answerService.UpdateManyAsync(answersUpdate);
             await examService.UpdateManyAsync(exams);
             var examsDto = _mapper.Map<List<ExamDto>>(exams);
             var userService = _serviceProvider.GetRequiredService<IUserService>();
@@ -489,6 +492,43 @@ namespace Bg.EduSocial.Application
                 }
             }
             return default;
+        }
+
+        public async Task<List<Dictionary<string, object>>> UsersCorrection(Guid testId, Guid questionId)
+        {
+            var examService = _serviceProvider.GetRequiredService<IExamService>();
+            var userService = _serviceProvider.GetRequiredService<IUserService>();
+            var result = new List<Dictionary<string, object>>();
+            var examFilters = new List<FilterCondition> {
+                new FilterCondition
+                {
+                    Field = "test_id",
+                    Operator = FilterOperator.Equal,  
+                    Value = testId
+                },
+                new FilterCondition {
+                    Field = "question_ids_attention",
+                    Operator = FilterOperator.Contains,
+                    Value = questionId
+                },
+            };
+            var examsHandle = await examService.FilterAsync(examFilters);
+            if (!(examsHandle?.Count > 0)) return result;
+            var filtersUser = new List<FilterCondition> {
+                new FilterCondition
+                {
+                    Field = "user_id",
+                    Operator = FilterOperator.In,
+                    Value = examsHandle.Select(e => e.user_id).ToList()  
+                }
+            };
+            var usersHandle = await userService.FilterAsync(filtersUser);
+            result.Add(new Dictionary<string, object>
+            {
+                { "question_id", questionId },
+                { "users", usersHandle?.Select(u => u.name).ToList() },
+            });
+            return result;
         }
     }
 }

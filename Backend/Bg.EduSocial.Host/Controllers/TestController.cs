@@ -77,6 +77,14 @@ namespace Bg.EduSocial.Host.Controllers
             return Ok(questions);
 
         }
+        [HttpGet("{testId}/user-correction/{questionId}")]
+        [Authorize]
+        public async Task<IActionResult> GetUsersCorrection(Guid testId, Guid questionId)
+        {
+            var questions = await _service.UsersCorrection(testId, questionId);
+            return Ok(questions);
+
+        }
         [HttpPost("auto-gen")]
         public async Task<IActionResult> GetAutoGenQuestion([FromBody] ParamAutoGenTest param)
         {

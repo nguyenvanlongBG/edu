@@ -154,7 +154,7 @@ namespace Bg.EduSocial.Application
             decimal totalPointUnclassified = 0;
             decimal totalPointCorrectUnclassified = 0;
             decimal totalPointIncorrectUnclassified = 0;
-            var unclassifiedQuestions = questionsHandle.Where(q => q.chapter_ids == null || !q.chapter_ids.Any()).ToList();
+            var unclassifiedQuestions = questionsHandle.Where(q => string.IsNullOrEmpty(q.chapter_ids)).ToList();
             if (unclassifiedQuestions.Any())
             {
                 foreach (var test in tests)

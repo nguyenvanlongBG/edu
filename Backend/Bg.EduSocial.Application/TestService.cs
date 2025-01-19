@@ -190,6 +190,7 @@ namespace Bg.EduSocial.Application
                     question_test_id = Guid.NewGuid(),
                     test_id = test.test_id,
                     question_id = question.question_id,
+                    point = question.point,
                     State = question.State
                 }).ToList();
                 questionsTesthandle.AddRange(questionTestAdd);

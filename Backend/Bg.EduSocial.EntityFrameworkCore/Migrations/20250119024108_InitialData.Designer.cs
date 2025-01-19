@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bg.EduSocial.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(EduSocialDbContext))]
-    [Migration("20250118063108_InitialData")]
+    [Migration("20250119024108_InitialData")]
     partial class InitialData
     {
         /// <inheritdoc />
@@ -94,81 +94,81 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasData(
                         new
                         {
-                            chapterid = new Guid("ce97dd67-a14b-4404-aa8c-736fb8894789"),
+                            chapterid = new Guid("80f8120a-452d-4efc-9620-6f028b37ce51"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4290),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6734),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4294),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6735),
                             name = "Hàm số lượng giác và phương trình lượng giác",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("db6f2c5b-5606-4503-a80d-3cc3c39fd297"),
+                            chapterid = new Guid("3c14d772-3b6c-44f6-aef9-840d327a600b"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4331),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6753),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4333),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6754),
                             name = "Dãy số cấp số cộng và cấp số nhân",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("ab44548f-6a75-455a-84b7-db2eecfe0851"),
+                            chapterid = new Guid("9b765f6f-3f83-403a-a401-29cd83c2717e"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4337),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6778),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4338),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6779),
                             name = "Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("7df87406-9bca-4ca2-9e57-0d83feebf4a5"),
+                            chapterid = new Guid("4bc248a9-f21c-471c-8248-27c1b1efc7bb"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4340),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6781),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4340),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6782),
                             name = "Giới hạn. Hàm số liên tục",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("92082c94-9f7a-42c9-abd3-0d86ddc1d9fc"),
+                            chapterid = new Guid("87e32ef5-01ff-4815-8cf1-2d819fa27c7a"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4343),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6787),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4344),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6787),
                             name = "Hàm số mũ và hàm số Logarit",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("6c1ad683-6cc7-428a-ace7-412949be6ef2"),
+                            chapterid = new Guid("2a6906d5-2537-432e-a33e-90b86c7d4687"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4352),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6795),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4352),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6796),
                             name = "Quan hệ vuông góc trong không gian",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("c8dec8f1-4f39-4863-8dcb-b3a38369c569"),
+                            chapterid = new Guid("dc63a7c8-57b2-40f8-9318-9a09396e4547"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4367),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6810),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4367),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6810),
                             name = "Các quy tắc tính xác suất",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         },
                         new
                         {
-                            chapterid = new Guid("7c82f129-dbc7-44b6-917f-ff1305b26c0e"),
+                            chapterid = new Guid("9490a64e-e422-40a8-bf54-0b15df122448"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4370),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6813),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4371),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6813),
                             name = "Đạo hàm",
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2")
                         });
@@ -578,9 +578,9 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                         {
                             subjectid = new Guid("bca0a3a0-4b29-4a94-9b14-5d40b2a0c7c2"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4123),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6639),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(4128),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6642),
                             subjectname = "Toán"
                         });
                 });
@@ -699,13 +699,13 @@ namespace Bg.EduSocial.EntityFrameworkCore.Migrations
                     b.HasData(
                         new
                         {
-                            userid = new Guid("e1ced5c0-28c8-4264-a4f4-871576ee80a3"),
+                            userid = new Guid("7ac2e0b5-6436-4fd5-9841-38b78b71ccd0"),
                             createdby = "",
-                            createddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(3542),
+                            createddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6261),
                             modifiedby = "",
-                            modifieddate = new DateTime(2025, 1, 18, 13, 31, 8, 566, DateTimeKind.Local).AddTicks(3564),
+                            modifieddate = new DateTime(2025, 1, 19, 9, 41, 8, 1, DateTimeKind.Local).AddTicks(6281),
                             name = "Admin",
-                            password = "$2a$11$M.tnFKW9blkYYn4JzuVokO0R3mjD8ZGNdxyEd8XeAlEvtOL6AJMqa",
+                            password = "$2a$11$j/YbMj.ANg/0oNolUlfEi.wW/QeCvBFka74vv8e.FZ0imcYIcfj7m",
                             roleid = 1,
                             username = "admin"
                         });
